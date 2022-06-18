@@ -1,5 +1,5 @@
 ---
-title: About
+title: Resume
 description: Brief summary about myself
 ---
  
