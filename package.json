@@ -24,6 +24,8 @@
     "hexo-renderer-pug": "^3.0.0",
     "hexo-renderer-sass": "^0.4.0",
     "hexo-renderer-stylus": "^1.1.0",
-    "hexo-server": "^1.0.0"
+    "hexo-server": "^1.0.0",
+    "sass": "^1.52.3",
+    "sass-loader": "^13.0.0"
   }
 }
