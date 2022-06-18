@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: Tamara Mathov
 subtitle: ''
-description: ''
-keywords:
-author: John Doe
+description: 'Are you ready to start learning Spanish? Take a look at the lessons I\’m currently offering a free 15-minute chat'
+keywords: 'spanish learning, languages, teaching'
+author: Tamara Mathov
 language: en
 timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: https://tamaramathov.com
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:

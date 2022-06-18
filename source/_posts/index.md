@@ -1,7 +1,7 @@
 ---
 title: Tamara Mathov
 description: Machine Learning Engineer & Creative Coder | Working on music information retrieval and natural language processing | 🤖 I like to make computers talk and sing
-
+academia: true
 preview_image: about/mathigatti-photo.jpg
 ---
 
