@@ -42,9 +42,8 @@ Are you ready to start learning Spanish? Take a look at [the lessons](/lessons) 
 ---
 
 # Reviews
----
-<br/>
 
+<br/>
 > *Tamara is very knowledgable about teaching Spanish. She was able to perfectly tailor the lessons to my skill level and was clear in her explanations of grammar rules. I would highly recommend her for anyone who is looking to learn Spanish.* - **Douglas**
 
 <br/>
