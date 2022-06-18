@@ -7,11 +7,8 @@ description: Brief summary about myself
  
 ### University
 
-- Bachelor in Language and Literature
-- Faculty of Philosophy and Letters
-- University of Buenos Aires
-
-- Nouvelle Course. Javeriana University of Bogota.
+- Bachelor in Language and Literature - Faculty of Philosophy and Letters, University of Buenos Aires
+- Nouvelle Course - Javeriana University of Bogota.
 
 ### English
 

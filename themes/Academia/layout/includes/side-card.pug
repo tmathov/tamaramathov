@@ -1,7 +1,8 @@
 .side-card.sticky
     .card-wrap(itemscope itemtype='http://schema.org/Person')
         .author-avatar
-            img.avatar-img(src=url_for(theme.avatar) onerror=`this.onerror=null;this.src='` + url_for(theme.loading_bg.flink) + `'` alt="avatar")
+            a.site-page(href=url_for("/"))
+                img.avatar-img(src=url_for(theme.avatar) onerror=`this.onerror=null;this.src='` + url_for(theme.loading_bg.flink) + `'` alt="avatar")
         .author-discrip
             p.author-bio= theme.author_bio
         .author-links
