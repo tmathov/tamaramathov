@@ -12,7 +12,7 @@ since: 2020
 # 可以选择外链或其他页面
 menu:
   Lessons: /lessons
-  About: /about
+  Resume: /resume
 
 # flink picture will load if avator link calls on error
 loading_bg:

@@ -4,11 +4,12 @@ description: Machine Learning Engineer & Creative Coder | Working on music infor
 academia: true
 preview_image: about/mathigatti-photo.jpg
 ---
+Hi there! My name is Tamara. I’m from Buenos Aires, Argentina, and I'm a Spanish teacher.
 
 <div id="video"></div>
 
 
-<[Spanish](/?lang=es)> / <[English](/?lang=en)>
+[Spanish](/?lang=es) | [English](/?lang=en)
 
 <script>
 
@@ -25,8 +26,6 @@ if (lang == 'en'){
     document.getElementById("video").insertAdjacentHTML('afterend', code);
 }
 </script>
-
-Hi there! My name is Tamara. I’m from Buenos Aires, Argentina, and I'm a Spanish teacher.
  
 I studied Language and Literature at Buenos Aires University, and I have over 10 years of experience in teaching Spanish as a second language.
  
