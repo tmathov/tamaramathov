@@ -19,10 +19,10 @@ var url = new URL(currentPageUrl);
 var lang = url.searchParams.get("lang");
 
 if (lang == 'en'){
-    var code = '<iframe width="560" height="315" id="demo" src="https://www.youtube.com/embed/vl5xa6D1S58" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+    var code = '<iframe id="demo" width="100%" height="315px" class="center" src="https://www.youtube.com/embed/vl5xa6D1S58" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
     document.getElementById("video").insertAdjacentHTML('afterend', code);
 } else {
-    var code = '<iframe width="560" height="315" id="demo" src="https://www.youtube.com/embed/zxixqQlckc0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+    var code = '<iframe id="demo" width="100%" height="315px" class="center" src="https://www.youtube.com/embed/zxixqQlckc0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
     document.getElementById("video").insertAdjacentHTML('afterend', code);
 }
 </script>

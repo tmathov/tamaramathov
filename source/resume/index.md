@@ -28,13 +28,13 @@ description: Brief summary about myself
  
 #### Copywriting
  
-- 2018. Conversational Spanish Guide. Fenix Enterprises LLC.
+- 2018 - Conversational Spanish Guide. Fenix Enterprises LLC.
     Practical Spanish guide written in English for English-speaking students.
  
-- 2017. Spanish Short Stories for Advanced Students. Fenix Enterprises LLC.
+- 2017 - Spanish Short Stories for Advanced Students. Fenix Enterprises LLC.
     Book of ten short stories in Spanish for foreign students.
  
-- 2016. Spanish for Beginners Kindle Book.
+- 2016 - Spanish for Beginners Kindle Book.
     E-book with the basics of Spanish language written in English.
  
 #### Translation
@@ -58,11 +58,11 @@ description: Brief summary about myself
 - January 2018-Present. Proofreading master’s and doctoral theses and academic
     articles for researchers and fellows of CONICET, Instituto Gino Germani, and CEDES.
  
-- 2017. Zapata, M.C. La política habitacional porteña bajo la lupa: de los programas llave en mano a la autogestión del hábitat. Editorial Teseo. Buenos Aires: 2017. Digital book, EPUB.
+- 2017 - Zapata, M.C. La política habitacional porteña bajo la lupa: de los programas llave en mano a la autogestión del hábitat. Editorial Teseo. Buenos Aires: 2017. Digital book, EPUB.
  
-- 2017. Durán, E. and Torrado M.C, ed. Políticas de infancia y adolescencia: ¿camino a la equidad? National University of Colombia. Bogotá: 2017.
+- 2017 - Durán, E. and Torrado M.C, ed. Políticas de infancia y adolescencia: ¿camino a la equidad? National University of Colombia. Bogotá: 2017.
  
-- 2016. Voces íntimas: relatos e imágenes de mujeres artistas. Exhibition catalog, National Museum of Colombia.
+- 2016 - Voces íntimas: relatos e imágenes de mujeres artistas. Exhibition catalog, National Museum of Colombia.
  
  
 ### Artistic Background.
