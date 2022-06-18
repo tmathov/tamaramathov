@@ -32,6 +32,7 @@ social_links:
 e_social:
   enable: true
 e_social_links:
+  tamaramathov@gmail.com: tamaramathov@gmail.com || fas fa-envelope
   LinkedIn: https://www.linkedin.com/in/tamara-m-6298161ab/ || fab fa-linkedin
   Upwork: https://www.upwork.com/freelancers/~01307cb9a33f300c23?viewMode=1 || fas fa-briefcase
 
