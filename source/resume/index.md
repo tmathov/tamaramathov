@@ -1,23 +1,23 @@
 ---
-title: About
+title: Resume
 description: Brief summary about myself
 ---
  
-## Education and Certifications
+### Education and Certifications
  
-### University
+#### University
 
 - Bachelor in Language and Literature - Faculty of Philosophy and Letters, University of Buenos Aires
 - Nouvelle Course - Javeriana University of Bogota.
 
-### English
+#### English
 
 - Certificate of Advanced English from Cambridge University (CAE)
 - International General Certificate of Secondary Education (IGCSE).
  
-## Employment Background
+### Employment Background
  
-### Teaching      
+#### Teaching      
  
 - 2013-Present. Virtual courses in English and Spanish as second languages.
            
@@ -26,7 +26,7 @@ description: Brief summary about myself
 - 2013-2020. Spanish instructor and educational content creator at [Accelerated Spanish](http://spanish.masterofmemory.com/).
            
  
-### Copywriting
+#### Copywriting
  
 - 2018. Conversational Spanish Guide. Fenix Enterprises LLC.
     Practical Spanish guide written in English for English-speaking students.
@@ -37,7 +37,7 @@ description: Brief summary about myself
 - 2016. Spanish for Beginners Kindle Book.
     E-book with the basics of Spanish language written in English.
  
-### Translation
+#### Translation
  
 - 2021-Present. Balanz Collection - Contemporary Art
     Translation of catalogs and institutional texts.
@@ -47,7 +47,7 @@ description: Brief summary about myself
  
 - 2017-Present. Translation of academic articles for researchers at CONICET, Instituto Gino Germani and CEDES.
  
-### Text Editing
+#### Text Editing
  
 - 2021-Present. Balanz Collection – Contemporary Art
     Translation of catalogs and institutional texts.
@@ -65,7 +65,7 @@ description: Brief summary about myself
 - 2016. Voces íntimas: relatos e imágenes de mujeres artistas. Exhibition catalog, National Museum of Colombia.
  
  
-## Artistic Background.
+### Artistic Background.
  
 - June 2018. Third place in the short story contest “Cuentos a la Calle”, organized by Unabrecha, with the story “El tiempo muerto”.
  
