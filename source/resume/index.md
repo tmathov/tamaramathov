@@ -28,10 +28,7 @@ description: Brief summary about myself
  
 #### Copywriting
  
-- 2018 - Collaborator at [Verbalicity](https://verbalicity.com/blog/)
-    [Conditional tense](https://verbalicity.com/spanish-conditional-tense/)
-    [Ser vs Estar](https://verbalicity.com/ser-vs-estar/)
-    [Por vs Para](https://verbalicity.com/por-vs-para/)
+- 2018 - Collaborator at [Verbalicity](https://verbalicity.com/blog/):[Conditional tense](https://verbalicity.com/spanish-conditional-tense/);[Ser vs Estar](https://verbalicity.com/ser-vs-estar/); [Por vs Para](https://verbalicity.com/por-vs-para/)
 
 - 2018 - Conversational Spanish Guide. Fenix Enterprises LLC.
     Practical Spanish guide written in English for English-speaking students.
