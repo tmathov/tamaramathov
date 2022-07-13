@@ -74,9 +74,9 @@ description: Brief summary about myself
  
  ### Press 
 
-- July 2020. [¿Por qué el lenguaje no binario tiene aún tanta resistencia?](https://www.lv12.com.ar/por-que-el-lenguaje-no-binario-tiene-aun-tanta-resistencia-n74670). Interview on gender-neutral Spanish. 
+- July 2020. [¿Por qué el lenguaje no binario tiene aún tanta resistencia?](https://www.lv12.com.ar/por-que-el-lenguaje-no-binario-tiene-aun-tanta-resistencia-n74670) - Interview on gender-neutral Spanish. 
 
-- June 2020. [Este nete es pere tedes les que edien el lengueje encleseve](https://www.filo.news/genero/Este-nete-es-pere-tedes-les-que-edien-el-lengueje-encleseve-20200622-0043.html). Interview on gender-neutral Spanish. 
+- June 2020. [Este nete es pere tedes les que edien el lengueje encleseve](https://www.filo.news/genero/Este-nete-es-pere-tedes-les-que-edien-el-lengueje-encleseve-20200622-0043.html) - Interview on gender-neutral Spanish. 
 
-- July 2018. [Por qué muchos insultos tienen como protagonistas a las mujeres y qué hacer al respecto](https://www.lanacion.com.ar/lifestyle/por-que-muchos-insultos-tienen-como-protagonistas-a-las-mujeres-y-que-hacer-al-respecto-nid2151011/). Interview on sexist insults. 
+- July 2018. [Por qué muchos insultos tienen como protagonistas a las mujeres y qué hacer al respecto](https://www.lanacion.com.ar/lifestyle/por-que-muchos-insultos-tienen-como-protagonistas-a-las-mujeres-y-que-hacer-al-respecto-nid2151011/) - Interview on sexist insults. 
 
