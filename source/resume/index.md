@@ -23,7 +23,7 @@ description: Brief summary about myself
            
 - 2013-Present. Virtual courses in literature and creative writing both for native and non-native speakers.
 
-- 2022 - [Can computers write poetry?](https://www.cceba.org.ar/medialab/pueden-escribir-poesia-las-computadoras) - Co-instructor at CCEBA Media Lab. 
+- April 2022. [Can computers write poetry?](https://www.cceba.org.ar/medialab/pueden-escribir-poesia-las-computadoras) - Co-instructor at CCEBA Media Lab. 
  
 - 2013-2020. Spanish instructor and educational content creator at [Accelerated Spanish](http://spanish.masterofmemory.com/).
            
