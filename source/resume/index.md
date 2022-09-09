@@ -28,7 +28,11 @@ description: Brief summary about myself
 - 2013-2020. Spanish instructor and educational content creator at [Accelerated Spanish](http://spanish.masterofmemory.com/).
            
  
-#### Copywriting
+#### Language Content
+ 
+- 2022 - Spanish proficiency tests development based on the Common European Framework of Reference for Languages  (Language Knowledge, Reading and Listening Comprehension) for Idioma Internacional.
+
+- 2022 - Blog Posts at Polygloss for Spanish learners.
  
 - 2018 - Collaborator at [Verbalicity](https://verbalicity.com/blog/): [Conditional tense](https://verbalicity.com/spanish-conditional-tense/);[Ser vs Estar](https://verbalicity.com/ser-vs-estar/); [Por vs Para](https://verbalicity.com/por-vs-para/)
 
@@ -44,12 +48,12 @@ description: Brief summary about myself
 #### Translation
  
 - 2021-Present. Balanz Collection - Contemporary Art
-    Translation of catalogs and institutional texts.
+    Spanish to English translation of catalogs and institutional texts.
  
 - 2018-Present. Parque de la Memoria, CABA.
-    Translation of catalogs, room texts, and institutional texts.
+    Spanish to English translation of catalogs, room texts, and institutional texts.
  
-- 2017-Present. Translation of academic articles for researchers at CONICET, Instituto Gino Germani and CEDES.
+- 2017-Present. Spanish to English translation of academic articles for researchers at CONICET, Instituto Gino Germani and CEDES.
  
 #### Text Editing
  
