@@ -9,7 +9,7 @@ html(lang=config.language)
         !=favicon_tag(config.favicon || theme.favicon || '/favicon.ico')
         each item in theme.CDN_USE.css
             link(rel='stylesheet', href=url_for(item))
-        include ./google-analytics.pug
+        script(src='./google-analytics.js')
     body
         header#page_header
             include ./header.pug
