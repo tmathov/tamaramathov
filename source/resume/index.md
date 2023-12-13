@@ -19,9 +19,9 @@ description: Brief summary about myself
  
 #### Teaching      
  
-- 2013-Present. Virtual courses in English and Spanish as second languages.
+- 2013-Present. Online English and Spanish as second language lessons.
            
-- 2013-Present. Virtual courses in literature and creative writing both for native and non-native speakers.
+- 2013-Present. Online lessons of literature and creative writing both for native and non-native speakers.
 
 - April 2022. [Can computers write poetry?](https://www.cceba.org.ar/medialab/pueden-escribir-poesia-las-computadoras) - Co-instructor at CCEBA Media Lab. 
  
