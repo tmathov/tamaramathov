@@ -30,6 +30,8 @@ description: Brief summary about myself
  
 #### Language Content
  
+- 2024 - Spanish Flex Course Creation for Berlitz Corporation
+
 - 2022 - Spanish proficiency tests development based on the Common European Framework of Reference for Languages  (Language Knowledge, Reading and Listening Comprehension) for Idioma Internacional.
 
 - 2022 - Blog Posts at Polygloss for Spanish learners.
