@@ -5,6 +5,14 @@ academia: true
 preview_image: about/mathigatti-photo.jpg
 ---
 Hi there! My name is Tamara and I'm a Spanish teacher.
+ 
+I’m from Buenos Aires, Argentina, but I’m currently based in Spain, where I research philosophy and linguistics at Universidad de Barcelona. I hold a degree in Language and Literature and have been teaching Spanish since 2012. 
+
+Working remotely allowed me to travel across South America until 2017, when I settled back in Buenos Aires. In 2024 I moved to Barcelona to continue learning. All these experiences not only exposed me to diverse lifestyles and cultures but also gave me firsthand insight into the many contemporary forms of Spanish. 
+ 
+I’m interested in science, politics, feminism and fiction—anything that helps me better understand how the world works! And I love exploring these ideas collectively. That’s why I’m passionate about helping people learn languages; they are the most powerful tools we have for connection.
+
+What I enjoy most is hearing people’s stories and discovering new perspectives on life.  I believe my students learn a lot from our time together, but I also learn from them. The most rewarding part of my work is the transformation that happens through our interactions.
 
 <div id="video"></div>
 
@@ -26,14 +34,6 @@ if (lang == 'en'){
     document.getElementById("video").insertAdjacentHTML('afterend', code);
 }
 </script>
- 
-I’m from Buenos Aires, Argentina, but I’m currently based in Spain, where I research philosophy and linguistics at Universidad de Barcelona. I hold a degree in Language and Literature and have been teaching Spanish since 2012. 
-
-Working remotely allowed me to travel across South America until 2017, when I settled back in Buenos Aires. In 2024 I moved to Barcelona to continue learning. All these experiences not only exposed me to diverse lifestyles and cultures but also gave me firsthand insight into the many contemporary forms of Spanish. 
- 
-I’m interested in science, politics, feminism and fiction—anything that helps me better understand how the world works! And I love exploring these ideas collectively. That’s why I’m passionate about helping people learn languages; they are the most powerful tools we have for connection.
-
-What I enjoy most is hearing people’s stories and discovering new perspectives on life.  I believe my students learn a lot from our time together, but I also learn from them. The most rewarding part of my work is the transformation that happens through our interactions.
 
 ---
 
