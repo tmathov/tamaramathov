@@ -7,6 +7,7 @@ description: Brief summary about myself
  
 #### University
 
+- Master Degree in Contemporary Philosophy - University of Barcelona
 - Bachelor in Language and Literature - Faculty of Philosophy and Letters, University of Buenos Aires
 - Nouvelle Course - Javeriana University of Bogota.
 
@@ -19,13 +20,14 @@ description: Brief summary about myself
  
 #### Teaching      
  
+- 2024-Present. Curriculum Specialist at [Learncraft Spanish](http://https://www.learncraftspanish.com)
 - 2013-Present. Online English and Spanish as second language lessons.
            
 - 2013-Present. Online lessons of literature and creative writing both for native and non-native speakers.
 
 - April 2022. [Can computers write poetry?](https://www.cceba.org.ar/medialab/pueden-escribir-poesia-las-computadoras) - Co-instructor at CCEBA Media Lab. 
  
-- 2013-2020. Spanish instructor and educational content creator at [Accelerated Spanish](http://spanish.masterofmemory.com/).
+- 2013-2020. Spanish instructor and educational content creator at [Learncraft Spanish](http://https://www.learncraftspanish.com).
            
  
 #### Language Content
