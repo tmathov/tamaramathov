@@ -27,7 +27,7 @@ if (lang == 'en'){
 }
 </script>
  
-I’m from Buenos Aires, Argentina, but I’m currently based in Barcelona, Spain, where I research philosophy and linguistics. I hold a degree in Language and Literature and have been teaching Spanish since 2012. 
+I’m from Buenos Aires, Argentina, but I’m currently based in Spain, where I research philosophy and linguistics at Universidad de Barcelona. I hold a degree in Language and Literature and have been teaching Spanish since 2012. 
 
 Working remotely allowed me to travel across South America until 2017, when I settled back in Buenos Aires. In 2024 I moved to Barcelona to continue learning. All these experiences not only exposed me to diverse lifestyles and cultures but also gave me firsthand insight into the many contemporary forms of Spanish. 
  
