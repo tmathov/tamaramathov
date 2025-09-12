@@ -25,7 +25,7 @@ description: Brief summary about myself
            
 - 2013-Present. Online lessons of literature and creative writing both for native and non-native speakers.
 
-- December 2022. [Creative writing assisted by artificial intelligence] (https://campus.citep.rec.uba.ar/course/index.php?categoryid=69) - Co-instructor at the Center for Innovation in Technology and Education workshops at the University of Buenos Aires. 
+- December 2022. [Creative writing assisted by artificial intelligence](https://campus.citep.rec.uba.ar/course/index.php?categoryid=69) - Co-instructor at the Center for Innovation in Technology and Education workshops at the University of Buenos Aires. 
 
 - April 2022. [Can computers write poetry?](https://www.cceba.org.ar/medialab/pueden-escribir-poesia-las-computadoras) - Co-instructor at CCEBA Media Lab. 
  
