@@ -24,7 +24,7 @@ loading_bg:
 social:
   enable: false
 social_links:
-  fab fa-linkedin: https://www.linkedin.com/in/tamara-m-6298161ab/
+  fab fa-linkedin: https://www.linkedin.com/in/tamara-mathov-6298161ab/
   fas fa-briefcase: https://www.upwork.com/freelancers/~01307cb9a33f300c23?viewMode=1
 
 # Additional social_links，额外添加自定义链接，可显示链接名称
@@ -33,7 +33,7 @@ e_social:
   enable: true
 e_social_links:
   tamaramathov@gmail.com: tamaramathov@gmail.com || fas fa-envelope
-  LinkedIn: https://www.linkedin.com/in/tamara-m-6298161ab/ || fab fa-linkedin
+  LinkedIn: https://www.linkedin.com/in/tamara-mathov-6298161ab/ || fab fa-linkedin
   Upwork: https://www.upwork.com/freelancers/~01307cb9a33f300c23?viewMode=1 || fas fa-briefcase
 
 # CV download link
@@ -59,3 +59,4 @@ CDN_USE:
     - https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js #/js/third-party/jquery.min.js
     - https://cdn.jsdelivr.net/npm/jquery-pjax@latest/jquery.pjax.min.js
     - /js/main.js
+
