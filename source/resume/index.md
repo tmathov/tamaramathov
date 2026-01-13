@@ -8,8 +8,7 @@ description: Brief summary about myself
 #### University
 
 - Master Degree in Contemporary Philosophy - University of Barcelona
-- Bachelor in Language and Literature - Faculty of Philosophy and Letters, University of Buenos Aires
-- Nouvelle Course - Javeriana University of Bogota.
+- Bachelor in Language and Literature with specialization in Linguistics (2816 h | GPA 8.65/10) - Faculty of Philosophy and Letters, University of Buenos Aires
 
 #### English
 
@@ -78,7 +77,12 @@ description: Brief summary about myself
  
 - 2016 - Voces íntimas: relatos e imágenes de mujeres artistas. Exhibition catalog, National Museum of Colombia.
  
- 
+### Research
+
+- 2018-2020. Research assistant at the neurolinguistics department of the University of Buenos Aires.
+  
+- 2018-2020. Reaserach assistant at Di Tella University neuroscience lab. 
+
 ### Artistic Background
  
 - June 2018. Third place in the short story contest “Cuentos a la Calle”, organized by Unabrecha, with the story “El tiempo muerto”.
