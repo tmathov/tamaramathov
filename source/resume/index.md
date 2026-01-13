@@ -13,7 +13,7 @@ description: Brief summary about myself
 #### English
 
 - Certificate of Advanced English from Cambridge University (CAE)
-- International General Certificate of Secondary Education (IGCSE).
+- International General Certificate of Secondary Education (IGCSE)
  
 ### Employment Background
  
