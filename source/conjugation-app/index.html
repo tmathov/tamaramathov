@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Conjugaciones</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#ffffff; --ink:#1a1a1a; --gray:#8a8a8a; --gray-light:#e4e4e4;
+  --accent:#c4432e; --ok:#4a7a5c; --warn:#b8860b;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Inter',sans-serif;
+  min-height:100vh; display:flex; justify-content:center;
+  padding:60px 20px 80px;
+}
+.col{ width:100%; max-width:440px; }
+
+/* header */
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin:0 0 36px;}
+h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:1.5rem;margin:0 0 32px;letter-spacing:-.01em;}
+
+/* filters (collapsed by default) */
+.top-divider{ border:none; border-top:1px solid var(--gray-light); margin:0 0 40px; }
+details.filters{ margin-top:56px; border-top:1px solid var(--gray-light); border-bottom:1px solid var(--gray-light); }
+details.filters summary{
+  list-style:none; cursor:pointer; padding:12px 0;
+  font-family:'IBM Plex Mono',monospace; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; color:var(--gray);
+  display:flex; justify-content:space-between; align-items:center;
+}
+details.filters > summary::-webkit-details-marker{ display:none; }
+details.filters > summary::marker{ content:''; display:none; }
+details.filters > summary::after{ content:'+'; font-family:'Inter'; font-size:1rem; }
+details.filters[open] > summary::after{ content:'–'; }
+.filter-body{ padding:4px 0 24px; }
+.f-group{ margin-bottom:20px; }
+.f-label{ font-family:'IBM Plex Mono',monospace; font-size:.76rem; letter-spacing:.08em; text-transform:uppercase; color:var(--gray); display:block; margin-bottom:8px; }
+.f-sub{ font-family:'Inter'; font-size:.68rem; font-weight:600; color:#b3a58f; margin:10px 0 4px; }
+.sub-details{ margin:4px 0; }
+.sub-details summary.f-sub{ cursor:pointer; list-style:none; list-style-type:none; display:flex; align-items:center; justify-content:flex-start; text-align:left; width:100%; gap:5px; user-select:none; color:#b3a58f; }
+.sub-details summary.f-sub::-webkit-details-marker{ display:none; }
+.sub-details summary.f-sub::marker{ content:''; display:none; font-size:0; }
+.sub-details summary.f-sub::before{ content:'▸'; font-size:.6rem; color:#b3a58f; transition:transform .12s ease; }
+.sub-details[open] summary.f-sub::before{ transform:rotate(90deg); }
+.sub-details .opt-row{ margin-top:4px; }
+.opt-row{ display:flex; flex-wrap:wrap; gap:6px; }
+.opt{
+  font-family:'Inter'; font-size:.78rem; padding:4px 10px; cursor:pointer; user-select:none;
+  border:1px solid var(--gray-light); color:var(--gray); border-radius:2px;
+}
+.opt.active{ border-color:var(--ink); color:var(--ink); }
+.opt.struct.active{ border-color:var(--accent); color:var(--accent); }
+.radio-inline{ display:flex; gap:16px; font-size:.8rem; }
+.radio-inline label{ display:flex; align-items:center; gap:5px; cursor:pointer; color:var(--gray); }
+.radio-inline input:checked + span{ color:var(--ink); font-weight:600; }
+input#manualInput{ width:100%; font-family:'IBM Plex Mono',monospace; font-size:.8rem; padding:8px 0; border:none; border-bottom:1px solid var(--gray-light); outline:none; background:transparent; }
+input#manualInput:focus{ border-color:var(--ink); }
+.manual-status{ font-family:'IBM Plex Mono',monospace; font-size:.68rem; margin-top:6px; }
+.manual-status .ok{ color:var(--ok); } .manual-status .bad{ color:var(--accent); }
+.switch-row{ display:flex; align-items:center; gap:8px; }
+.switch{ position:relative; width:34px; height:19px; flex-shrink:0; }
+.switch input{ opacity:0; width:0; height:0; }
+.switch-track{ position:absolute; inset:0; background:var(--gray-light); border-radius:19px; cursor:pointer; transition:background .15s ease; }
+.switch-track::before{ content:''; position:absolute; width:14px; height:14px; left:2.5px; top:2.5px; background:#fff; border-radius:50%; transition:transform .15s ease; box-shadow:0 1px 2px rgba(0,0,0,.25); }
+.switch input:checked + .switch-track{ background:var(--ink); }
+.switch input:checked + .switch-track::before{ transform:translateX(15px); }
+.switch-label{ font-family:'Inter'; font-size:.82rem; color:#4a4130; cursor:pointer; }
+
+/* question */
+.tags{ display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap; }
+.tag{ font-family:'IBM Plex Mono',monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; color:var(--gray); }
+.tag.accent{ color:var(--accent); }
+.tag::before{ content:'· '; }
+
+.pronoun-line{ font-family:'IBM Plex Serif',serif; font-style:italic; font-size:1.15rem; color:var(--gray); margin-bottom:2px; }
+.verb-display{ font-family:'IBM Plex Serif',serif; font-weight:600; font-size:2.6rem; letter-spacing:-.01em; margin:2px 0 34px; }
+.verb-display.long{ font-size:1.7rem; line-height:1.3; }
+.sentence .blank{ display:inline-block; min-width:90px; border-bottom:2px solid var(--ink); }
+.hint{ display:block; font-family:'IBM Plex Mono',monospace; font-size:.7rem; color:var(--gray); margin-top:10px; }
+
+.options-row{ display:flex; flex-direction:column; gap:0; margin:0 0 34px; }
+.opt-btn{
+  font-family:'IBM Plex Mono',monospace; font-size:1rem; text-align:left; padding:13px 4px;
+  border:none; border-bottom:1px solid var(--gray-light); background:transparent; color:var(--ink); cursor:pointer;
+  display:flex; align-items:center; gap:12px; width:100%;
+}
+.opt-btn:hover{ background:#fafafa; }
+.opt-btn.correct{ color:var(--ok); font-weight:600; }
+.opt-btn.wrong{ color:var(--accent); text-decoration:line-through; }
+.opt-num{ font-size:.72rem; color:var(--gray); border:1px solid var(--gray-light); border-radius:3px; width:18px; height:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.opt-btn.correct .opt-num{ border-color:var(--ok); color:var(--ok); }
+.opt-btn.wrong .opt-num{ border-color:var(--accent); color:var(--accent); }
+
+.answer-wrap{ position:relative; margin-bottom:8px; }
+.tilde-pop{
+  position:absolute; top:-22px; left:0; font-family:'IBM Plex Serif',serif; font-size:1.3rem; color:var(--ok);
+  opacity:0; transform:translateY(6px); transition:all .35s ease;
+}
+.tilde-pop.show{ opacity:1; transform:translateY(0); }
+input#answer{
+  width:100%; font-family:'IBM Plex Mono',monospace; font-size:1.3rem; padding:8px 0;
+  border:none; border-bottom:2px solid var(--ink); outline:none; background:transparent; color:var(--ink);
+}
+input#answer.wrong{ border-color:var(--accent); color:var(--accent); }
+input#answer.correct{ border-color:var(--ok); color:var(--ok); }
+input#answer.almost{ border-color:var(--warn); color:var(--warn); }
+
+.actions{ display:flex; justify-content:space-between; align-items:center; margin-top:24px; }
+button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cursor:pointer; background:none; padding:0; }
+#checkBtn{ color:var(--bg); background:var(--ink); padding:10px 22px; border-radius:2px; }
+#checkBtn:hover{ background:var(--accent); }
+#nextBtn{ color:var(--gray); }
+#nextBtn:hover{ color:var(--ink); }
+#prevBtn{ color:var(--gray); }
+#prevBtn:hover:not(:disabled){ color:var(--ink); }
+#prevBtn:disabled{ opacity:.3; cursor:default; }
+
+.feedback{ font-family:'Inter'; font-size:.85rem; min-height:20px; margin-top:14px; color:var(--gray); }
+.feedback.bad{ color:var(--accent); }
+.feedback.almost{ color:var(--warn); }
+.warn{ font-family:'Inter'; font-size:.85rem; color:var(--accent); border:1px solid var(--accent); padding:12px 14px; border-radius:2px; }
+
+/* streak as accumulating tildes */
+.scoreboard{ margin-top:56px; padding-top:20px; border-top:1px solid var(--gray-light); display:flex; justify-content:space-between; align-items:baseline; }
+.score-text{ font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--gray); }
+.streak-marks{ font-family:'IBM Plex Serif',serif; font-size:1.1rem; color:var(--ok); letter-spacing:2px; max-width:200px; text-align:right; overflow-wrap:break-word; }
+</style>
+</head>
+<body>
+<div class="col">
+  <p class="eyebrow">Práctica de conjugación</p>
+  <hr class="top-divider">
+
+  <div class="tags" id="tags"></div>
+
+  <div id="questionArea">
+    <div class="pronoun-line" id="pronounLine"></div>
+    <div class="verb-display" id="verbDisplay" style="display:none;"></div>
+  </div>
+
+  <div id="mcBox" class="options-row" style="display:none;"></div>
+
+  <div class="answer-wrap" id="inputWrap">
+    <div class="tilde-pop" id="tildePop">´</div>
+    <input type="text" id="answer" placeholder="" autocomplete="off">
+  </div>
+
+  <div class="actions">
+    <button id="checkBtn">Comprobar</button>
+    <button id="prevBtn">← Anterior</button>
+    <button id="nextBtn">Siguiente →</button>
+  </div>
+  <div class="feedback" id="feedback"></div>
+  <div id="warnBox"></div>
+
+  <div class="scoreboard">
+    <span class="score-text" id="scoreText">0 correctas · 0 incorrectas</span>
+    <span class="streak-marks" id="streakText"></span>
+  </div>
+
+  <details class="filters" id="filtersDetails">
+    <summary>Filtros</summary>
+    <div class="filter-body">
+      <div class="f-group">
+        <span class="f-label">Vocabulario</span>
+        <div class="radio-inline" id="nivelRadio">
+          <label><input type="radio" name="nivel" value="1" checked><span>básico</span></label>
+          <label><input type="radio" name="nivel" value="2"><span>intermedio</span></label>
+          <label><input type="radio" name="nivel" value="3"><span>avanzado</span></label>
+        </div>
+      </div>
+      <div class="f-group">
+        <span class="f-label">Tipo de verbo</span>
+        <div class="opt-row" id="tipoChips"></div>
+      </div>
+      <div class="f-group">
+        <span class="f-label">Tiempos verbales</span>
+        <details class="sub-details">
+          <summary class="f-sub">Indicativo</summary>
+          <div class="opt-row" id="tenseChipsInd"></div>
+        </details>
+        <details class="sub-details">
+          <summary class="f-sub">Subjuntivo</summary>
+          <div class="opt-row" id="tenseChipsSubj"></div>
+        </details>
+        <details class="sub-details">
+          <summary class="f-sub">Imperativo</summary>
+          <div class="opt-row" id="tenseChipsImp"></div>
+        </details>
+      </div>
+      <div class="f-group">
+        <span class="f-label">Formas especiales</span>
+        <div class="opt-row" id="structChips"></div>
+        <div class="opt-row" id="pronominalChip" style="margin-top:6px;"></div>
+        <div class="opt-row" id="onlyEspecialesChip" style="margin-top:8px;"></div>
+      </div>
+      <div class="f-group">
+        <span class="f-label">Modos de drilling</span>
+        <div class="opt-row" id="modeChips"></div>
+      </div>
+      <div class="f-group">
+        <span class="f-label">Modo manual - Verbos específicos</span>
+        <input type="text" id="manualInput" placeholder="ej. hablar, tener, ir">
+        <div class="manual-status" id="manualStatus"></div>
+        <div class="opt-row" id="onlyManualChip" style="margin-top:8px;"></div>
+      </div>
+    </div>
+  </details>
+</div>
+
+<script>
+/* ================= engine ================= */
+const ACCENT = {a:'á',e:'é',i:'í',o:'ó',u:'ú'};
+const DEACCENT = {á:'a',é:'e',í:'i',ó:'o',ú:'u'};
+function stripAccents(s){ return s.replace(/[áéíóú]/g, c=>DEACCENT[c]); }
+function accentLast(s){ const c=s.slice(-1); return s.slice(0,-1) + (ACCENT[c]||c); }
+function imperfSubj(verb){ const base=verb.table.preterito[4].slice(0,-3); return [base+'ra',base+'ras',base+'ra',accentLast(base)+'ramos',base+'ran']; }
+const IRREG_PART = {hacer:'hecho', ver:'visto', poner:'puesto', volver:'vuelto', escribir:'escrito',
+  romper:'roto', morir:'muerto', decir:'dicho', abrir:'abierto', cubrir:'cubierto', descubrir:'descubierto',
+  proponer:'propuesto', detener:'detenido', sostener:'sostenido', suponer:'supuesto', obtener:'obtenido', mantener:'mantenido'};
+function participio(verb){
+  const inf = verb.pronominal ? verb.baseInf : verb.inf;
+  if(IRREG_PART[inf]) return IRREG_PART[inf];
+  const stem = inf.slice(0,-2);
+  const type = inf.slice(-2);
+  return stem + (type==='ar' ? 'ado' : 'ido');
+}
+
+const VERBS = [
+  {inf:'ser',type:'er',tr:'to be',tag:'irregular',nivel:1,table:{presente:['soy','eres','es','somos','son'],preterito:['fui','fuiste','fue','fuimos','fueron'],imperfecto:['era','eras','era','éramos','eran'],futuro:['seré','serás','será','seremos','serán'],condicional:['sería','serías','sería','seríamos','serían'],subjuntivo:['sea','seas','sea','seamos','sean']},pronominal:false},
+  {inf:'estar',type:'ar',tr:'to be',tag:'irregular',nivel:1,table:{presente:['estoy','estás','está','estamos','están'],preterito:['estuve','estuviste','estuvo','estuvimos','estuvieron'],imperfecto:['estaba','estabas','estaba','estábamos','estaban'],futuro:['estaré','estarás','estará','estaremos','estarán'],condicional:['estaría','estarías','estaría','estaríamos','estarían'],subjuntivo:['esté','estés','esté','estemos','estén']},pronominal:false},
+  {inf:'tener',type:'er',tr:'to have',tag:'irregular',nivel:1,table:{presente:['tengo','tienes','tiene','tenemos','tienen'],preterito:['tuve','tuviste','tuvo','tuvimos','tuvieron'],imperfecto:['tenía','tenías','tenía','teníamos','tenían'],futuro:['tendré','tendrás','tendrá','tendremos','tendrán'],condicional:['tendría','tendrías','tendría','tendríamos','tendrían'],subjuntivo:['tenga','tengas','tenga','tengamos','tengan']},pronominal:false},
+  {inf:'hacer',type:'er',tr:'to do/make',tag:'irregular',nivel:1,table:{presente:['hago','haces','hace','hacemos','hacen'],preterito:['hice','hiciste','hizo','hicimos','hicieron'],imperfecto:['hacía','hacías','hacía','hacíamos','hacían'],futuro:['haré','harás','hará','haremos','harán'],condicional:['haría','harías','haría','haríamos','harían'],subjuntivo:['haga','hagas','haga','hagamos','hagan']},pronominal:false},
+  {inf:'ir',type:'ir',tr:'to go',tag:'irregular',nivel:1,table:{presente:['voy','vas','va','vamos','van'],preterito:['fui','fuiste','fue','fuimos','fueron'],imperfecto:['iba','ibas','iba','íbamos','iban'],futuro:['iré','irás','irá','iremos','irán'],condicional:['iría','irías','iría','iríamos','irían'],subjuntivo:['vaya','vayas','vaya','vayamos','vayan']},pronominal:false},
+  {inf:'poder',type:'er',tr:'to be able to',tag:'irregular',nivel:1,table:{presente:['puedo','puedes','puede','podemos','pueden'],preterito:['pude','pudiste','pudo','pudimos','pudieron'],imperfecto:['podía','podías','podía','podíamos','podían'],futuro:['podré','podrás','podrá','podremos','podrán'],condicional:['podría','podrías','podría','podríamos','podrían'],subjuntivo:['pueda','puedas','pueda','podamos','puedan']},pronominal:false},
+  {inf:'querer',type:'er',tr:'to want',tag:'irregular',nivel:1,table:{presente:['quiero','quieres','quiere','queremos','quieren'],preterito:['quise','quisiste','quiso','quisimos','quisieron'],imperfecto:['quería','querías','quería','queríamos','querían'],futuro:['querré','querrás','querrá','querremos','querrán'],condicional:['querría','querrías','querría','querríamos','querrían'],subjuntivo:['quiera','quieras','quiera','queramos','quieran']},pronominal:false},
+  {inf:'creer',type:'er',tr:'to believe',tag:'irregular',nivel:1,table:{presente:['creo','crees','cree','creemos','creen'],preterito:['creí','creíste','creyó','creímos','creyeron'],imperfecto:['creía','creías','creía','creíamos','creían'],futuro:['creeré','creerás','creerá','creeremos','creerán'],condicional:['creería','creerías','creería','creeríamos','creerían'],subjuntivo:['crea','creas','crea','creamos','crean']},pronominal:false},
+  {inf:'hablar',type:'ar',tr:'to speak',tag:'regular',nivel:1,table:{presente:['hablo','hablas','habla','hablamos','hablan'],preterito:['hablé','hablaste','habló','hablamos','hablaron'],imperfecto:['hablaba','hablabas','hablaba','hablábamos','hablaban'],futuro:['hablaré','hablarás','hablará','hablaremos','hablarán'],condicional:['hablaría','hablarías','hablaría','hablaríamos','hablarían'],subjuntivo:['hable','hables','hable','hablemos','hablen']},pronominal:false},
+  {inf:'vivir',type:'ir',tr:'to live',tag:'regular',nivel:1,table:{presente:['vivo','vives','vive','vivimos','viven'],preterito:['viví','viviste','vivió','vivimos','vivieron'],imperfecto:['vivía','vivías','vivía','vivíamos','vivían'],futuro:['viviré','vivirás','vivirá','viviremos','vivirán'],condicional:['viviría','vivirías','viviría','viviríamos','vivirían'],subjuntivo:['viva','vivas','viva','vivamos','vivan']},pronominal:false},
+  {inf:'comer',type:'er',tr:'to eat',tag:'regular',nivel:1,table:{presente:['como','comes','come','comemos','comen'],preterito:['comí','comiste','comió','comimos','comieron'],imperfecto:['comía','comías','comía','comíamos','comían'],futuro:['comeré','comerás','comerá','comeremos','comerán'],condicional:['comería','comerías','comería','comeríamos','comerían'],subjuntivo:['coma','comas','coma','comamos','coman']},pronominal:false},
+  {inf:'beber',type:'er',tr:'to drink',tag:'regular',nivel:1,table:{presente:['bebo','bebes','bebe','bebemos','beben'],preterito:['bebí','bebiste','bebió','bebimos','bebieron'],imperfecto:['bebía','bebías','bebía','bebíamos','bebían'],futuro:['beberé','beberás','beberá','beberemos','beberán'],condicional:['bebería','beberías','bebería','beberíamos','beberían'],subjuntivo:['beba','bebas','beba','bebamos','beban']},pronominal:false},
+  {inf:'dormir',type:'ir',tr:'to sleep',tag:'irregular',nivel:1,table:{presente:['duermo','duermes','duerme','dormimos','duermen'],preterito:['dormí','dormiste','durmió','dormimos','durmieron'],imperfecto:['dormía','dormías','dormía','dormíamos','dormían'],futuro:['dormiré','dormirás','dormirá','dormiremos','dormirán'],condicional:['dormiría','dormirías','dormiría','dormiríamos','dormirían'],subjuntivo:['duerma','duermas','duerma','durmamos','duerman']},pronominal:false},
+  {inf:'trabajar',type:'ar',tr:'to work',tag:'regular',nivel:1,table:{presente:['trabajo','trabajas','trabaja','trabajamos','trabajan'],preterito:['trabajé','trabajaste','trabajó','trabajamos','trabajaron'],imperfecto:['trabajaba','trabajabas','trabajaba','trabajábamos','trabajaban'],futuro:['trabajaré','trabajarás','trabajará','trabajaremos','trabajarán'],condicional:['trabajaría','trabajarías','trabajaría','trabajaríamos','trabajarían'],subjuntivo:['trabaje','trabajes','trabaje','trabajemos','trabajen']},pronominal:false},
+  {inf:'estudiar',type:'ar',tr:'to study',tag:'regular',nivel:1,table:{presente:['estudio','estudias','estudia','estudiamos','estudian'],preterito:['estudié','estudiaste','estudió','estudiamos','estudiaron'],imperfecto:['estudiaba','estudiabas','estudiaba','estudiábamos','estudiaban'],futuro:['estudiaré','estudiarás','estudiará','estudiaremos','estudiarán'],condicional:['estudiaría','estudiarías','estudiaría','estudiaríamos','estudiarían'],subjuntivo:['estudie','estudies','estudie','estudiemos','estudien']},pronominal:false},
+  {inf:'aprender',type:'er',tr:'to learn',tag:'regular',nivel:1,table:{presente:['aprendo','aprendes','aprende','aprendemos','aprenden'],preterito:['aprendí','aprendiste','aprendió','aprendimos','aprendieron'],imperfecto:['aprendía','aprendías','aprendía','aprendíamos','aprendían'],futuro:['aprenderé','aprenderás','aprenderá','aprenderemos','aprenderán'],condicional:['aprendería','aprenderías','aprendería','aprenderíamos','aprenderían'],subjuntivo:['aprenda','aprendas','aprenda','aprendamos','aprendan']},pronominal:false},
+  {inf:'escribir',type:'ir',tr:'to write',tag:'irregular',nivel:1,table:{presente:['escribo','escribes','escribe','escribimos','escriben'],preterito:['escribí','escribiste','escribió','escribimos','escribieron'],imperfecto:['escribía','escribías','escribía','escribíamos','escribían'],futuro:['escribiré','escribirás','escribirá','escribiremos','escribirán'],condicional:['escribiría','escribirías','escribiría','escribiríamos','escribirían'],subjuntivo:['escriba','escribas','escriba','escribamos','escriban']},pronominal:false},
+  {inf:'leer',type:'er',tr:'to read',tag:'irregular',nivel:1,table:{presente:['leo','lees','lee','leemos','leen'],preterito:['leí','leíste','leyó','leímos','leyeron'],imperfecto:['leía','leías','leía','leíamos','leían'],futuro:['leeré','leerás','leerá','leeremos','leerán'],condicional:['leería','leerías','leería','leeríamos','leerían'],subjuntivo:['lea','leas','lea','leamos','lean']},pronominal:false},
+  {inf:'escuchar',type:'ar',tr:'to listen',tag:'regular',nivel:1,table:{presente:['escucho','escuchas','escucha','escuchamos','escuchan'],preterito:['escuché','escuchaste','escuchó','escuchamos','escucharon'],imperfecto:['escuchaba','escuchabas','escuchaba','escuchábamos','escuchaban'],futuro:['escucharé','escucharás','escuchará','escucharemos','escucharán'],condicional:['escucharía','escucharías','escucharía','escucharíamos','escucharían'],subjuntivo:['escuche','escuches','escuche','escuchemos','escuchen']},pronominal:false},
+  {inf:'jugar',type:'ar',tr:'to play',tag:'irregular',nivel:1,table:{presente:['juego','juegas','juega','jugamos','juegan'],preterito:['jugué','jugaste','jugó','jugamos','jugaron'],imperfecto:['jugaba','jugabas','jugaba','jugábamos','jugaban'],futuro:['jugaré','jugarás','jugará','jugaremos','jugarán'],condicional:['jugaría','jugarías','jugaría','jugaríamos','jugarían'],subjuntivo:['juegue','juegues','juegue','juguemos','jueguen']},pronominal:false},
+  {inf:'comprar',type:'ar',tr:'to buy',tag:'regular',nivel:1,table:{presente:['compro','compras','compra','compramos','compran'],preterito:['compré','compraste','compró','compramos','compraron'],imperfecto:['compraba','comprabas','compraba','comprábamos','compraban'],futuro:['compraré','comprarás','comprará','compraremos','comprarán'],condicional:['compraría','comprarías','compraría','compraríamos','comprarían'],subjuntivo:['compre','compres','compre','compremos','compren']},pronominal:false},
+  {inf:'pagar',type:'ar',tr:'to pay',tag:'irregular',nivel:1,table:{presente:['pago','pagas','paga','pagamos','pagan'],preterito:['pagué','pagaste','pagó','pagamos','pagaron'],imperfecto:['pagaba','pagabas','pagaba','pagábamos','pagaban'],futuro:['pagaré','pagarás','pagará','pagaremos','pagarán'],condicional:['pagaría','pagarías','pagaría','pagaríamos','pagarían'],subjuntivo:['pague','pagues','pague','paguemos','paguen']},pronominal:false},
+  {inf:'viajar',type:'ar',tr:'to travel',tag:'regular',nivel:1,table:{presente:['viajo','viajas','viaja','viajamos','viajan'],preterito:['viajé','viajaste','viajó','viajamos','viajaron'],imperfecto:['viajaba','viajabas','viajaba','viajábamos','viajaban'],futuro:['viajaré','viajarás','viajará','viajaremos','viajarán'],condicional:['viajaría','viajarías','viajaría','viajaríamos','viajarían'],subjuntivo:['viaje','viajes','viaje','viajemos','viajen']},pronominal:false},
+  {inf:'gustar',type:'ar',tr:'to like',tag:'regular',nivel:1,table:{presente:['gusto','gustas','gusta','gustamos','gustan'],preterito:['gusté','gustaste','gustó','gustamos','gustaron'],imperfecto:['gustaba','gustabas','gustaba','gustábamos','gustaban'],futuro:['gustaré','gustarás','gustará','gustaremos','gustarán'],condicional:['gustaría','gustarías','gustaría','gustaríamos','gustarían'],subjuntivo:['guste','gustes','guste','gustemos','gusten']},pronominal:false,esTipoGustar:true},
+  {inf:'encantar',type:'ar',tr:'to love (lit. to delight)',tag:'regular',nivel:1,table:{presente:['encanto','encantas','encanta','encantamos','encantan'],preterito:['encanté','encantaste','encantó','encantamos','encantaron'],imperfecto:['encantaba','encantabas','encantaba','encantábamos','encantaban'],futuro:['encantaré','encantarás','encantará','encantaremos','encantarán'],condicional:['encantaría','encantarías','encantaría','encantaríamos','encantarían'],subjuntivo:['encante','encantes','encante','encantemos','encanten']},pronominal:false,esTipoGustar:true},
+  {inf:'necesitar',type:'ar',tr:'to need',tag:'regular',nivel:1,table:{presente:['necesito','necesitas','necesita','necesitamos','necesitan'],preterito:['necesité','necesitaste','necesitó','necesitamos','necesitaron'],imperfecto:['necesitaba','necesitabas','necesitaba','necesitábamos','necesitaban'],futuro:['necesitaré','necesitarás','necesitará','necesitaremos','necesitarán'],condicional:['necesitaría','necesitarías','necesitaría','necesitaríamos','necesitarían'],subjuntivo:['necesite','necesites','necesite','necesitemos','necesiten']},pronominal:false},
+  {inf:'buscar',type:'ar',tr:'to look for',tag:'irregular',nivel:1,table:{presente:['busco','buscas','busca','buscamos','buscan'],preterito:['busqué','buscaste','buscó','buscamos','buscaron'],imperfecto:['buscaba','buscabas','buscaba','buscábamos','buscaban'],futuro:['buscaré','buscarás','buscará','buscaremos','buscarán'],condicional:['buscaría','buscarías','buscaría','buscaríamos','buscarían'],subjuntivo:['busque','busques','busque','busquemos','busquen']},pronominal:false},
+  {inf:'empezar',type:'ar',tr:'to begin',tag:'irregular',nivel:1,table:{presente:['empiezo','empiezas','empieza','empezamos','empiezan'],preterito:['empecé','empezaste','empezó','empezamos','empezaron'],imperfecto:['empezaba','empezabas','empezaba','empezábamos','empezaban'],futuro:['empezaré','empezarás','empezará','empezaremos','empezarán'],condicional:['empezaría','empezarías','empezaría','empezaríamos','empezarían'],subjuntivo:['empiece','empieces','empiece','empecemos','empiecen']},pronominal:false},
+  {inf:'esperar',type:'ar',tr:'to wait/hope',tag:'regular',nivel:1,table:{presente:['espero','esperas','espera','esperamos','esperan'],preterito:['esperé','esperaste','esperó','esperamos','esperaron'],imperfecto:['esperaba','esperabas','esperaba','esperábamos','esperaban'],futuro:['esperaré','esperarás','esperará','esperaremos','esperarán'],condicional:['esperaría','esperarías','esperaría','esperaríamos','esperarían'],subjuntivo:['espere','esperes','espere','esperemos','esperen']},pronominal:false},
+  {inf:'decir',type:'ir',tr:'to say/tell',tag:'irregular',nivel:1,table:{presente:['digo','dices','dice','decimos','dicen'],preterito:['dije','dijiste','dijo','dijimos','dijeron'],imperfecto:['decía','decías','decía','decíamos','decían'],futuro:['diré','dirás','dirá','diremos','dirán'],condicional:['diría','dirías','diría','diríamos','dirían'],subjuntivo:['diga','digas','diga','digamos','digan']},pronominal:false},
+  {inf:'pedir',type:'ir',tr:'to ask for',tag:'irregular',nivel:1,table:{presente:['pido','pides','pide','pedimos','piden'],preterito:['pedí','pediste','pidió','pedimos','pidieron'],imperfecto:['pedía','pedías','pedía','pedíamos','pedían'],futuro:['pediré','pedirás','pedirá','pediremos','pedirán'],condicional:['pediría','pedirías','pediría','pediríamos','pedirían'],subjuntivo:['pida','pidas','pida','pidamos','pidan']},pronominal:false},
+  {inf:'usar',type:'ar',tr:'to use',tag:'regular',nivel:1,table:{presente:['uso','usas','usa','usamos','usan'],preterito:['usé','usaste','usó','usamos','usaron'],imperfecto:['usaba','usabas','usaba','usábamos','usaban'],futuro:['usaré','usarás','usará','usaremos','usarán'],condicional:['usaría','usarías','usaría','usaríamos','usarían'],subjuntivo:['use','uses','use','usemos','usen']},pronominal:false},
+  {inf:'traer',type:'er',tr:'to bring',tag:'irregular',nivel:1,table:{presente:['traigo','traes','trae','traemos','traen'],preterito:['traje','trajiste','trajo','trajimos','trajeron'],imperfecto:['traía','traías','traía','traíamos','traían'],futuro:['traeré','traerás','traerá','traeremos','traerán'],condicional:['traería','traerías','traería','traeríamos','traerían'],subjuntivo:['traiga','traigas','traiga','traigamos','traigan']},pronominal:false},
+  {inf:'haber',type:'er',tr:'to have (aux.)',tag:'irregular',nivel:2,table:{presente:['he','has','ha','hemos','han'],preterito:['hube','hubiste','hubo','hubimos','hubieron'],imperfecto:['había','habías','había','habíamos','habían'],futuro:['habré','habrás','habrá','habremos','habrán'],condicional:['habría','habrías','habría','habríamos','habrían'],subjuntivo:['haya','hayas','haya','hayamos','hayan']},pronominal:false},
+  {inf:'dar',type:'ar',tr:'to give',tag:'irregular',nivel:2,table:{presente:['doy','das','da','damos','dan'],preterito:['di','diste','dio','dimos','dieron'],imperfecto:['daba','dabas','daba','dábamos','daban'],futuro:['daré','darás','dará','daremos','darán'],condicional:['daría','darías','daría','daríamos','darían'],subjuntivo:['dé','des','dé','demos','den']},pronominal:false},
+  {inf:'ver',type:'er',tr:'to see',tag:'irregular',nivel:2,table:{presente:['veo','ves','ve','vemos','ven'],preterito:['vi','viste','vio','vimos','vieron'],imperfecto:['veía','veías','veía','veíamos','veían'],futuro:['veré','verás','verá','veremos','verán'],condicional:['vería','verías','vería','veríamos','verían'],subjuntivo:['vea','veas','vea','veamos','vean']},pronominal:false},
+  {inf:'saber',type:'er',tr:'to know',tag:'irregular',nivel:2,table:{presente:['sé','sabes','sabe','sabemos','saben'],preterito:['supe','supiste','supo','supimos','supieron'],imperfecto:['sabía','sabías','sabía','sabíamos','sabían'],futuro:['sabré','sabrás','sabrá','sabremos','sabrán'],condicional:['sabría','sabrías','sabría','sabríamos','sabrían'],subjuntivo:['sepa','sepas','sepa','sepamos','sepan']},pronominal:false},
+  {inf:'poner',type:'er',tr:'to put',tag:'irregular',nivel:2,table:{presente:['pongo','pones','pone','ponemos','ponen'],preterito:['puse','pusiste','puso','pusimos','pusieron'],imperfecto:['ponía','ponías','ponía','poníamos','ponían'],futuro:['pondré','pondrás','pondrá','pondremos','pondrán'],condicional:['pondría','pondrías','pondría','pondríamos','pondrían'],subjuntivo:['ponga','pongas','ponga','pongamos','pongan']},pronominal:false},
+  {inf:'venir',type:'ir',tr:'to come',tag:'irregular',nivel:2,table:{presente:['vengo','vienes','viene','venimos','vienen'],preterito:['vine','viniste','vino','vinimos','vinieron'],imperfecto:['venía','venías','venía','veníamos','venían'],futuro:['vendré','vendrás','vendrá','vendremos','vendrán'],condicional:['vendría','vendrías','vendría','vendríamos','vendrían'],subjuntivo:['venga','vengas','venga','vengamos','vengan']},pronominal:false},
+  {inf:'salir',type:'ir',tr:'to leave/go out',tag:'irregular',nivel:2,table:{presente:['salgo','sales','sale','salimos','salen'],preterito:['salí','saliste','salió','salimos','salieron'],imperfecto:['salía','salías','salía','salíamos','salían'],futuro:['saldré','saldrás','saldrá','saldremos','saldrán'],condicional:['saldría','saldrías','saldría','saldríamos','saldrían'],subjuntivo:['salga','salgas','salga','salgamos','salgan']},pronominal:false},
+  {inf:'llegar',type:'ar',tr:'to arrive',tag:'irregular',nivel:2,table:{presente:['llego','llegas','llega','llegamos','llegan'],preterito:['llegué','llegaste','llegó','llegamos','llegaron'],imperfecto:['llegaba','llegabas','llegaba','llegábamos','llegaban'],futuro:['llegaré','llegarás','llegará','llegaremos','llegarán'],condicional:['llegaría','llegarías','llegaría','llegaríamos','llegarían'],subjuntivo:['llegue','llegues','llegue','lleguemos','lleguen']},pronominal:false},
+  {inf:'pasar',type:'ar',tr:'to happen/pass',tag:'regular',nivel:2,table:{presente:['paso','pasas','pasa','pasamos','pasan'],preterito:['pasé','pasaste','pasó','pasamos','pasaron'],imperfecto:['pasaba','pasabas','pasaba','pasábamos','pasaban'],futuro:['pasaré','pasarás','pasará','pasaremos','pasarán'],condicional:['pasaría','pasarías','pasaría','pasaríamos','pasarían'],subjuntivo:['pase','pases','pase','pasemos','pasen']},pronominal:false},
+  {inf:'entender',type:'er',tr:'to understand',tag:'irregular',nivel:2,table:{presente:['entiendo','entiendes','entiende','entendemos','entienden'],preterito:['entendí','entendiste','entendió','entendimos','entendieron'],imperfecto:['entendía','entendías','entendía','entendíamos','entendían'],futuro:['entenderé','entenderás','entenderá','entenderemos','entenderán'],condicional:['entendería','entenderías','entendería','entenderíamos','entenderían'],subjuntivo:['entienda','entiendas','entienda','entendamos','entiendan']},pronominal:false},
+  {inf:'explicar',type:'ar',tr:'to explain',tag:'irregular',nivel:2,table:{presente:['explico','explicas','explica','explicamos','explican'],preterito:['expliqué','explicaste','explicó','explicamos','explicaron'],imperfecto:['explicaba','explicabas','explicaba','explicábamos','explicaban'],futuro:['explicaré','explicarás','explicará','explicaremos','explicarán'],condicional:['explicaría','explicarías','explicaría','explicaríamos','explicarían'],subjuntivo:['explique','expliques','explique','expliquemos','expliquen']},pronominal:false},
+  {inf:'preguntar',type:'ar',tr:'to ask',tag:'regular',nivel:2,table:{presente:['pregunto','preguntas','pregunta','preguntamos','preguntan'],preterito:['pregunté','preguntaste','preguntó','preguntamos','preguntaron'],imperfecto:['preguntaba','preguntabas','preguntaba','preguntábamos','preguntaban'],futuro:['preguntaré','preguntarás','preguntará','preguntaremos','preguntarán'],condicional:['preguntaría','preguntarías','preguntaría','preguntaríamos','preguntarían'],subjuntivo:['pregunte','preguntes','pregunte','preguntemos','pregunten']},pronominal:false},
+  {inf:'recordar',type:'ar',tr:'to remember',tag:'irregular',nivel:2,table:{presente:['recuerdo','recuerdas','recuerda','recordamos','recuerdan'],preterito:['recordé','recordaste','recordó','recordamos','recordaron'],imperfecto:['recordaba','recordabas','recordaba','recordábamos','recordaban'],futuro:['recordaré','recordarás','recordará','recordaremos','recordarán'],condicional:['recordaría','recordarías','recordaría','recordaríamos','recordarían'],subjuntivo:['recuerde','recuerdes','recuerde','recordemos','recuerden']},pronominal:false},
+  {inf:'olvidar',type:'ar',tr:'to forget',tag:'regular',nivel:2,table:{presente:['olvido','olvidas','olvida','olvidamos','olvidan'],preterito:['olvidé','olvidaste','olvidó','olvidamos','olvidaron'],imperfecto:['olvidaba','olvidabas','olvidaba','olvidábamos','olvidaban'],futuro:['olvidaré','olvidarás','olvidará','olvidaremos','olvidarán'],condicional:['olvidaría','olvidarías','olvidaría','olvidaríamos','olvidarían'],subjuntivo:['olvide','olvides','olvide','olvidemos','olviden']},pronominal:false},
+  {inf:'ayudar',type:'ar',tr:'to help',tag:'regular',nivel:2,table:{presente:['ayudo','ayudas','ayuda','ayudamos','ayudan'],preterito:['ayudé','ayudaste','ayudó','ayudamos','ayudaron'],imperfecto:['ayudaba','ayudabas','ayudaba','ayudábamos','ayudaban'],futuro:['ayudaré','ayudarás','ayudará','ayudaremos','ayudarán'],condicional:['ayudaría','ayudarías','ayudaría','ayudaríamos','ayudarían'],subjuntivo:['ayude','ayudes','ayude','ayudemos','ayuden']},pronominal:false},
+  {inf:'permitir',type:'ir',tr:'to allow',tag:'regular',nivel:2,table:{presente:['permito','permites','permite','permitimos','permiten'],preterito:['permití','permitiste','permitió','permitimos','permitieron'],imperfecto:['permitía','permitías','permitía','permitíamos','permitían'],futuro:['permitiré','permitirás','permitirá','permitiremos','permitirán'],condicional:['permitiría','permitirías','permitiría','permitiríamos','permitirían'],subjuntivo:['permita','permitas','permita','permitamos','permitan']},pronominal:false},
+  {inf:'presentar',type:'ar',tr:'to introduce/present',tag:'regular',nivel:2,table:{presente:['presento','presentas','presenta','presentamos','presentan'],preterito:['presenté','presentaste','presentó','presentamos','presentaron'],imperfecto:['presentaba','presentabas','presentaba','presentábamos','presentaban'],futuro:['presentaré','presentarás','presentará','presentaremos','presentarán'],condicional:['presentaría','presentarías','presentaría','presentaríamos','presentarían'],subjuntivo:['presente','presentes','presente','presentemos','presenten']},pronominal:false},
+  {inf:'mostrar',type:'ar',tr:'to show',tag:'irregular',nivel:2,table:{presente:['muestro','muestras','muestra','mostramos','muestran'],preterito:['mostré','mostraste','mostró','mostramos','mostraron'],imperfecto:['mostraba','mostrabas','mostraba','mostrábamos','mostraban'],futuro:['mostraré','mostrarás','mostrará','mostraremos','mostrarán'],condicional:['mostraría','mostrarías','mostraría','mostraríamos','mostrarían'],subjuntivo:['muestre','muestres','muestre','mostremos','muestren']},pronominal:false},
+  {inf:'tratar',type:'ar',tr:'to try/deal with',tag:'regular',nivel:2,table:{presente:['trato','tratas','trata','tratamos','tratan'],preterito:['traté','trataste','trató','tratamos','trataron'],imperfecto:['trataba','tratabas','trataba','tratábamos','trataban'],futuro:['trataré','tratarás','tratará','trataremos','tratarán'],condicional:['trataría','tratarías','trataría','trataríamos','tratarían'],subjuntivo:['trate','trates','trate','tratemos','traten']},pronominal:false},
+  {inf:'mirar',type:'ar',tr:'to look at',tag:'regular',nivel:2,table:{presente:['miro','miras','mira','miramos','miran'],preterito:['miré','miraste','miró','miramos','miraron'],imperfecto:['miraba','mirabas','miraba','mirábamos','miraban'],futuro:['miraré','mirarás','mirará','miraremos','mirarán'],condicional:['miraría','mirarías','miraría','miraríamos','mirarían'],subjuntivo:['mire','mires','mire','miremos','miren']},pronominal:false},
+  {inf:'cambiar',type:'ar',tr:'to change',tag:'regular',nivel:2,table:{presente:['cambio','cambias','cambia','cambiamos','cambian'],preterito:['cambié','cambiaste','cambió','cambiamos','cambiaron'],imperfecto:['cambiaba','cambiabas','cambiaba','cambiábamos','cambiaban'],futuro:['cambiaré','cambiarás','cambiará','cambiaremos','cambiarán'],condicional:['cambiaría','cambiarías','cambiaría','cambiaríamos','cambiarían'],subjuntivo:['cambie','cambies','cambie','cambiemos','cambien']},pronominal:false},
+  {inf:'cerrar',type:'ar',tr:'to close',tag:'irregular',nivel:2,table:{presente:['cierro','cierras','cierra','cerramos','cierran'],preterito:['cerré','cerraste','cerró','cerramos','cerraron'],imperfecto:['cerraba','cerrabas','cerraba','cerrábamos','cerraban'],futuro:['cerraré','cerrarás','cerrará','cerraremos','cerrarán'],condicional:['cerraría','cerrarías','cerraría','cerraríamos','cerrarían'],subjuntivo:['cierre','cierres','cierre','cerremos','cierren']},pronominal:false},
+  {inf:'abrir',type:'ir',tr:'to open',tag:'irregular',nivel:2,table:{presente:['abro','abres','abre','abrimos','abren'],preterito:['abrí','abriste','abrió','abrimos','abrieron'],imperfecto:['abría','abrías','abría','abríamos','abrían'],futuro:['abriré','abrirás','abrirá','abriremos','abrirán'],condicional:['abriría','abrirías','abriría','abriríamos','abrirían'],subjuntivo:['abra','abras','abra','abramos','abran']},pronominal:false},
+  {inf:'entrar',type:'ar',tr:'to enter',tag:'regular',nivel:2,table:{presente:['entro','entras','entra','entramos','entran'],preterito:['entré','entraste','entró','entramos','entraron'],imperfecto:['entraba','entrabas','entraba','entrábamos','entraban'],futuro:['entraré','entrarás','entrará','entraremos','entrarán'],condicional:['entraría','entrarías','entraría','entraríamos','entrarían'],subjuntivo:['entre','entres','entre','entremos','entren']},pronominal:false},
+  {inf:'correr',type:'er',tr:'to run',tag:'regular',nivel:2,table:{presente:['corro','corres','corre','corremos','corren'],preterito:['corrí','corriste','corrió','corrimos','corrieron'],imperfecto:['corría','corrías','corría','corríamos','corrían'],futuro:['correré','correrás','correrá','correremos','correrán'],condicional:['correría','correrías','correría','correríamos','correrían'],subjuntivo:['corra','corras','corra','corramos','corran']},pronominal:false},
+  {inf:'oír',type:'ir',tr:'to hear',tag:'irregular',nivel:2,table:{presente:['oigo','oyes','oye','oímos','oyen'],preterito:['oí','oíste','oyó','oímos','oyeron'],imperfecto:['oía','oías','oía','oíamos','oían'],futuro:['oíré','oírás','oírá','oíremos','oírán'],condicional:['oíría','oírías','oíría','oíríamos','oírían'],subjuntivo:['oiga','oigas','oiga','oigamos','oigan']},pronominal:false},
+  {inf:'caminar',type:'ar',tr:'to walk',tag:'regular',nivel:2,table:{presente:['camino','caminas','camina','caminamos','caminan'],preterito:['caminé','caminaste','caminó','caminamos','caminaron'],imperfecto:['caminaba','caminabas','caminaba','caminábamos','caminaban'],futuro:['caminaré','caminarás','caminará','caminaremos','caminarán'],condicional:['caminaría','caminarías','caminaría','caminaríamos','caminarían'],subjuntivo:['camine','camines','camine','caminemos','caminen']},pronominal:false},
+  {inf:'interesar',type:'ar',tr:'to interest',tag:'regular',nivel:2,table:{presente:['intereso','interesas','interesa','interesamos','interesan'],preterito:['interesé','interesaste','interesó','interesamos','interesaron'],imperfecto:['interesaba','interesabas','interesaba','interesábamos','interesaban'],futuro:['interesaré','interesarás','interesará','interesaremos','interesarán'],condicional:['interesaría','interesarías','interesaría','interesaríamos','interesarían'],subjuntivo:['interese','intereses','interese','interesemos','interesen']},pronominal:false,esTipoGustar:true},
+  {inf:'molestar',type:'ar',tr:'to bother',tag:'regular',nivel:2,table:{presente:['molesto','molestas','molesta','molestamos','molestan'],preterito:['molesté','molestaste','molestó','molestamos','molestaron'],imperfecto:['molestaba','molestabas','molestaba','molestábamos','molestaban'],futuro:['molestaré','molestarás','molestará','molestaremos','molestarán'],condicional:['molestaría','molestarías','molestaría','molestaríamos','molestarían'],subjuntivo:['moleste','molestes','moleste','molestemos','molesten']},pronominal:false,esTipoGustar:true},
+  {inf:'doler',type:'er',tr:'to hurt',tag:'irregular',nivel:2,table:{presente:['duelo','dueles','duele','dolemos','duelen'],preterito:['dolí','doliste','dolió','dolimos','dolieron'],imperfecto:['dolía','dolías','dolía','dolíamos','dolían'],futuro:['doleré','dolerás','dolerá','doleremos','dolerán'],condicional:['dolería','dolerías','dolería','doleríamos','dolerían'],subjuntivo:['duela','duelas','duela','dolamos','duelan']},pronominal:false,esTipoGustar:true},
+  {inf:'costar',type:'ar',tr:'to cost',tag:'irregular',nivel:2,table:{presente:['cuesto','cuestas','cuesta','costamos','cuestan'],preterito:['costé','costaste','costó','costamos','costaron'],imperfecto:['costaba','costabas','costaba','costábamos','costaban'],futuro:['costaré','costarás','costará','costaremos','costarán'],condicional:['costaría','costarías','costaría','costaríamos','costarían'],subjuntivo:['cueste','cuestes','cueste','costemos','cuesten']},pronominal:false,esTipoGustar:true},
+  {inf:'faltar',type:'ar',tr:'to be missing/lacking',tag:'regular',nivel:2,table:{presente:['falto','faltas','falta','faltamos','faltan'],preterito:['falté','faltaste','faltó','faltamos','faltaron'],imperfecto:['faltaba','faltabas','faltaba','faltábamos','faltaban'],futuro:['faltaré','faltarás','faltará','faltaremos','faltarán'],condicional:['faltaría','faltarías','faltaría','faltaríamos','faltarían'],subjuntivo:['falte','faltes','falte','faltemos','falten']},pronominal:false,esTipoGustar:true},
+  {inf:'contar',type:'ar',tr:'to count/tell',tag:'irregular',nivel:2,table:{presente:['cuento','cuentas','cuenta','contamos','cuentan'],preterito:['conté','contaste','contó','contamos','contaron'],imperfecto:['contaba','contabas','contaba','contábamos','contaban'],futuro:['contaré','contarás','contará','contaremos','contarán'],condicional:['contaría','contarías','contaría','contaríamos','contarían'],subjuntivo:['cuente','cuentes','cuente','contemos','cuenten']},pronominal:false},
+  {inf:'tomar',type:'ar',tr:'to take/drink',tag:'regular',nivel:2,table:{presente:['tomo','tomas','toma','tomamos','toman'],preterito:['tomé','tomaste','tomó','tomamos','tomaron'],imperfecto:['tomaba','tomabas','tomaba','tomábamos','tomaban'],futuro:['tomaré','tomarás','tomará','tomaremos','tomarán'],condicional:['tomaría','tomarías','tomaría','tomaríamos','tomarían'],subjuntivo:['tome','tomes','tome','tomemos','tomen']},pronominal:false},
+  {inf:'volver',type:'er',tr:'to return',tag:'irregular',nivel:2,table:{presente:['vuelvo','vuelves','vuelve','volvemos','vuelven'],preterito:['volví','volviste','volvió','volvimos','volvieron'],imperfecto:['volvía','volvías','volvía','volvíamos','volvían'],futuro:['volveré','volverás','volverá','volveremos','volverán'],condicional:['volvería','volverías','volvería','volveríamos','volverían'],subjuntivo:['vuelva','vuelvas','vuelva','volvamos','vuelvan']},pronominal:false},
+  {inf:'sentir',type:'ir',tr:'to feel',tag:'irregular',nivel:2,table:{presente:['siento','sientes','siente','sentimos','sienten'],preterito:['sentí','sentiste','sintió','sentimos','sintieron'],imperfecto:['sentía','sentías','sentía','sentíamos','sentían'],futuro:['sentiré','sentirás','sentirá','sentiremos','sentirán'],condicional:['sentiría','sentirías','sentiría','sentiríamos','sentirían'],subjuntivo:['sienta','sientas','sienta','sintamos','sientan']},pronominal:false},
+  {inf:'llamar',type:'ar',tr:'to call',tag:'regular',nivel:2,table:{presente:['llamo','llamas','llama','llamamos','llaman'],preterito:['llamé','llamaste','llamó','llamamos','llamaron'],imperfecto:['llamaba','llamabas','llamaba','llamábamos','llamaban'],futuro:['llamaré','llamarás','llamará','llamaremos','llamarán'],condicional:['llamaría','llamarías','llamaría','llamaríamos','llamarían'],subjuntivo:['llame','llames','llame','llamemos','llamen']},pronominal:false},
+  {inf:'crear',type:'ar',tr:'to create',tag:'regular',nivel:2,table:{presente:['creo','creas','crea','creamos','crean'],preterito:['creé','creaste','creó','creamos','crearon'],imperfecto:['creaba','creabas','creaba','creábamos','creaban'],futuro:['crearé','crearás','creará','crearemos','crearán'],condicional:['crearía','crearías','crearía','crearíamos','crearían'],subjuntivo:['cree','crees','cree','creemos','creen']},pronominal:false},
+  {inf:'perder',type:'er',tr:'to lose',tag:'irregular',nivel:2,table:{presente:['pierdo','pierdes','pierde','perdemos','pierden'],preterito:['perdí','perdiste','perdió','perdimos','perdieron'],imperfecto:['perdía','perdías','perdía','perdíamos','perdían'],futuro:['perderé','perderás','perderá','perderemos','perderán'],condicional:['perdería','perderías','perdería','perderíamos','perderían'],subjuntivo:['pierda','pierdas','pierda','perdamos','pierdan']},pronominal:false},
+  {inf:'mantener',type:'er',tr:'to maintain',tag:'irregular',nivel:2,table:{presente:['mantengo','mantienes','mantiene','mantenemos','mantienen'],preterito:['mantuve','mantuviste','mantuvo','mantuvimos','mantuvieron'],imperfecto:['mantenía','mantenías','mantenía','manteníamos','mantenían'],futuro:['mantendré','mantendrás','mantendrá','mantendremos','mantendrán'],condicional:['mantendría','mantendrías','mantendría','mantendríamos','mantendrían'],subjuntivo:['mantenga','mantengas','mantenga','mantengamos','mantengan']},pronominal:false},
+  {inf:'recibir',type:'ir',tr:'to receive',tag:'regular',nivel:2,table:{presente:['recibo','recibes','recibe','recibimos','reciben'],preterito:['recibí','recibiste','recibió','recibimos','recibieron'],imperfecto:['recibía','recibías','recibía','recibíamos','recibían'],futuro:['recibiré','recibirás','recibirá','recibiremos','recibirán'],condicional:['recibiría','recibirías','recibiría','recibiríamos','recibirían'],subjuntivo:['reciba','recibas','reciba','recibamos','reciban']},pronominal:false},
+  {inf:'comenzar',type:'ar',tr:'to begin',tag:'irregular',nivel:2,table:{presente:['comienzo','comienzas','comienza','comenzamos','comienzan'],preterito:['comencé','comenzaste','comenzó','comenzamos','comenzaron'],imperfecto:['comenzaba','comenzabas','comenzaba','comenzábamos','comenzaban'],futuro:['comenzaré','comenzarás','comenzará','comenzaremos','comenzarán'],condicional:['comenzaría','comenzarías','comenzaría','comenzaríamos','comenzarían'],subjuntivo:['comience','comiences','comience','comencemos','comiencen']},pronominal:false},
+  {inf:'terminar',type:'ar',tr:'to finish',tag:'regular',nivel:2,table:{presente:['termino','terminas','termina','terminamos','terminan'],preterito:['terminé','terminaste','terminó','terminamos','terminaron'],imperfecto:['terminaba','terminabas','terminaba','terminábamos','terminaban'],futuro:['terminaré','terminarás','terminará','terminaremos','terminarán'],condicional:['terminaría','terminarías','terminaría','terminaríamos','terminarían'],subjuntivo:['termine','termines','termine','terminemos','terminen']},pronominal:false},
+  {inf:'ganar',type:'ar',tr:'to win/earn',tag:'regular',nivel:2,table:{presente:['gano','ganas','gana','ganamos','ganan'],preterito:['gané','ganaste','ganó','ganamos','ganaron'],imperfecto:['ganaba','ganabas','ganaba','ganábamos','ganaban'],futuro:['ganaré','ganarás','ganará','ganaremos','ganarán'],condicional:['ganaría','ganarías','ganaría','ganaríamos','ganarían'],subjuntivo:['gane','ganes','gane','ganemos','ganen']},pronominal:false},
+  {inf:'ofrecer',type:'er',tr:'to offer',tag:'irregular',nivel:2,table:{presente:['ofrezco','ofreces','ofrece','ofrecemos','ofrecen'],preterito:['ofrecí','ofreciste','ofreció','ofrecimos','ofrecieron'],imperfecto:['ofrecía','ofrecías','ofrecía','ofrecíamos','ofrecían'],futuro:['ofreceré','ofrecerás','ofrecerá','ofreceremos','ofrecerán'],condicional:['ofrecería','ofrecerías','ofrecería','ofreceríamos','ofrecerían'],subjuntivo:['ofrezca','ofrezcas','ofrezca','ofrezcamos','ofrezcan']},pronominal:false},
+  {inf:'acabar',type:'ar',tr:'to finish',tag:'regular',nivel:2,table:{presente:['acabo','acabas','acaba','acabamos','acaban'],preterito:['acabé','acabaste','acabó','acabamos','acabaron'],imperfecto:['acababa','acababas','acababa','acabábamos','acababan'],futuro:['acabaré','acabarás','acabará','acabaremos','acabarán'],condicional:['acabaría','acabarías','acabaría','acabaríamos','acabarían'],subjuntivo:['acabe','acabes','acabe','acabemos','acaben']},pronominal:false},
+  {inf:'morir',type:'ir',tr:'to die',tag:'irregular',nivel:2,table:{presente:['muero','mueres','muere','morimos','mueren'],preterito:['morí','moriste','murió','morimos','murieron'],imperfecto:['moría','morías','moría','moríamos','morían'],futuro:['moriré','morirás','morirá','moriremos','morirán'],condicional:['moriría','morirías','moriría','moriríamos','morirían'],subjuntivo:['muera','mueras','muera','muramos','mueran']},pronominal:false},
+  {inf:'aparecer',type:'er',tr:'to appear',tag:'irregular',nivel:2,table:{presente:['aparezco','apareces','aparece','aparecemos','aparecen'],preterito:['aparecí','apareciste','apareció','aparecimos','aparecieron'],imperfecto:['aparecía','aparecías','aparecía','aparecíamos','aparecían'],futuro:['apareceré','aparecerás','aparecerá','apareceremos','aparecerán'],condicional:['aparecería','aparecerías','aparecería','apareceríamos','aparecerían'],subjuntivo:['aparezca','aparezcas','aparezca','aparezcamos','aparezcan']},pronominal:false},
+  {inf:'decidir',type:'ir',tr:'to decide',tag:'regular',nivel:2,table:{presente:['decido','decides','decide','decidimos','deciden'],preterito:['decidí','decidiste','decidió','decidimos','decidieron'],imperfecto:['decidía','decidías','decidía','decidíamos','decidían'],futuro:['decidiré','decidirás','decidirá','decidiremos','decidirán'],condicional:['decidiría','decidirías','decidiría','decidiríamos','decidirían'],subjuntivo:['decida','decidas','decida','decidamos','decidan']},pronominal:false},
+  {inf:'sacar',type:'ar',tr:'to take out',tag:'irregular',nivel:2,table:{presente:['saco','sacas','saca','sacamos','sacan'],preterito:['saqué','sacaste','sacó','sacamos','sacaron'],imperfecto:['sacaba','sacabas','sacaba','sacábamos','sacaban'],futuro:['sacaré','sacarás','sacará','sacaremos','sacarán'],condicional:['sacaría','sacarías','sacaría','sacaríamos','sacarían'],subjuntivo:['saque','saques','saque','saquemos','saquen']},pronominal:false},
+  {inf:'conseguir',type:'ir',tr:'to get/achieve',tag:'irregular',nivel:2,table:{presente:['consigo','consigues','consigue','conseguimos','consiguen'],preterito:['conseguí','conseguiste','consiguió','conseguimos','consiguieron'],imperfecto:['conseguía','conseguías','conseguía','conseguíamos','conseguían'],futuro:['conseguiré','conseguirás','conseguirá','conseguiremos','conseguirán'],condicional:['conseguiría','conseguirías','conseguiría','conseguiríamos','conseguirían'],subjuntivo:['consiga','consigas','consiga','consigamos','consigan']},pronominal:false},
+  {inf:'servir',type:'ir',tr:'to serve',tag:'irregular',nivel:2,table:{presente:['sirvo','sirves','sirve','servimos','sirven'],preterito:['serví','serviste','sirvió','servimos','sirvieron'],imperfecto:['servía','servías','servía','servíamos','servían'],futuro:['serviré','servirás','servirá','serviremos','servirán'],condicional:['serviría','servirías','serviría','serviríamos','servirían'],subjuntivo:['sirva','sirvas','sirva','sirvamos','sirvan']},pronominal:false},
+  {inf:'cumplir',type:'ir',tr:'to fulfill/turn (age)',tag:'regular',nivel:2,table:{presente:['cumplo','cumples','cumple','cumplimos','cumplen'],preterito:['cumplí','cumpliste','cumplió','cumplimos','cumplieron'],imperfecto:['cumplía','cumplías','cumplía','cumplíamos','cumplían'],futuro:['cumpliré','cumplirás','cumplirá','cumpliremos','cumplirán'],condicional:['cumpliría','cumplirías','cumpliría','cumpliríamos','cumplirían'],subjuntivo:['cumpla','cumplas','cumpla','cumplamos','cumplan']},pronominal:false},
+  {inf:'responder',type:'er',tr:'to respond',tag:'regular',nivel:2,table:{presente:['respondo','respondes','responde','respondemos','responden'],preterito:['respondí','respondiste','respondió','respondimos','respondieron'],imperfecto:['respondía','respondías','respondía','respondíamos','respondían'],futuro:['responderé','responderás','responderá','responderemos','responderán'],condicional:['respondería','responderías','respondería','responderíamos','responderían'],subjuntivo:['responda','respondas','responda','respondamos','respondan']},pronominal:false},
+  {inf:'evitar',type:'ar',tr:'to avoid',tag:'regular',nivel:2,table:{presente:['evito','evitas','evita','evitamos','evitan'],preterito:['evité','evitaste','evitó','evitamos','evitaron'],imperfecto:['evitaba','evitabas','evitaba','evitábamos','evitaban'],futuro:['evitaré','evitarás','evitará','evitaremos','evitarán'],condicional:['evitaría','evitarías','evitaría','evitaríamos','evitarían'],subjuntivo:['evite','evites','evite','evitemos','eviten']},pronominal:false},
+  {inf:'observar',type:'ar',tr:'to observe',tag:'regular',nivel:2,table:{presente:['observo','observas','observa','observamos','observan'],preterito:['observé','observaste','observó','observamos','observaron'],imperfecto:['observaba','observabas','observaba','observábamos','observaban'],futuro:['observaré','observarás','observará','observaremos','observarán'],condicional:['observaría','observarías','observaría','observaríamos','observarían'],subjuntivo:['observe','observes','observe','observemos','observen']},pronominal:false},
+  {inf:'continuar',type:'ar',tr:'to continue',tag:'irregular',nivel:2,table:{presente:['continúo','continúas','continúa','continuamos','continúan'],preterito:['continué','continuaste','continuó','continuamos','continuaron'],imperfecto:['continuaba','continuabas','continuaba','continuábamos','continuaban'],futuro:['continuaré','continuarás','continuará','continuaremos','continuarán'],condicional:['continuaría','continuarías','continuaría','continuaríamos','continuarían'],subjuntivo:['continúe','continúes','continúe','continuemos','continúen']},pronominal:false},
+  {inf:'tocar',type:'ar',tr:'to touch/play (instrument)',tag:'irregular',nivel:2,table:{presente:['toco','tocas','toca','tocamos','tocan'],preterito:['toqué','tocaste','tocó','tocamos','tocaron'],imperfecto:['tocaba','tocabas','tocaba','tocábamos','tocaban'],futuro:['tocaré','tocarás','tocará','tocaremos','tocarán'],condicional:['tocaría','tocarías','tocaría','tocaríamos','tocarían'],subjuntivo:['toque','toques','toque','toquemos','toquen']},pronominal:false},
+  {inf:'levantar',type:'ar',tr:'to lift',tag:'regular',nivel:2,table:{presente:['levanto','levantas','levanta','levantamos','levantan'],preterito:['levanté','levantaste','levantó','levantamos','levantaron'],imperfecto:['levantaba','levantabas','levantaba','levantábamos','levantaban'],futuro:['levantaré','levantarás','levantará','levantaremos','levantarán'],condicional:['levantaría','levantarías','levantaría','levantaríamos','levantarían'],subjuntivo:['levante','levantes','levante','levantemos','levanten']},pronominal:false},
+  {inf:'bajar',type:'ar',tr:'to go down/lower',tag:'regular',nivel:2,table:{presente:['bajo','bajas','baja','bajamos','bajan'],preterito:['bajé','bajaste','bajó','bajamos','bajaron'],imperfecto:['bajaba','bajabas','bajaba','bajábamos','bajaban'],futuro:['bajaré','bajarás','bajará','bajaremos','bajarán'],condicional:['bajaría','bajarías','bajaría','bajaríamos','bajarían'],subjuntivo:['baje','bajes','baje','bajemos','bajen']},pronominal:false},
+  {inf:'descubrir',type:'ir',tr:'to discover',tag:'irregular',nivel:2,table:{presente:['descubro','descubres','descubre','descubrimos','descubren'],preterito:['descubrí','descubriste','descubrió','descubrimos','descubrieron'],imperfecto:['descubría','descubrías','descubría','descubríamos','descubrían'],futuro:['descubriré','descubrirás','descubrirá','descubriremos','descubrirán'],condicional:['descubriría','descubrirías','descubriría','descubriríamos','descubrirían'],subjuntivo:['descubra','descubras','descubra','descubramos','descubran']},pronominal:false},
+  {inf:'acompañar',type:'ar',tr:'to accompany',tag:'regular',nivel:2,table:{presente:['acompaño','acompañas','acompaña','acompañamos','acompañan'],preterito:['acompañé','acompañaste','acompañó','acompañamos','acompañaron'],imperfecto:['acompañaba','acompañabas','acompañaba','acompañábamos','acompañaban'],futuro:['acompañaré','acompañarás','acompañará','acompañaremos','acompañarán'],condicional:['acompañaría','acompañarías','acompañaría','acompañaríamos','acompañarían'],subjuntivo:['acompañe','acompañes','acompañe','acompañemos','acompañen']},pronominal:false},
+  {inf:'nacer',type:'er',tr:'to be born',tag:'irregular',nivel:2,table:{presente:['nazco','naces','nace','nacemos','nacen'],preterito:['nací','naciste','nació','nacimos','nacieron'],imperfecto:['nacía','nacías','nacía','nacíamos','nacían'],futuro:['naceré','nacerás','nacerá','naceremos','nacerán'],condicional:['nacería','nacerías','nacería','naceríamos','nacerían'],subjuntivo:['nazca','nazcas','nazca','nazcamos','nazcan']},pronominal:false},
+  {inf:'meter',type:'er',tr:'to put in',tag:'regular',nivel:2,table:{presente:['meto','metes','mete','metemos','meten'],preterito:['metí','metiste','metió','metimos','metieron'],imperfecto:['metía','metías','metía','metíamos','metían'],futuro:['meteré','meterás','meterá','meteremos','meterán'],condicional:['metería','meterías','metería','meteríamos','meterían'],subjuntivo:['meta','metas','meta','metamos','metan']},pronominal:false},
+  {inf:'aceptar',type:'ar',tr:'to accept',tag:'regular',nivel:2,table:{presente:['acepto','aceptas','acepta','aceptamos','aceptan'],preterito:['acepté','aceptaste','aceptó','aceptamos','aceptaron'],imperfecto:['aceptaba','aceptabas','aceptaba','aceptábamos','aceptaban'],futuro:['aceptaré','aceptarás','aceptará','aceptaremos','aceptarán'],condicional:['aceptaría','aceptarías','aceptaría','aceptaríamos','aceptarían'],subjuntivo:['acepte','aceptes','acepte','aceptemos','acepten']},pronominal:false},
+  {inf:'preparar',type:'ar',tr:'to prepare',tag:'regular',nivel:2,table:{presente:['preparo','preparas','prepara','preparamos','preparan'],preterito:['preparé','preparaste','preparó','preparamos','prepararon'],imperfecto:['preparaba','preparabas','preparaba','preparábamos','preparaban'],futuro:['prepararé','prepararás','preparará','prepararemos','prepararán'],condicional:['prepararía','prepararías','prepararía','prepararíamos','prepararían'],subjuntivo:['prepare','prepares','prepare','preparemos','preparen']},pronominal:false},
+  {inf:'compartir',type:'ir',tr:'to share',tag:'regular',nivel:2,table:{presente:['comparto','compartes','comparte','compartimos','comparten'],preterito:['compartí','compartiste','compartió','compartimos','compartieron'],imperfecto:['compartía','compartías','compartía','compartíamos','compartían'],futuro:['compartiré','compartirás','compartirá','compartiremos','compartirán'],condicional:['compartiría','compartirías','compartiría','compartiríamos','compartirían'],subjuntivo:['comparta','compartas','comparta','compartamos','compartan']},pronominal:false},
+  {inf:'mejorar',type:'ar',tr:'to improve',tag:'regular',nivel:2,table:{presente:['mejoro','mejoras','mejora','mejoramos','mejoran'],preterito:['mejoré','mejoraste','mejoró','mejoramos','mejoraron'],imperfecto:['mejoraba','mejorabas','mejoraba','mejorábamos','mejoraban'],futuro:['mejoraré','mejorarás','mejorará','mejoraremos','mejorarán'],condicional:['mejoraría','mejorarías','mejoraría','mejoraríamos','mejorarían'],subjuntivo:['mejore','mejores','mejore','mejoremos','mejoren']},pronominal:false},
+  {inf:'regresar',type:'ar',tr:'to return',tag:'regular',nivel:2,table:{presente:['regreso','regresas','regresa','regresamos','regresan'],preterito:['regresé','regresaste','regresó','regresamos','regresaron'],imperfecto:['regresaba','regresabas','regresaba','regresábamos','regresaban'],futuro:['regresaré','regresarás','regresará','regresaremos','regresarán'],condicional:['regresaría','regresarías','regresaría','regresaríamos','regresarían'],subjuntivo:['regrese','regreses','regrese','regresemos','regresen']},pronominal:false},
+  {inf:'crecer',type:'er',tr:'to grow',tag:'irregular',nivel:2,table:{presente:['crezco','creces','crece','crecemos','crecen'],preterito:['crecí','creciste','creció','crecimos','crecieron'],imperfecto:['crecía','crecías','crecía','crecíamos','crecían'],futuro:['creceré','crecerás','crecerá','creceremos','crecerán'],condicional:['crecería','crecerías','crecería','creceríamos','crecerían'],subjuntivo:['crezca','crezcas','crezca','crezcamos','crezcan']},pronominal:false},
+  {inf:'imaginar',type:'ar',tr:'to imagine',tag:'regular',nivel:2,table:{presente:['imagino','imaginas','imagina','imaginamos','imaginan'],preterito:['imaginé','imaginaste','imaginó','imaginamos','imaginaron'],imperfecto:['imaginaba','imaginabas','imaginaba','imaginábamos','imaginaban'],futuro:['imaginaré','imaginarás','imaginará','imaginaremos','imaginarán'],condicional:['imaginaría','imaginarías','imaginaría','imaginaríamos','imaginarían'],subjuntivo:['imagine','imagines','imagine','imaginemos','imaginen']},pronominal:false},
+  {inf:'elegir',type:'ir',tr:'to choose',tag:'irregular',nivel:2,table:{presente:['elijo','eliges','elige','elegimos','eligen'],preterito:['elegí','elegiste','eligió','elegimos','eligieron'],imperfecto:['elegía','elegías','elegía','elegíamos','elegían'],futuro:['elegiré','elegirás','elegirá','elegiremos','elegirán'],condicional:['elegiría','elegirías','elegiría','elegiríamos','elegirían'],subjuntivo:['elija','elijas','elija','elijamos','elijan']},pronominal:false},
+  {inf:'vender',type:'er',tr:'to sell',tag:'regular',nivel:2,table:{presente:['vendo','vendes','vende','vendemos','venden'],preterito:['vendí','vendiste','vendió','vendimos','vendieron'],imperfecto:['vendía','vendías','vendía','vendíamos','vendían'],futuro:['venderé','venderás','venderá','venderemos','venderán'],condicional:['vendería','venderías','vendería','venderíamos','venderían'],subjuntivo:['venda','vendas','venda','vendamos','vendan']},pronominal:false},
+  {inf:'comentar',type:'ar',tr:'to comment',tag:'regular',nivel:2,table:{presente:['comento','comentas','comenta','comentamos','comentan'],preterito:['comenté','comentaste','comentó','comentamos','comentaron'],imperfecto:['comentaba','comentabas','comentaba','comentábamos','comentaban'],futuro:['comentaré','comentarás','comentará','comentaremos','comentarán'],condicional:['comentaría','comentarías','comentaría','comentaríamos','comentarían'],subjuntivo:['comente','comentes','comente','comentemos','comenten']},pronominal:false},
+  {inf:'apoyar',type:'ar',tr:'to support',tag:'regular',nivel:2,table:{presente:['apoyo','apoyas','apoya','apoyamos','apoyan'],preterito:['apoyé','apoyaste','apoyó','apoyamos','apoyaron'],imperfecto:['apoyaba','apoyabas','apoyaba','apoyábamos','apoyaban'],futuro:['apoyaré','apoyarás','apoyará','apoyaremos','apoyarán'],condicional:['apoyaría','apoyarías','apoyaría','apoyaríamos','apoyarían'],subjuntivo:['apoye','apoyes','apoye','apoyemos','apoyen']},pronominal:false},
+  {inf:'significar',type:'ar',tr:'to mean',tag:'irregular',nivel:2,table:{presente:['significo','significas','significa','significamos','significan'],preterito:['signifiqué','significaste','significó','significamos','significaron'],imperfecto:['significaba','significabas','significaba','significábamos','significaban'],futuro:['significaré','significarás','significará','significaremos','significarán'],condicional:['significaría','significarías','significaría','significaríamos','significarían'],subjuntivo:['signifique','signifiques','signifique','signifiquemos','signifiquen']},pronominal:false},
+  {inf:'comprender',type:'er',tr:'to understand',tag:'regular',nivel:2,table:{presente:['comprendo','comprendes','comprende','comprendemos','comprenden'],preterito:['comprendí','comprendiste','comprendió','comprendimos','comprendieron'],imperfecto:['comprendía','comprendías','comprendía','comprendíamos','comprendían'],futuro:['comprenderé','comprenderás','comprenderá','comprenderemos','comprenderán'],condicional:['comprendería','comprenderías','comprendería','comprenderíamos','comprenderían'],subjuntivo:['comprenda','comprendas','comprenda','comprendamos','comprendan']},pronominal:false},
+  {inf:'aplicar',type:'ar',tr:'to apply',tag:'irregular',nivel:2,table:{presente:['aplico','aplicas','aplica','aplicamos','aplican'],preterito:['apliqué','aplicaste','aplicó','aplicamos','aplicaron'],imperfecto:['aplicaba','aplicabas','aplicaba','aplicábamos','aplicaban'],futuro:['aplicaré','aplicarás','aplicará','aplicaremos','aplicarán'],condicional:['aplicaría','aplicarías','aplicaría','aplicaríamos','aplicarían'],subjuntivo:['aplique','apliques','aplique','apliquemos','apliquen']},pronominal:false},
+  {inf:'matar',type:'ar',tr:'to kill',tag:'regular',nivel:2,table:{presente:['mato','matas','mata','matamos','matan'],preterito:['maté','mataste','mató','matamos','mataron'],imperfecto:['mataba','matabas','mataba','matábamos','mataban'],futuro:['mataré','matarás','matará','mataremos','matarán'],condicional:['mataría','matarías','mataría','mataríamos','matarían'],subjuntivo:['mate','mates','mate','matemos','maten']},pronominal:false},
+  {inf:'enviar',type:'ar',tr:'to send',tag:'irregular',nivel:2,table:{presente:['envío','envías','envía','enviamos','envían'],preterito:['envié','enviaste','envió','enviamos','enviaron'],imperfecto:['enviaba','enviabas','enviaba','enviábamos','enviaban'],futuro:['enviaré','enviarás','enviará','enviaremos','enviarán'],condicional:['enviaría','enviarías','enviaría','enviaríamos','enviarían'],subjuntivo:['envíe','envíes','envíe','enviemos','envíen']},pronominal:false},
+  {inf:'mencionar',type:'ar',tr:'to mention',tag:'regular',nivel:2,table:{presente:['menciono','mencionas','menciona','mencionamos','mencionan'],preterito:['mencioné','mencionaste','mencionó','mencionamos','mencionaron'],imperfecto:['mencionaba','mencionabas','mencionaba','mencionábamos','mencionaban'],futuro:['mencionaré','mencionarás','mencionará','mencionaremos','mencionarán'],condicional:['mencionaría','mencionarías','mencionaría','mencionaríamos','mencionarían'],subjuntivo:['mencione','menciones','mencione','mencionemos','mencionen']},pronominal:false},
+  {inf:'romper',type:'er',tr:'to break',tag:'irregular',nivel:2,table:{presente:['rompo','rompes','rompe','rompemos','rompen'],preterito:['rompí','rompiste','rompió','rompimos','rompieron'],imperfecto:['rompía','rompías','rompía','rompíamos','rompían'],futuro:['romperé','romperás','romperá','romperemos','romperán'],condicional:['rompería','romperías','rompería','romperíamos','romperían'],subjuntivo:['rompa','rompas','rompa','rompamos','rompan']},pronominal:false},
+  {inf:'proteger',type:'er',tr:'to protect',tag:'irregular',nivel:2,table:{presente:['protejo','proteges','protege','protegemos','protegen'],preterito:['protegí','protegiste','protegió','protegimos','protegieron'],imperfecto:['protegía','protegías','protegía','protegíamos','protegían'],futuro:['protegeré','protegerás','protegerá','protegeremos','protegerán'],condicional:['protegería','protegerías','protegería','protegeríamos','protegerían'],subjuntivo:['proteja','protejas','proteja','protejamos','protejan']},pronominal:false},
+  {inf:'organizar',type:'ar',tr:'to organize',tag:'irregular',nivel:2,table:{presente:['organizo','organizas','organiza','organizamos','organizan'],preterito:['organicé','organizaste','organizó','organizamos','organizaron'],imperfecto:['organizaba','organizabas','organizaba','organizábamos','organizaban'],futuro:['organizaré','organizarás','organizará','organizaremos','organizarán'],condicional:['organizaría','organizarías','organizaría','organizaríamos','organizarían'],subjuntivo:['organice','organices','organice','organicemos','organicen']},pronominal:false},
+  {inf:'conducir',type:'ir',tr:'to drive',tag:'irregular',nivel:2,table:{presente:['conduzco','conduces','conduce','conducimos','conducen'],preterito:['conduje','condujiste','condujo','condujimos','condujeron'],imperfecto:['conducía','conducías','conducía','conducíamos','conducían'],futuro:['conduciré','conducirás','conducirá','conduciremos','conducirán'],condicional:['conduciría','conducirías','conduciría','conduciríamos','conducirían'],subjuntivo:['conduzca','conduzcas','conduzca','conduzcamos','conduzcan']},pronominal:false},
+  {inf:'soler',type:'er',tr:'to usually (do)',tag:'irregular',nivel:2,table:{presente:['suelo','sueles','suele','solemos','suelen'],preterito:['solí','soliste','solió','solimos','solieron'],imperfecto:['solía','solías','solía','solíamos','solían'],futuro:['soleré','solerás','solerá','soleremos','solerán'],condicional:['solería','solerías','solería','soleríamos','solerían'],subjuntivo:['suela','suelas','suela','solamos','suelan']},pronominal:false},
+  {inf:'conocer',type:'er',tr:'to know/meet',tag:'irregular',nivel:3,table:{presente:['conozco','conoces','conoce','conocemos','conocen'],preterito:['conocí','conociste','conoció','conocimos','conocieron'],imperfecto:['conocía','conocías','conocía','conocíamos','conocían'],futuro:['conoceré','conocerás','conocerá','conoceremos','conocerán'],condicional:['conocería','conocerías','conocería','conoceríamos','conocerían'],subjuntivo:['conozca','conozcas','conozca','conozcamos','conozcan']},pronominal:false},
+  {inf:'deber',type:'er',tr:'should/to owe',tag:'regular',nivel:3,table:{presente:['debo','debes','debe','debemos','deben'],preterito:['debí','debiste','debió','debimos','debieron'],imperfecto:['debía','debías','debía','debíamos','debían'],futuro:['deberé','deberás','deberá','deberemos','deberán'],condicional:['debería','deberías','debería','deberíamos','deberían'],subjuntivo:['deba','debas','deba','debamos','deban']},pronominal:false},
+  {inf:'quedar',type:'ar',tr:'to stay/remain/arrange to meet',tag:'regular',nivel:3,table:{presente:['quedo','quedas','queda','quedamos','quedan'],preterito:['quedé','quedaste','quedó','quedamos','quedaron'],imperfecto:['quedaba','quedabas','quedaba','quedábamos','quedaban'],futuro:['quedaré','quedarás','quedará','quedaremos','quedarán'],condicional:['quedaría','quedarías','quedaría','quedaríamos','quedarían'],subjuntivo:['quede','quedes','quede','quedemos','queden']},pronominal:false},
+  {inf:'parecer',type:'er',tr:'to seem',tag:'irregular',nivel:3,table:{presente:['parezco','pareces','parece','parecemos','parecen'],preterito:['parecí','pareciste','pareció','parecimos','parecieron'],imperfecto:['parecía','parecías','parecía','parecíamos','parecían'],futuro:['pareceré','parecerás','parecerá','pareceremos','parecerán'],condicional:['parecería','parecerías','parecería','pareceríamos','parecerían'],subjuntivo:['parezca','parezcas','parezca','parezcamos','parezcan']},pronominal:false},
+  {inf:'seguir',type:'ir',tr:'to follow/continue',tag:'irregular',nivel:3,table:{presente:['sigo','sigues','sigue','seguimos','siguen'],preterito:['seguí','seguiste','siguió','seguimos','siguieron'],imperfecto:['seguía','seguías','seguía','seguíamos','seguían'],futuro:['seguiré','seguirás','seguirá','seguiremos','seguirán'],condicional:['seguiría','seguirías','seguiría','seguiríamos','seguirían'],subjuntivo:['siga','sigas','siga','sigamos','sigan']},pronominal:false},
+  {inf:'llevar',type:'ar',tr:'to carry/wear',tag:'regular',nivel:3,table:{presente:['llevo','llevas','lleva','llevamos','llevan'],preterito:['llevé','llevaste','llevó','llevamos','llevaron'],imperfecto:['llevaba','llevabas','llevaba','llevábamos','llevaban'],futuro:['llevaré','llevarás','llevará','llevaremos','llevarán'],condicional:['llevaría','llevarías','llevaría','llevaríamos','llevarían'],subjuntivo:['lleve','lleves','lleve','llevemos','lleven']},pronominal:false},
+  {inf:'dejar',type:'ar',tr:'to leave/let',tag:'regular',nivel:3,table:{presente:['dejo','dejas','deja','dejamos','dejan'],preterito:['dejé','dejaste','dejó','dejamos','dejaron'],imperfecto:['dejaba','dejabas','dejaba','dejábamos','dejaban'],futuro:['dejaré','dejarás','dejará','dejaremos','dejarán'],condicional:['dejaría','dejarías','dejaría','dejaríamos','dejarían'],subjuntivo:['deje','dejes','deje','dejemos','dejen']},pronominal:false},
+  {inf:'encontrar',type:'ar',tr:'to find',tag:'irregular',nivel:3,table:{presente:['encuentro','encuentras','encuentra','encontramos','encuentran'],preterito:['encontré','encontraste','encontró','encontramos','encontraron'],imperfecto:['encontraba','encontrabas','encontraba','encontrábamos','encontraban'],futuro:['encontraré','encontrarás','encontrará','encontraremos','encontrarán'],condicional:['encontraría','encontrarías','encontraría','encontraríamos','encontrarían'],subjuntivo:['encuentre','encuentres','encuentre','encontremos','encuentren']},pronominal:false},
+  {inf:'pensar',type:'ar',tr:'to think',tag:'irregular',nivel:3,table:{presente:['pienso','piensas','piensa','pensamos','piensan'],preterito:['pensé','pensaste','pensó','pensamos','pensaron'],imperfecto:['pensaba','pensabas','pensaba','pensábamos','pensaban'],futuro:['pensaré','pensarás','pensará','pensaremos','pensarán'],condicional:['pensaría','pensarías','pensaría','pensaríamos','pensarían'],subjuntivo:['piense','pienses','piense','pensemos','piensen']},pronominal:false},
+  {inf:'cocinar',type:'ar',tr:'to cook',tag:'regular',nivel:3,table:{presente:['cocino','cocinas','cocina','cocinamos','cocinan'],preterito:['cociné','cocinaste','cocinó','cocinamos','cocinaron'],imperfecto:['cocinaba','cocinabas','cocinaba','cocinábamos','cocinaban'],futuro:['cocinaré','cocinarás','cocinará','cocinaremos','cocinarán'],condicional:['cocinaría','cocinarías','cocinaría','cocinaríamos','cocinarían'],subjuntivo:['cocine','cocines','cocine','cocinemos','cocinen']},pronominal:false},
+  {inf:'limpiar',type:'ar',tr:'to clean',tag:'regular',nivel:3,table:{presente:['limpio','limpias','limpia','limpiamos','limpian'],preterito:['limpié','limpiaste','limpió','limpiamos','limpiaron'],imperfecto:['limpiaba','limpiabas','limpiaba','limpiábamos','limpiaban'],futuro:['limpiaré','limpiarás','limpiará','limpiaremos','limpiarán'],condicional:['limpiaría','limpiarías','limpiaría','limpiaríamos','limpiarían'],subjuntivo:['limpie','limpies','limpie','limpiemos','limpien']},pronominal:false},
+  {inf:'planchar',type:'ar',tr:'to iron',tag:'regular',nivel:3,table:{presente:['plancho','planchas','plancha','planchamos','planchan'],preterito:['planché','planchaste','planchó','planchamos','plancharon'],imperfecto:['planchaba','planchabas','planchaba','planchábamos','planchaban'],futuro:['plancharé','plancharás','planchará','plancharemos','plancharán'],condicional:['plancharía','plancharías','plancharía','plancharíamos','plancharían'],subjuntivo:['planche','planches','planche','planchemos','planchen']},pronominal:false},
+  {inf:'bailar',type:'ar',tr:'to dance',tag:'regular',nivel:3,table:{presente:['bailo','bailas','baila','bailamos','bailan'],preterito:['bailé','bailaste','bailó','bailamos','bailaron'],imperfecto:['bailaba','bailabas','bailaba','bailábamos','bailaban'],futuro:['bailaré','bailarás','bailará','bailaremos','bailarán'],condicional:['bailaría','bailarías','bailaría','bailaríamos','bailarían'],subjuntivo:['baile','bailes','baile','bailemos','bailen']},pronominal:false},
+  {inf:'cantar',type:'ar',tr:'to sing',tag:'regular',nivel:3,table:{presente:['canto','cantas','canta','cantamos','cantan'],preterito:['canté','cantaste','cantó','cantamos','cantaron'],imperfecto:['cantaba','cantabas','cantaba','cantábamos','cantaban'],futuro:['cantaré','cantarás','cantará','cantaremos','cantarán'],condicional:['cantaría','cantarías','cantaría','cantaríamos','cantarían'],subjuntivo:['cante','cantes','cante','cantemos','canten']},pronominal:false},
+  {inf:'nadar',type:'ar',tr:'to swim',tag:'regular',nivel:3,table:{presente:['nado','nadas','nada','nadamos','nadan'],preterito:['nadé','nadaste','nadó','nadamos','nadaron'],imperfecto:['nadaba','nadabas','nadaba','nadábamos','nadaban'],futuro:['nadaré','nadarás','nadará','nadaremos','nadarán'],condicional:['nadaría','nadarías','nadaría','nadaríamos','nadarían'],subjuntivo:['nade','nades','nade','nademos','naden']},pronominal:false},
+  {inf:'manejar',type:'ar',tr:'to drive',tag:'regular',nivel:3,table:{presente:['manejo','manejas','maneja','manejamos','manejan'],preterito:['manejé','manejaste','manejó','manejamos','manejaron'],imperfecto:['manejaba','manejabas','manejaba','manejábamos','manejaban'],futuro:['manejaré','manejarás','manejará','manejaremos','manejarán'],condicional:['manejaría','manejarías','manejaría','manejaríamos','manejarían'],subjuntivo:['maneje','manejes','maneje','manejemos','manejen']},pronominal:false},
+  {inf:'pasear',type:'ar',tr:'to stroll',tag:'regular',nivel:3,table:{presente:['paseo','paseas','pasea','paseamos','pasean'],preterito:['paseé','paseaste','paseó','paseamos','pasearon'],imperfecto:['paseaba','paseabas','paseaba','paseábamos','paseaban'],futuro:['pasearé','pasearás','paseará','pasearemos','pasearán'],condicional:['pasearía','pasearías','pasearía','pasearíamos','pasearían'],subjuntivo:['pasee','pasees','pasee','paseemos','paseen']},pronominal:false},
+  {inf:'montar',type:'ar',tr:'to ride/set up',tag:'regular',nivel:3,table:{presente:['monto','montas','monta','montamos','montan'],preterito:['monté','montaste','montó','montamos','montaron'],imperfecto:['montaba','montabas','montaba','montábamos','montaban'],futuro:['montaré','montarás','montará','montaremos','montarán'],condicional:['montaría','montarías','montaría','montaríamos','montarían'],subjuntivo:['monte','montes','monte','montemos','monten']},pronominal:false},
+  {inf:'subir',type:'ir',tr:'to go up',tag:'regular',nivel:3,table:{presente:['subo','subes','sube','subimos','suben'],preterito:['subí','subiste','subió','subimos','subieron'],imperfecto:['subía','subías','subía','subíamos','subían'],futuro:['subiré','subirás','subirá','subiremos','subirán'],condicional:['subiría','subirías','subiría','subiríamos','subirían'],subjuntivo:['suba','subas','suba','subamos','suban']},pronominal:false},
+  {inf:'acercar',type:'ar',tr:'to bring closer',tag:'irregular',nivel:3,table:{presente:['acerco','acercas','acerca','acercamos','acercan'],preterito:['acerqué','acercaste','acercó','acercamos','acercaron'],imperfecto:['acercaba','acercabas','acercaba','acercábamos','acercaban'],futuro:['acercaré','acercarás','acercará','acercaremos','acercarán'],condicional:['acercaría','acercarías','acercaría','acercaríamos','acercarían'],subjuntivo:['acerque','acerques','acerque','acerquemos','acerquen']},pronominal:false},
+  {inf:'mover',type:'er',tr:'to move',tag:'irregular',nivel:3,table:{presente:['muevo','mueves','mueve','movemos','mueven'],preterito:['moví','moviste','movió','movimos','movieron'],imperfecto:['movía','movías','movía','movíamos','movían'],futuro:['moveré','moverás','moverá','moveremos','moverán'],condicional:['movería','moverías','movería','moveríamos','moverían'],subjuntivo:['mueva','muevas','mueva','movamos','muevan']},pronominal:false},
+  {inf:'echar',type:'ar',tr:'to throw/pour',tag:'regular',nivel:3,table:{presente:['echo','echas','echa','echamos','echan'],preterito:['eché','echaste','echó','echamos','echaron'],imperfecto:['echaba','echabas','echaba','echábamos','echaban'],futuro:['echaré','echarás','echará','echaremos','echarán'],condicional:['echaría','echarías','echaría','echaríamos','echarían'],subjuntivo:['eche','eches','eche','echemos','echen']},pronominal:false},
+  {inf:'colocar',type:'ar',tr:'to place',tag:'irregular',nivel:3,table:{presente:['coloco','colocas','coloca','colocamos','colocan'],preterito:['coloqué','colocaste','colocó','colocamos','colocaron'],imperfecto:['colocaba','colocabas','colocaba','colocábamos','colocaban'],futuro:['colocaré','colocarás','colocará','colocaremos','colocarán'],condicional:['colocaría','colocarías','colocaría','colocaríamos','colocarían'],subjuntivo:['coloque','coloques','coloque','coloquemos','coloquen']},pronominal:false},
+  {inf:'marcar',type:'ar',tr:'to mark/dial',tag:'irregular',nivel:3,table:{presente:['marco','marcas','marca','marcamos','marcan'],preterito:['marqué','marcaste','marcó','marcamos','marcaron'],imperfecto:['marcaba','marcabas','marcaba','marcábamos','marcaban'],futuro:['marcaré','marcarás','marcará','marcaremos','marcarán'],condicional:['marcaría','marcarías','marcaría','marcaríamos','marcarían'],subjuntivo:['marque','marques','marque','marquemos','marquen']},pronominal:false},
+  {inf:'superar',type:'ar',tr:'to overcome/surpass',tag:'regular',nivel:3,table:{presente:['supero','superas','supera','superamos','superan'],preterito:['superé','superaste','superó','superamos','superaron'],imperfecto:['superaba','superabas','superaba','superábamos','superaban'],futuro:['superaré','superarás','superará','superaremos','superarán'],condicional:['superaría','superarías','superaría','superaríamos','superarían'],subjuntivo:['supere','superes','supere','superemos','superen']},pronominal:false},
+  {inf:'repetir',type:'ir',tr:'to repeat',tag:'irregular',nivel:3,table:{presente:['repito','repites','repite','repetimos','repiten'],preterito:['repetí','repetiste','repitió','repetimos','repitieron'],imperfecto:['repetía','repetías','repetía','repetíamos','repetían'],futuro:['repetiré','repetirás','repetirá','repetiremos','repetirán'],condicional:['repetiría','repetirías','repetiría','repetiríamos','repetirían'],subjuntivo:['repita','repitas','repita','repitamos','repitan']},pronominal:false},
+  {inf:'plantear',type:'ar',tr:'to raise/pose (an issue)',tag:'regular',nivel:3,table:{presente:['planteo','planteas','plantea','planteamos','plantean'],preterito:['planteé','planteaste','planteó','planteamos','plantearon'],imperfecto:['planteaba','planteabas','planteaba','planteábamos','planteaban'],futuro:['plantearé','plantearás','planteará','plantearemos','plantearán'],condicional:['plantearía','plantearías','plantearía','plantearíamos','plantearían'],subjuntivo:['plantee','plantees','plantee','planteemos','planteen']},pronominal:false},
+  {inf:'cubrir',type:'ir',tr:'to cover',tag:'irregular',nivel:3,table:{presente:['cubro','cubres','cubre','cubrimos','cubren'],preterito:['cubrí','cubriste','cubrió','cubrimos','cubrieron'],imperfecto:['cubría','cubrías','cubría','cubríamos','cubrían'],futuro:['cubriré','cubrirás','cubrirá','cubriremos','cubrirán'],condicional:['cubriría','cubrirías','cubriría','cubriríamos','cubrirían'],subjuntivo:['cubra','cubras','cubra','cubramos','cubran']},pronominal:false},
+  {inf:'sumar',type:'ar',tr:'to add up',tag:'regular',nivel:3,table:{presente:['sumo','sumas','suma','sumamos','suman'],preterito:['sumé','sumaste','sumó','sumamos','sumaron'],imperfecto:['sumaba','sumabas','sumaba','sumábamos','sumaban'],futuro:['sumaré','sumarás','sumará','sumaremos','sumarán'],condicional:['sumaría','sumarías','sumaría','sumaríamos','sumarían'],subjuntivo:['sume','sumes','sume','sumemos','sumen']},pronominal:false},
+  {inf:'importar',type:'ar',tr:'to matter/import',tag:'regular',nivel:3,table:{presente:['importo','importas','importa','importamos','importan'],preterito:['importé','importaste','importó','importamos','importaron'],imperfecto:['importaba','importabas','importaba','importábamos','importaban'],futuro:['importaré','importarás','importará','importaremos','importarán'],condicional:['importaría','importarías','importaría','importaríamos','importarían'],subjuntivo:['importe','importes','importe','importemos','importen']},pronominal:false},
+  {inf:'lanzar',type:'ar',tr:'to throw/launch',tag:'irregular',nivel:3,table:{presente:['lanzo','lanzas','lanza','lanzamos','lanzan'],preterito:['lancé','lanzaste','lanzó','lanzamos','lanzaron'],imperfecto:['lanzaba','lanzabas','lanzaba','lanzábamos','lanzaban'],futuro:['lanzaré','lanzarás','lanzará','lanzaremos','lanzarán'],condicional:['lanzaría','lanzarías','lanzaría','lanzaríamos','lanzarían'],subjuntivo:['lance','lances','lance','lancemos','lancen']},pronominal:false},
+  {inf:'funcionar',type:'ar',tr:'to work/function',tag:'regular',nivel:3,table:{presente:['funciono','funcionas','funciona','funcionamos','funcionan'],preterito:['funcioné','funcionaste','funcionó','funcionamos','funcionaron'],imperfecto:['funcionaba','funcionabas','funcionaba','funcionábamos','funcionaban'],futuro:['funcionaré','funcionarás','funcionará','funcionaremos','funcionarán'],condicional:['funcionaría','funcionarías','funcionaría','funcionaríamos','funcionarían'],subjuntivo:['funcione','funciones','funcione','funcionemos','funcionen']},pronominal:false},
+  {inf:'celebrar',type:'ar',tr:'to celebrate',tag:'regular',nivel:3,table:{presente:['celebro','celebras','celebra','celebramos','celebran'],preterito:['celebré','celebraste','celebró','celebramos','celebraron'],imperfecto:['celebraba','celebrabas','celebraba','celebrábamos','celebraban'],futuro:['celebraré','celebrarás','celebrará','celebraremos','celebrarán'],condicional:['celebraría','celebrarías','celebraría','celebraríamos','celebrarían'],subjuntivo:['celebre','celebres','celebre','celebremos','celebren']},pronominal:false},
+  {inf:'desear',type:'ar',tr:'to wish/desire',tag:'regular',nivel:3,table:{presente:['deseo','deseas','desea','deseamos','desean'],preterito:['deseé','deseaste','deseó','deseamos','desearon'],imperfecto:['deseaba','deseabas','deseaba','deseábamos','deseaban'],futuro:['desearé','desearás','deseará','desearemos','desearán'],condicional:['desearía','desearías','desearía','desearíamos','desearían'],subjuntivo:['desee','desees','desee','deseemos','deseen']},pronominal:false},
+  {inf:'andar',type:'ar',tr:'to walk/go around',tag:'irregular',nivel:3,table:{presente:['ando','andas','anda','andamos','andan'],preterito:['anduve','anduviste','anduvo','anduvimos','anduvieron'],imperfecto:['andaba','andabas','andaba','andábamos','andaban'],futuro:['andaré','andarás','andará','andaremos','andarán'],condicional:['andaría','andarías','andaría','andaríamos','andarían'],subjuntivo:['ande','andes','ande','andemos','anden']},pronominal:false},
+  {inf:'participar',type:'ar',tr:'to participate',tag:'regular',nivel:3,table:{presente:['participo','participas','participa','participamos','participan'],preterito:['participé','participaste','participó','participamos','participaron'],imperfecto:['participaba','participabas','participaba','participábamos','participaban'],futuro:['participaré','participarás','participará','participaremos','participarán'],condicional:['participaría','participarías','participaría','participaríamos','participarían'],subjuntivo:['participe','participes','participe','participemos','participen']},pronominal:false},
+  {inf:'realizar',type:'ar',tr:'to carry out',tag:'irregular',nivel:3,table:{presente:['realizo','realizas','realiza','realizamos','realizan'],preterito:['realicé','realizaste','realizó','realizamos','realizaron'],imperfecto:['realizaba','realizabas','realizaba','realizábamos','realizaban'],futuro:['realizaré','realizarás','realizará','realizaremos','realizarán'],condicional:['realizaría','realizarías','realizaría','realizaríamos','realizarían'],subjuntivo:['realice','realices','realice','realicemos','realicen']},pronominal:false},
+  {inf:'existir',type:'ir',tr:'to exist',tag:'regular',nivel:3,table:{presente:['existo','existes','existe','existimos','existen'],preterito:['existí','exististe','existió','existimos','existieron'],imperfecto:['existía','existías','existía','existíamos','existían'],futuro:['existiré','existirás','existirá','existiremos','existirán'],condicional:['existiría','existirías','existiría','existiríamos','existirían'],subjuntivo:['exista','existas','exista','existamos','existan']},pronominal:false},
+  {inf:'considerar',type:'ar',tr:'to consider',tag:'regular',nivel:3,table:{presente:['considero','consideras','considera','consideramos','consideran'],preterito:['consideré','consideraste','consideró','consideramos','consideraron'],imperfecto:['consideraba','considerabas','consideraba','considerábamos','consideraban'],futuro:['consideraré','considerarás','considerará','consideraremos','considerarán'],condicional:['consideraría','considerarías','consideraría','consideraríamos','considerarían'],subjuntivo:['considere','consideres','considere','consideremos','consideren']},pronominal:false},
+  {inf:'lograr',type:'ar',tr:'to achieve',tag:'regular',nivel:3,table:{presente:['logro','logras','logra','logramos','logran'],preterito:['logré','lograste','logró','logramos','lograron'],imperfecto:['lograba','lograbas','lograba','lográbamos','lograban'],futuro:['lograré','lograrás','logrará','lograremos','lograrán'],condicional:['lograría','lograrías','lograría','lograríamos','lograrían'],subjuntivo:['logre','logres','logre','logremos','logren']},pronominal:false},
+  {inf:'convertir',type:'ir',tr:'to convert/turn into',tag:'irregular',nivel:3,table:{presente:['convierto','conviertes','convierte','convertimos','convierten'],preterito:['convertí','convertiste','convirtió','convertimos','convirtieron'],imperfecto:['convertía','convertías','convertía','convertíamos','convertían'],futuro:['convertiré','convertirás','convertirá','convertiremos','convertirán'],condicional:['convertiría','convertirías','convertiría','convertiríamos','convertirían'],subjuntivo:['convierta','conviertas','convierta','convirtamos','conviertan']},pronominal:false},
+  {inf:'producir',type:'ir',tr:'to produce',tag:'irregular',nivel:3,table:{presente:['produzco','produces','produce','producimos','producen'],preterito:['produje','produjiste','produjo','produjimos','produjeron'],imperfecto:['producía','producías','producía','producíamos','producían'],futuro:['produciré','producirás','producirá','produciremos','producirán'],condicional:['produciría','producirías','produciría','produciríamos','producirían'],subjuntivo:['produzca','produzcas','produzca','produzcamos','produzcan']},pronominal:false},
+  {inf:'señalar',type:'ar',tr:'to point out/indicate',tag:'regular',nivel:3,table:{presente:['señalo','señalas','señala','señalamos','señalan'],preterito:['señalé','señalaste','señaló','señalamos','señalaron'],imperfecto:['señalaba','señalabas','señalaba','señalábamos','señalaban'],futuro:['señalaré','señalarás','señalará','señalaremos','señalarán'],condicional:['señalaría','señalarías','señalaría','señalaríamos','señalarían'],subjuntivo:['señale','señales','señale','señalemos','señalen']},pronominal:false},
+  {inf:'utilizar',type:'ar',tr:'to use/utilize',tag:'irregular',nivel:3,table:{presente:['utilizo','utilizas','utiliza','utilizamos','utilizan'],preterito:['utilicé','utilizaste','utilizó','utilizamos','utilizaron'],imperfecto:['utilizaba','utilizabas','utilizaba','utilizábamos','utilizaban'],futuro:['utilizaré','utilizarás','utilizará','utilizaremos','utilizarán'],condicional:['utilizaría','utilizarías','utilizaría','utilizaríamos','utilizarían'],subjuntivo:['utilice','utilices','utilice','utilicemos','utilicen']},pronominal:false},
+  {inf:'asegurar',type:'ar',tr:'to assure/ensure',tag:'regular',nivel:3,table:{presente:['aseguro','aseguras','asegura','aseguramos','aseguran'],preterito:['aseguré','aseguraste','aseguró','aseguramos','aseguraron'],imperfecto:['aseguraba','asegurabas','aseguraba','asegurábamos','aseguraban'],futuro:['aseguraré','asegurarás','asegurará','aseguraremos','asegurarán'],condicional:['aseguraría','asegurarías','aseguraría','aseguraríamos','asegurarían'],subjuntivo:['asegure','asegures','asegure','aseguremos','aseguren']},pronominal:false},
+  {inf:'ocurrir',type:'ir',tr:'to occur',tag:'regular',nivel:3,table:{presente:['ocurro','ocurres','ocurre','ocurrimos','ocurren'],preterito:['ocurrí','ocurriste','ocurrió','ocurrimos','ocurrieron'],imperfecto:['ocurría','ocurrías','ocurría','ocurríamos','ocurrían'],futuro:['ocurriré','ocurrirás','ocurrirá','ocurriremos','ocurrirán'],condicional:['ocurriría','ocurrirías','ocurriría','ocurriríamos','ocurrirían'],subjuntivo:['ocurra','ocurras','ocurra','ocurramos','ocurran']},pronominal:false},
+  {inf:'incluir',type:'ir',tr:'to include',tag:'irregular',nivel:3,table:{presente:['incluyo','incluyes','incluye','incluimos','incluyen'],preterito:['incluí','incluiste','incluyó','incluimos','incluyeron'],imperfecto:['incluía','incluías','incluía','incluíamos','incluían'],futuro:['incluiré','incluirás','incluirá','incluiremos','incluirán'],condicional:['incluiría','incluirías','incluiría','incluiríamos','incluirían'],subjuntivo:['incluya','incluyas','incluya','incluyamos','incluyan']},pronominal:false},
+  {inf:'sentar',type:'ar',tr:'to seat (someone)',tag:'irregular',nivel:3,table:{presente:['siento','sientas','sienta','sentamos','sientan'],preterito:['senté','sentaste','sentó','sentamos','sentaron'],imperfecto:['sentaba','sentabas','sentaba','sentábamos','sentaban'],futuro:['sentaré','sentarás','sentará','sentaremos','sentarán'],condicional:['sentaría','sentarías','sentaría','sentaríamos','sentarían'],subjuntivo:['siente','sientes','siente','sentemos','sienten']},pronominal:false},
+  {inf:'resultar',type:'ar',tr:'to result/turn out',tag:'regular',nivel:3,table:{presente:['resulto','resultas','resulta','resultamos','resultan'],preterito:['resulté','resultaste','resultó','resultamos','resultaron'],imperfecto:['resultaba','resultabas','resultaba','resultábamos','resultaban'],futuro:['resultaré','resultarás','resultará','resultaremos','resultarán'],condicional:['resultaría','resultarías','resultaría','resultaríamos','resultarían'],subjuntivo:['resulte','resultes','resulte','resultemos','resulten']},pronominal:false},
+  {inf:'desarrollar',type:'ar',tr:'to develop',tag:'regular',nivel:3,table:{presente:['desarrollo','desarrollas','desarrolla','desarrollamos','desarrollan'],preterito:['desarrollé','desarrollaste','desarrolló','desarrollamos','desarrollaron'],imperfecto:['desarrollaba','desarrollabas','desarrollaba','desarrollábamos','desarrollaban'],futuro:['desarrollaré','desarrollarás','desarrollará','desarrollaremos','desarrollarán'],condicional:['desarrollaría','desarrollarías','desarrollaría','desarrollaríamos','desarrollarían'],subjuntivo:['desarrolle','desarrolles','desarrolle','desarrollemos','desarrollen']},pronominal:false},
+  {inf:'formar',type:'ar',tr:'to form',tag:'regular',nivel:3,table:{presente:['formo','formas','forma','formamos','forman'],preterito:['formé','formaste','formó','formamos','formaron'],imperfecto:['formaba','formabas','formaba','formábamos','formaban'],futuro:['formaré','formarás','formará','formaremos','formarán'],condicional:['formaría','formarías','formaría','formaríamos','formarían'],subjuntivo:['forme','formes','forme','formemos','formen']},pronominal:false},
+  {inf:'reconocer',type:'er',tr:'to recognize',tag:'irregular',nivel:3,table:{presente:['reconozco','reconoces','reconoce','reconocemos','reconocen'],preterito:['reconocí','reconociste','reconoció','reconocimos','reconocieron'],imperfecto:['reconocía','reconocías','reconocía','reconocíamos','reconocían'],futuro:['reconoceré','reconocerás','reconocerá','reconoceremos','reconocerán'],condicional:['reconocería','reconocerías','reconocería','reconoceríamos','reconocerían'],subjuntivo:['reconozca','reconozcas','reconozca','reconozcamos','reconozcan']},pronominal:false},
+  {inf:'alcanzar',type:'ar',tr:'to reach/achieve',tag:'irregular',nivel:3,table:{presente:['alcanzo','alcanzas','alcanza','alcanzamos','alcanzan'],preterito:['alcancé','alcanzaste','alcanzó','alcanzamos','alcanzaron'],imperfecto:['alcanzaba','alcanzabas','alcanzaba','alcanzábamos','alcanzaban'],futuro:['alcanzaré','alcanzarás','alcanzará','alcanzaremos','alcanzarán'],condicional:['alcanzaría','alcanzarías','alcanzaría','alcanzaríamos','alcanzarían'],subjuntivo:['alcance','alcances','alcance','alcancemos','alcancen']},pronominal:false},
+  {inf:'establecer',type:'er',tr:'to establish',tag:'irregular',nivel:3,table:{presente:['establezco','estableces','establece','establecemos','establecen'],preterito:['establecí','estableciste','estableció','establecimos','establecieron'],imperfecto:['establecía','establecías','establecía','establecíamos','establecían'],futuro:['estableceré','establecerás','establecerá','estableceremos','establecerán'],condicional:['establecería','establecerías','establecería','estableceríamos','establecerían'],subjuntivo:['establezca','establezcas','establezca','establezcamos','establezcan']},pronominal:false},
+  {inf:'indicar',type:'ar',tr:'to indicate',tag:'irregular',nivel:3,table:{presente:['indico','indicas','indica','indicamos','indican'],preterito:['indiqué','indicaste','indicó','indicamos','indicaron'],imperfecto:['indicaba','indicabas','indicaba','indicábamos','indicaban'],futuro:['indicaré','indicarás','indicará','indicaremos','indicarán'],condicional:['indicaría','indicarías','indicaría','indicaríamos','indicarían'],subjuntivo:['indique','indiques','indique','indiquemos','indiquen']},pronominal:false},
+  {inf:'generar',type:'ar',tr:'to generate',tag:'regular',nivel:3,table:{presente:['genero','generas','genera','generamos','generan'],preterito:['generé','generaste','generó','generamos','generaron'],imperfecto:['generaba','generabas','generaba','generábamos','generaban'],futuro:['generaré','generarás','generará','generaremos','generarán'],condicional:['generaría','generarías','generaría','generaríamos','generarían'],subjuntivo:['genere','generes','genere','generemos','generen']},pronominal:false},
+  {inf:'dirigir',type:'ir',tr:'to direct',tag:'irregular',nivel:3,table:{presente:['dirijo','diriges','dirige','dirigimos','dirigen'],preterito:['dirigí','dirigiste','dirigió','dirigimos','dirigieron'],imperfecto:['dirigía','dirigías','dirigía','dirigíamos','dirigían'],futuro:['dirigiré','dirigirás','dirigirá','dirigiremos','dirigirán'],condicional:['dirigiría','dirigirías','dirigiría','dirigiríamos','dirigirían'],subjuntivo:['dirija','dirijas','dirija','dirijamos','dirijan']},pronominal:false},
+  {inf:'obtener',type:'er',tr:'to obtain',tag:'irregular',nivel:3,table:{presente:['obtengo','obtienes','obtiene','obtenemos','obtienen'],preterito:['obtuve','obtuviste','obtuvo','obtuvimos','obtuvieron'],imperfecto:['obtenía','obtenías','obtenía','obteníamos','obtenían'],futuro:['obtendré','obtendrás','obtendrá','obtendremos','obtendrán'],condicional:['obtendría','obtendrías','obtendría','obtendríamos','obtendrían'],subjuntivo:['obtenga','obtengas','obtenga','obtengamos','obtengan']},pronominal:false},
+  {inf:'afirmar',type:'ar',tr:'to affirm/state',tag:'regular',nivel:3,table:{presente:['afirmo','afirmas','afirma','afirmamos','afirman'],preterito:['afirmé','afirmaste','afirmó','afirmamos','afirmaron'],imperfecto:['afirmaba','afirmabas','afirmaba','afirmábamos','afirmaban'],futuro:['afirmaré','afirmarás','afirmará','afirmaremos','afirmarán'],condicional:['afirmaría','afirmarías','afirmaría','afirmaríamos','afirmarían'],subjuntivo:['afirme','afirmes','afirme','afirmemos','afirmen']},pronominal:false},
+  {inf:'suponer',type:'er',tr:'to suppose',tag:'irregular',nivel:3,table:{presente:['supongo','supones','supone','suponemos','suponen'],preterito:['supuse','supusiste','supuso','supusimos','supusieron'],imperfecto:['suponía','suponías','suponía','suponíamos','suponían'],futuro:['supondré','supondrás','supondrá','supondremos','supondrán'],condicional:['supondría','supondrías','supondría','supondríamos','supondrían'],subjuntivo:['suponga','supongas','suponga','supongamos','supongan']},pronominal:false},
+  {inf:'representar',type:'ar',tr:'to represent',tag:'regular',nivel:3,table:{presente:['represento','representas','representa','representamos','representan'],preterito:['representé','representaste','representó','representamos','representaron'],imperfecto:['representaba','representabas','representaba','representábamos','representaban'],futuro:['representaré','representarás','representará','representaremos','representarán'],condicional:['representaría','representarías','representaría','representaríamos','representarían'],subjuntivo:['represente','representes','represente','representemos','representen']},pronominal:false},
+  {inf:'destacar',type:'ar',tr:'to stand out/highlight',tag:'irregular',nivel:3,table:{presente:['destaco','destacas','destaca','destacamos','destacan'],preterito:['destaqué','destacaste','destacó','destacamos','destacaron'],imperfecto:['destacaba','destacabas','destacaba','destacábamos','destacaban'],futuro:['destacaré','destacarás','destacará','destacaremos','destacarán'],condicional:['destacaría','destacarías','destacaría','destacaríamos','destacarían'],subjuntivo:['destaque','destaques','destaque','destaquemos','destaquen']},pronominal:false},
+  {inf:'afectar',type:'ar',tr:'to affect',tag:'regular',nivel:3,table:{presente:['afecto','afectas','afecta','afectamos','afectan'],preterito:['afecté','afectaste','afectó','afectamos','afectaron'],imperfecto:['afectaba','afectabas','afectaba','afectábamos','afectaban'],futuro:['afectaré','afectarás','afectará','afectaremos','afectarán'],condicional:['afectaría','afectarías','afectaría','afectaríamos','afectarían'],subjuntivo:['afecte','afectes','afecte','afectemos','afecten']},pronominal:false},
+  {inf:'informar',type:'ar',tr:'to inform',tag:'regular',nivel:3,table:{presente:['informo','informas','informa','informamos','informan'],preterito:['informé','informaste','informó','informamos','informaron'],imperfecto:['informaba','informabas','informaba','informábamos','informaban'],futuro:['informaré','informarás','informará','informaremos','informarán'],condicional:['informaría','informarías','informaría','informaríamos','informarían'],subjuntivo:['informe','informes','informe','informemos','informen']},pronominal:false},
+  {inf:'suceder',type:'er',tr:'to happen',tag:'regular',nivel:3,table:{presente:['sucedo','sucedes','sucede','sucedemos','suceden'],preterito:['sucedí','sucediste','sucedió','sucedimos','sucedieron'],imperfecto:['sucedía','sucedías','sucedía','sucedíamos','sucedían'],futuro:['sucederé','sucederás','sucederá','sucederemos','sucederán'],condicional:['sucedería','sucederías','sucedería','sucederíamos','sucederían'],subjuntivo:['suceda','sucedas','suceda','sucedamos','sucedan']},pronominal:false},
+  {inf:'sufrir',type:'ir',tr:'to suffer',tag:'regular',nivel:3,table:{presente:['sufro','sufres','sufre','sufrimos','sufren'],preterito:['sufrí','sufriste','sufrió','sufrimos','sufrieron'],imperfecto:['sufría','sufrías','sufría','sufríamos','sufrían'],futuro:['sufriré','sufrirás','sufrirá','sufriremos','sufrirán'],condicional:['sufriría','sufrirías','sufriría','sufriríamos','sufrirían'],subjuntivo:['sufra','sufras','sufra','suframos','sufran']},pronominal:false},
+  {inf:'iniciar',type:'ar',tr:'to initiate',tag:'regular',nivel:3,table:{presente:['inicio','inicias','inicia','iniciamos','inician'],preterito:['inicié','iniciaste','inició','iniciamos','iniciaron'],imperfecto:['iniciaba','iniciabas','iniciaba','iniciábamos','iniciaban'],futuro:['iniciaré','iniciarás','iniciará','iniciaremos','iniciarán'],condicional:['iniciaría','iniciarías','iniciaría','iniciaríamos','iniciarían'],subjuntivo:['inicie','inicies','inicie','iniciemos','inicien']},pronominal:false},
+  {inf:'referir',type:'ir',tr:'to refer',tag:'irregular',nivel:3,table:{presente:['refiero','refieres','refiere','referimos','refieren'],preterito:['referí','referiste','refirió','referimos','refirieron'],imperfecto:['refería','referías','refería','referíamos','referían'],futuro:['referiré','referirás','referirá','referiremos','referirán'],condicional:['referiría','referirías','referiría','referiríamos','referirían'],subjuntivo:['refiera','refieras','refiera','refiramos','refieran']},pronominal:false},
+  {inf:'agregar',type:'ar',tr:'to add',tag:'irregular',nivel:3,table:{presente:['agrego','agregas','agrega','agregamos','agregan'],preterito:['agregué','agregaste','agregó','agregamos','agregaron'],imperfecto:['agregaba','agregabas','agregaba','agregábamos','agregaban'],futuro:['agregaré','agregarás','agregará','agregaremos','agregarán'],condicional:['agregaría','agregarías','agregaría','agregaríamos','agregarían'],subjuntivo:['agregue','agregues','agregue','agreguemos','agreguen']},pronominal:false},
+  {inf:'proponer',type:'er',tr:'to propose',tag:'irregular',nivel:3,table:{presente:['propongo','propones','propone','proponemos','proponen'],preterito:['propuse','propusiste','propuso','propusimos','propusieron'],imperfecto:['proponía','proponías','proponía','proponíamos','proponían'],futuro:['propondré','propondrás','propondrá','propondremos','propondrán'],condicional:['propondría','propondrías','propondría','propondríamos','propondrían'],subjuntivo:['proponga','propongas','proponga','propongamos','propongan']},pronominal:false},
+  {inf:'construir',type:'ir',tr:'to build',tag:'irregular',nivel:3,table:{presente:['construyo','construyes','construye','construimos','construyen'],preterito:['construí','construiste','construyó','construimos','construyeron'],imperfecto:['construía','construías','construía','construíamos','construían'],futuro:['construiré','construirás','construirá','construiremos','construirán'],condicional:['construiría','construirías','construiría','construiríamos','construirían'],subjuntivo:['construya','construyas','construya','construyamos','construyan']},pronominal:false},
+  {inf:'dedicar',type:'ar',tr:'to dedicate',tag:'irregular',nivel:3,table:{presente:['dedico','dedicas','dedica','dedicamos','dedican'],preterito:['dediqué','dedicaste','dedicó','dedicamos','dedicaron'],imperfecto:['dedicaba','dedicabas','dedicaba','dedicábamos','dedicaban'],futuro:['dedicaré','dedicarás','dedicará','dedicaremos','dedicarán'],condicional:['dedicaría','dedicarías','dedicaría','dedicaríamos','dedicarían'],subjuntivo:['dedique','dediques','dedique','dediquemos','dediquen']},pronominal:false},
+  {inf:'demostrar',type:'ar',tr:'to demonstrate',tag:'irregular',nivel:3,table:{presente:['demuestro','demuestras','demuestra','demostramos','demuestran'],preterito:['demostré','demostraste','demostró','demostramos','demostraron'],imperfecto:['demostraba','demostrabas','demostraba','demostrábamos','demostraban'],futuro:['demostraré','demostrarás','demostrará','demostraremos','demostrarán'],condicional:['demostraría','demostrarías','demostraría','demostraríamos','demostrarían'],subjuntivo:['demuestre','demuestres','demuestre','demostremos','demuestren']},pronominal:false},
+  {inf:'añadir',type:'ir',tr:'to add',tag:'regular',nivel:3,table:{presente:['añado','añades','añade','añadimos','añaden'],preterito:['añadí','añadiste','añadió','añadimos','añadieron'],imperfecto:['añadía','añadías','añadía','añadíamos','añadían'],futuro:['añadiré','añadirás','añadirá','añadiremos','añadirán'],condicional:['añadiría','añadirías','añadiría','añadiríamos','añadirían'],subjuntivo:['añada','añadas','añada','añadamos','añadan']},pronominal:false},
+  {inf:'anunciar',type:'ar',tr:'to announce',tag:'regular',nivel:3,table:{presente:['anuncio','anuncias','anuncia','anunciamos','anuncian'],preterito:['anuncié','anunciaste','anunció','anunciamos','anunciaron'],imperfecto:['anunciaba','anunciabas','anunciaba','anunciábamos','anunciaban'],futuro:['anunciaré','anunciarás','anunciará','anunciaremos','anunciarán'],condicional:['anunciaría','anunciarías','anunciaría','anunciaríamos','anunciarían'],subjuntivo:['anuncie','anuncies','anuncie','anunciemos','anuncien']},pronominal:false},
+  {inf:'aumentar',type:'ar',tr:'to increase',tag:'regular',nivel:3,table:{presente:['aumento','aumentas','aumenta','aumentamos','aumentan'],preterito:['aumenté','aumentaste','aumentó','aumentamos','aumentaron'],imperfecto:['aumentaba','aumentabas','aumentaba','aumentábamos','aumentaban'],futuro:['aumentaré','aumentarás','aumentará','aumentaremos','aumentarán'],condicional:['aumentaría','aumentarías','aumentaría','aumentaríamos','aumentarían'],subjuntivo:['aumente','aumentes','aumente','aumentemos','aumenten']},pronominal:false},
+  {inf:'publicar',type:'ar',tr:'to publish',tag:'irregular',nivel:3,table:{presente:['publico','publicas','publica','publicamos','publican'],preterito:['publiqué','publicaste','publicó','publicamos','publicaron'],imperfecto:['publicaba','publicabas','publicaba','publicábamos','publicaban'],futuro:['publicaré','publicarás','publicará','publicaremos','publicarán'],condicional:['publicaría','publicarías','publicaría','publicaríamos','publicarían'],subjuntivo:['publique','publiques','publique','publiquemos','publiquen']},pronominal:false},
+  {inf:'ocupar',type:'ar',tr:'to occupy',tag:'regular',nivel:3,table:{presente:['ocupo','ocupas','ocupa','ocupamos','ocupan'],preterito:['ocupé','ocupaste','ocupó','ocupamos','ocuparon'],imperfecto:['ocupaba','ocupabas','ocupaba','ocupábamos','ocupaban'],futuro:['ocuparé','ocuparás','ocupará','ocuparemos','ocuparán'],condicional:['ocuparía','ocuparías','ocuparía','ocuparíamos','ocuparían'],subjuntivo:['ocupe','ocupes','ocupe','ocupemos','ocupen']},pronominal:false},
+  {inf:'expresar',type:'ar',tr:'to express',tag:'regular',nivel:3,table:{presente:['expreso','expresas','expresa','expresamos','expresan'],preterito:['expresé','expresaste','expresó','expresamos','expresaron'],imperfecto:['expresaba','expresabas','expresaba','expresábamos','expresaban'],futuro:['expresaré','expresarás','expresará','expresaremos','expresarán'],condicional:['expresaría','expresarías','expresaría','expresaríamos','expresarían'],subjuntivo:['exprese','expreses','exprese','expresemos','expresen']},pronominal:false},
+  {inf:'detener',type:'er',tr:'to detain/stop',tag:'irregular',nivel:3,table:{presente:['detengo','detienes','detiene','detenemos','detienen'],preterito:['detuve','detuviste','detuvo','detuvimos','detuvieron'],imperfecto:['detenía','detenías','detenía','deteníamos','detenían'],futuro:['detendré','detendrás','detendrá','detendremos','detendrán'],condicional:['detendría','detendrías','detendría','detendríamos','detendrían'],subjuntivo:['detenga','detengas','detenga','detengamos','detengan']},pronominal:false},
+  {inf:'sostener',type:'er',tr:'to sustain/hold',tag:'irregular',nivel:3,table:{presente:['sostengo','sostienes','sostiene','sostenemos','sostienen'],preterito:['sostuve','sostuviste','sostuvo','sostuvimos','sostuvieron'],imperfecto:['sostenía','sostenías','sostenía','sosteníamos','sostenían'],futuro:['sostendré','sostendrás','sostendrá','sostendremos','sostendrán'],condicional:['sostendría','sostendrías','sostendría','sostendríamos','sostendrían'],subjuntivo:['sostenga','sostengas','sostenga','sostengamos','sostengan']},pronominal:false},
+  {inf:'definir',type:'ir',tr:'to define',tag:'regular',nivel:3,table:{presente:['defino','defines','define','definimos','definen'],preterito:['definí','definiste','definió','definimos','definieron'],imperfecto:['definía','definías','definía','definíamos','definían'],futuro:['definiré','definirás','definirá','definiremos','definirán'],condicional:['definiría','definirías','definiría','definiríamos','definirían'],subjuntivo:['defina','definas','defina','definamos','definan']},pronominal:false},
+  {inf:'entregar',type:'ar',tr:'to hand in/deliver',tag:'irregular',nivel:3,table:{presente:['entrego','entregas','entrega','entregamos','entregan'],preterito:['entregué','entregaste','entregó','entregamos','entregaron'],imperfecto:['entregaba','entregabas','entregaba','entregábamos','entregaban'],futuro:['entregaré','entregarás','entregará','entregaremos','entregarán'],condicional:['entregaría','entregarías','entregaría','entregaríamos','entregarían'],subjuntivo:['entregue','entregues','entregue','entreguemos','entreguen']},pronominal:false},
+  {inf:'provocar',type:'ar',tr:'to provoke/cause',tag:'irregular',nivel:3,table:{presente:['provoco','provocas','provoca','provocamos','provocan'],preterito:['provoqué','provocaste','provocó','provocamos','provocaron'],imperfecto:['provocaba','provocabas','provocaba','provocábamos','provocaban'],futuro:['provocaré','provocarás','provocará','provocaremos','provocarán'],condicional:['provocaría','provocarías','provocaría','provocaríamos','provocarían'],subjuntivo:['provoque','provoques','provoque','provoquemos','provoquen']},pronominal:false},
+  {inf:'reducir',type:'ir',tr:'to reduce',tag:'irregular',nivel:3,table:{presente:['reduzco','reduces','reduce','reducimos','reducen'],preterito:['reduje','redujiste','redujo','redujimos','redujeron'],imperfecto:['reducía','reducías','reducía','reducíamos','reducían'],futuro:['reduciré','reducirás','reducirá','reduciremos','reducirán'],condicional:['reduciría','reducirías','reduciría','reduciríamos','reducirían'],subjuntivo:['reduzca','reduzcas','reduzca','reduzcamos','reduzcan']},pronominal:false},
+  {inf:'enfrentar',type:'ar',tr:'to confront',tag:'regular',nivel:3,table:{presente:['enfrento','enfrentas','enfrenta','enfrentamos','enfrentan'],preterito:['enfrenté','enfrentaste','enfrentó','enfrentamos','enfrentaron'],imperfecto:['enfrentaba','enfrentabas','enfrentaba','enfrentábamos','enfrentaban'],futuro:['enfrentaré','enfrentarás','enfrentará','enfrentaremos','enfrentarán'],condicional:['enfrentaría','enfrentarías','enfrentaría','enfrentaríamos','enfrentarían'],subjuntivo:['enfrente','enfrentes','enfrente','enfrentemos','enfrenten']},pronominal:false},
+  {inf:'requerir',type:'ir',tr:'to require',tag:'irregular',nivel:3,table:{presente:['requiero','requieres','requiere','requerimos','requieren'],preterito:['requerí','requeriste','requirió','requerimos','requirieron'],imperfecto:['requería','requerías','requería','requeríamos','requerían'],futuro:['requeriré','requerirás','requerirá','requeriremos','requerirán'],condicional:['requeriría','requerirías','requeriría','requeriríamos','requerirían'],subjuntivo:['requiera','requieras','requiera','requiramos','requieran']},pronominal:false},
+  {inf:'constituir',type:'ir',tr:'to constitute',tag:'irregular',nivel:3,table:{presente:['constituyo','constituyes','constituye','constituimos','constituyen'],preterito:['constituí','constituiste','constituyó','constituimos','constituyeron'],imperfecto:['constituía','constituías','constituía','constituíamos','constituían'],futuro:['constituiré','constituirás','constituirá','constituiremos','constituirán'],condicional:['constituiría','constituirías','constituiría','constituiríamos','constituirían'],subjuntivo:['constituya','constituyas','constituya','constituyamos','constituyan']},pronominal:false},
+  {inf:'identificar',type:'ar',tr:'to identify',tag:'irregular',nivel:3,table:{presente:['identifico','identificas','identifica','identificamos','identifican'],preterito:['identifiqué','identificaste','identificó','identificamos','identificaron'],imperfecto:['identificaba','identificabas','identificaba','identificábamos','identificaban'],futuro:['identificaré','identificarás','identificará','identificaremos','identificarán'],condicional:['identificaría','identificarías','identificaría','identificaríamos','identificarían'],subjuntivo:['identifique','identifiques','identifique','identifiquemos','identifiquen']},pronominal:false},
+  {inf:'abandonar',type:'ar',tr:'to abandon',tag:'regular',nivel:3,table:{presente:['abandono','abandonas','abandona','abandonamos','abandonan'],preterito:['abandoné','abandonaste','abandonó','abandonamos','abandonaron'],imperfecto:['abandonaba','abandonabas','abandonaba','abandonábamos','abandonaban'],futuro:['abandonaré','abandonarás','abandonará','abandonaremos','abandonarán'],condicional:['abandonaría','abandonarías','abandonaría','abandonaríamos','abandonarían'],subjuntivo:['abandone','abandones','abandone','abandonemos','abandonen']},pronominal:false},
+  {inf:'actuar',type:'ar',tr:'to act',tag:'irregular',nivel:3,table:{presente:['actúo','actúas','actúa','actuamos','actúan'],preterito:['actué','actuaste','actuó','actuamos','actuaron'],imperfecto:['actuaba','actuabas','actuaba','actuábamos','actuaban'],futuro:['actuaré','actuarás','actuará','actuaremos','actuarán'],condicional:['actuaría','actuarías','actuaría','actuaríamos','actuarían'],subjuntivo:['actúe','actúes','actúe','actuemos','actúen']},pronominal:false},
+  {inf:'aprovechar',type:'ar',tr:'to take advantage of',tag:'regular',nivel:3,table:{presente:['aprovecho','aprovechas','aprovecha','aprovechamos','aprovechan'],preterito:['aproveché','aprovechaste','aprovechó','aprovechamos','aprovecharon'],imperfecto:['aprovechaba','aprovechabas','aprovechaba','aprovechábamos','aprovechaban'],futuro:['aprovecharé','aprovecharás','aprovechará','aprovecharemos','aprovecharán'],condicional:['aprovecharía','aprovecharías','aprovecharía','aprovecharíamos','aprovecharían'],subjuntivo:['aproveche','aproveches','aproveche','aprovechemos','aprovechen']},pronominal:false},
+  {inf:'reunir',type:'ir',tr:'to gather/meet',tag:'irregular',nivel:3,table:{presente:['reúno','reúnes','reúne','reunimos','reúnen'],preterito:['reuní','reuniste','reunió','reunimos','reunieron'],imperfecto:['reunía','reunías','reunía','reuníamos','reunían'],futuro:['reuniré','reunirás','reunirá','reuniremos','reunirán'],condicional:['reuniría','reunirías','reuniría','reuniríamos','reunirían'],subjuntivo:['reúna','reúnas','reúna','reunamos','reúnan']},pronominal:false},
+  {inf:'declarar',type:'ar',tr:'to declare',tag:'regular',nivel:3,table:{presente:['declaro','declaras','declara','declaramos','declaran'],preterito:['declaré','declaraste','declaró','declaramos','declararon'],imperfecto:['declaraba','declarabas','declaraba','declarábamos','declaraban'],futuro:['declararé','declararás','declarará','declararemos','declararán'],condicional:['declararía','declararías','declararía','declararíamos','declararían'],subjuntivo:['declare','declares','declare','declaremos','declaren']},pronominal:false},
+  {inf:'asumir',type:'ir',tr:'to assume',tag:'regular',nivel:3,table:{presente:['asumo','asumes','asume','asumimos','asumen'],preterito:['asumí','asumiste','asumió','asumimos','asumieron'],imperfecto:['asumía','asumías','asumía','asumíamos','asumían'],futuro:['asumiré','asumirás','asumirá','asumiremos','asumirán'],condicional:['asumiría','asumirías','asumiría','asumiríamos','asumirían'],subjuntivo:['asuma','asumas','asuma','asumamos','asuman']},pronominal:false},
+  {inf:'despertar',type:'ar',tr:'to wake (someone)',tag:'irregular',nivel:1,table:{presente:['despierto','despiertas','despierta','despertamos','despiertan'],preterito:['desperté','despertaste','despertó','despertamos','despertaron'],imperfecto:['despertaba','despertabas','despertaba','despertábamos','despertaban'],futuro:['despertaré','despertarás','despertará','despertaremos','despertarán'],condicional:['despertaría','despertarías','despertaría','despertaríamos','despertarían'],subjuntivo:['despierte','despiertes','despierte','despertemos','despierten']},pronominal:false},
+  {inf:'vestir',type:'ir',tr:'to dress (someone)',tag:'irregular',nivel:1,table:{presente:['visto','vistes','viste','vestimos','visten'],preterito:['vestí','vestiste','vistió','vestimos','vistieron'],imperfecto:['vestía','vestías','vestía','vestíamos','vestían'],futuro:['vestiré','vestirás','vestirá','vestiremos','vestirán'],condicional:['vestiría','vestirías','vestiría','vestiríamos','vestirían'],subjuntivo:['vista','vistas','vista','vistamos','vistan']},pronominal:false},
+  {inf:'acostar',type:'ar',tr:'to put to bed',tag:'irregular',nivel:3,table:{presente:['acuesto','acuestas','acuesta','acostamos','acuestan'],preterito:['acosté','acostaste','acostó','acostamos','acostaron'],imperfecto:['acostaba','acostabas','acostaba','acostábamos','acostaban'],futuro:['acostaré','acostarás','acostará','acostaremos','acostarán'],condicional:['acostaría','acostarías','acostaría','acostaríamos','acostarían'],subjuntivo:['acueste','acuestes','acueste','acostemos','acuesten']},pronominal:false},
+  {inf:'almorzar',type:'ar',tr:'to have lunch',tag:'irregular',nivel:1,table:{presente:['almuerzo','almuerzas','almuerza','almorzamos','almuerzan'],preterito:['almorcé','almorzaste','almorzó','almorzamos','almorzaron'],imperfecto:['almorzaba','almorzabas','almorzaba','almorzábamos','almorzaban'],futuro:['almorzaré','almorzarás','almorzará','almorzaremos','almorzarán'],condicional:['almorzaría','almorzarías','almorzaría','almorzaríamos','almorzarían'],subjuntivo:['almuerce','almuerces','almuerce','almorcemos','almuercen']},pronominal:false},
+  {inf:'caer',type:'er',tr:'to fall',tag:'irregular',nivel:2,table:{presente:['caigo','caes','cae','caemos','caen'],preterito:['caí','caíste','cayó','caímos','cayeron'],imperfecto:['caía','caías','caía','caíamos','caían'],futuro:['caeré','caerás','caerá','caeremos','caerán'],condicional:['caería','caerías','caería','caeríamos','caerían'],subjuntivo:['caiga','caigas','caiga','caigamos','caigan']},pronominal:false},
+  {inf:'cenar',type:'ar',tr:'to have dinner',tag:'regular',nivel:1,table:{presente:['ceno','cenas','cena','cenamos','cenan'],preterito:['cené','cenaste','cenó','cenamos','cenaron'],imperfecto:['cenaba','cenabas','cenaba','cenábamos','cenaban'],futuro:['cenaré','cenarás','cenará','cenaremos','cenarán'],condicional:['cenaría','cenarías','cenaría','cenaríamos','cenarían'],subjuntivo:['cene','cenes','cene','cenemos','cenen']},pronominal:false},
+  {inf:'desayunar',type:'ar',tr:'to have breakfast',tag:'regular',nivel:1,table:{presente:['desayuno','desayunas','desayuna','desayunamos','desayunan'],preterito:['desayuné','desayunaste','desayunó','desayunamos','desayunaron'],imperfecto:['desayunaba','desayunabas','desayunaba','desayunábamos','desayunaban'],futuro:['desayunaré','desayunarás','desayunará','desayunaremos','desayunarán'],condicional:['desayunaría','desayunarías','desayunaría','desayunaríamos','desayunarían'],subjuntivo:['desayune','desayunes','desayune','desayunemos','desayunen']},pronominal:false},
+  {inf:'intentar',type:'ar',tr:'to try',tag:'regular',nivel:2,table:{presente:['intento','intentas','intenta','intentamos','intentan'],preterito:['intenté','intentaste','intentó','intentamos','intentaron'],imperfecto:['intentaba','intentabas','intentaba','intentábamos','intentaban'],futuro:['intentaré','intentarás','intentará','intentaremos','intentarán'],condicional:['intentaría','intentarías','intentaría','intentaríamos','intentarían'],subjuntivo:['intente','intentes','intente','intentemos','intenten']},pronominal:false},
+  {inf:'llamarse',type:'ar',tr:'to be named/to call oneself',tag:'regular',nivel:1,table:{presente:['me llamo','te llamas','se llama','nos llamamos','se llaman'],preterito:['me llamé','te llamaste','se llamó','nos llamamos','se llamaron'],imperfecto:['me llamaba','te llamabas','se llamaba','nos llamábamos','se llamaban'],futuro:['me llamaré','te llamarás','se llamará','nos llamaremos','se llamarán'],condicional:['me llamaría','te llamarías','se llamaría','nos llamaríamos','se llamarían'],subjuntivo:['me llame','te llames','se llame','nos llamemos','se llamen']},pronominal:true,baseInf:'llamar'},
+  {inf:'levantarse',type:'ar',tr:'to get (oneself) up',tag:'regular',nivel:1,table:{presente:['me levanto','te levantas','se levanta','nos levantamos','se levantan'],preterito:['me levanté','te levantaste','se levantó','nos levantamos','se levantaron'],imperfecto:['me levantaba','te levantabas','se levantaba','nos levantábamos','se levantaban'],futuro:['me levantaré','te levantarás','se levantará','nos levantaremos','se levantarán'],condicional:['me levantaría','te levantarías','se levantaría','nos levantaríamos','se levantarían'],subjuntivo:['me levante','te levantes','se levante','nos levantemos','se levanten']},pronominal:true,baseInf:'levantar'},
+  {inf:'despertarse',type:'ar',tr:'to wake (oneself) up',tag:'irregular',nivel:1,table:{presente:['me despierto','te despiertas','se despierta','nos despertamos','se despiertan'],preterito:['me desperté','te despertaste','se despertó','nos despertamos','se despertaron'],imperfecto:['me despertaba','te despertabas','se despertaba','nos despertábamos','se despertaban'],futuro:['me despertaré','te despertarás','se despertará','nos despertaremos','se despertarán'],condicional:['me despertaría','te despertarías','se despertaría','nos despertaríamos','se despertarían'],subjuntivo:['me despierte','te despiertes','se despierte','nos despertemos','se despierten']},pronominal:true,baseInf:'despertar'},
+  {inf:'ducharse',type:'ar',tr:'to shower',tag:'regular',nivel:1,table:{presente:['me ducho','te duchas','se ducha','nos duchamos','se duchan'],preterito:['me duché','te duchaste','se duchó','nos duchamos','se ducharon'],imperfecto:['me duchaba','te duchabas','se duchaba','nos duchábamos','se duchaban'],futuro:['me ducharé','te ducharás','se duchará','nos ducharemos','se ducharán'],condicional:['me ducharía','te ducharías','se ducharía','nos ducharíamos','se ducharían'],subjuntivo:['me duche','te duches','se duche','nos duchemos','se duchen']},pronominal:true,baseInf:'duchar'},
+  {inf:'bañarse',type:'ar',tr:'to bathe',tag:'regular',nivel:1,table:{presente:['me baño','te bañas','se baña','nos bañamos','se bañan'],preterito:['me bañé','te bañaste','se bañó','nos bañamos','se bañaron'],imperfecto:['me bañaba','te bañabas','se bañaba','nos bañábamos','se bañaban'],futuro:['me bañaré','te bañarás','se bañará','nos bañaremos','se bañarán'],condicional:['me bañaría','te bañarías','se bañaría','nos bañaríamos','se bañarían'],subjuntivo:['me bañe','te bañes','se bañe','nos bañemos','se bañen']},pronominal:true,baseInf:'bañar'},
+  {inf:'vestirse',type:'ir',tr:'to get dressed',tag:'irregular',nivel:1,table:{presente:['me visto','te vistes','se viste','nos vestimos','se visten'],preterito:['me vestí','te vestiste','se vistió','nos vestimos','se vistieron'],imperfecto:['me vestía','te vestías','se vestía','nos vestíamos','se vestían'],futuro:['me vestiré','te vestirás','se vestirá','nos vestiremos','se vestirán'],condicional:['me vestiría','te vestirías','se vestiría','nos vestiríamos','se vestirían'],subjuntivo:['me vista','te vistas','se vista','nos vistamos','se vistan']},pronominal:true,baseInf:'vestir'},
+  {inf:'casarse',type:'ar',tr:'to get married',tag:'regular',nivel:3,table:{presente:['me caso','te casas','se casa','nos casamos','se casan'],preterito:['me casé','te casaste','se casó','nos casamos','se casaron'],imperfecto:['me casaba','te casabas','se casaba','nos casábamos','se casaban'],futuro:['me casaré','te casarás','se casará','nos casaremos','se casarán'],condicional:['me casaría','te casarías','se casaría','nos casaríamos','se casarían'],subjuntivo:['me case','te cases','se case','nos casemos','se casen']},pronominal:true,baseInf:'casar'},
+  {inf:'mudarse',type:'ar',tr:'to move (house)',tag:'regular',nivel:3,table:{presente:['me mudo','te mudas','se muda','nos mudamos','se mudan'],preterito:['me mudé','te mudaste','se mudó','nos mudamos','se mudaron'],imperfecto:['me mudaba','te mudabas','se mudaba','nos mudábamos','se mudaban'],futuro:['me mudaré','te mudarás','se mudará','nos mudaremos','se mudarán'],condicional:['me mudaría','te mudarías','se mudaría','nos mudaríamos','se mudarían'],subjuntivo:['me mude','te mudes','se mude','nos mudemos','se muden']},pronominal:true,baseInf:'mudar'},
+  {inf:'enamorarse',type:'ar',tr:'to fall in love',tag:'regular',nivel:3,table:{presente:['me enamoro','te enamoras','se enamora','nos enamoramos','se enamoran'],preterito:['me enamoré','te enamoraste','se enamoró','nos enamoramos','se enamoraron'],imperfecto:['me enamoraba','te enamorabas','se enamoraba','nos enamorábamos','se enamoraban'],futuro:['me enamoraré','te enamorarás','se enamorará','nos enamoraremos','se enamorarán'],condicional:['me enamoraría','te enamorarías','se enamoraría','nos enamoraríamos','se enamorarían'],subjuntivo:['me enamore','te enamores','se enamore','nos enamoremos','se enamoren']},pronominal:true,baseInf:'enamorar'},
+  {inf:'divorciarse',type:'ar',tr:'to get divorced',tag:'regular',nivel:3,table:{presente:['me divorcio','te divorcias','se divorcia','nos divorciamos','se divorcian'],preterito:['me divorcié','te divorciaste','se divorció','nos divorciamos','se divorciaron'],imperfecto:['me divorciaba','te divorciabas','se divorciaba','nos divorciábamos','se divorciaban'],futuro:['me divorciaré','te divorciarás','se divorciará','nos divorciaremos','se divorciarán'],condicional:['me divorciaría','te divorciarías','se divorciaría','nos divorciaríamos','se divorciarían'],subjuntivo:['me divorcie','te divorcies','se divorcie','nos divorciemos','se divorcien']},pronominal:true,baseInf:'divorciar'},
+  {inf:'jubilarse',type:'ar',tr:'to retire',tag:'regular',nivel:3,table:{presente:['me jubilo','te jubilas','se jubila','nos jubilamos','se jubilan'],preterito:['me jubilé','te jubilaste','se jubiló','nos jubilamos','se jubilaron'],imperfecto:['me jubilaba','te jubilabas','se jubilaba','nos jubilábamos','se jubilaban'],futuro:['me jubilaré','te jubilarás','se jubilará','nos jubilaremos','se jubilarán'],condicional:['me jubilaría','te jubilarías','se jubilaría','nos jubilaríamos','se jubilarían'],subjuntivo:['me jubile','te jubiles','se jubile','nos jubilemos','se jubilen']},pronominal:true,baseInf:'jubilar'},
+  {inf:'graduarse',type:'ar',tr:'to graduate',tag:'irregular',nivel:3,table:{presente:['me gradúo','te gradúas','se gradúa','nos graduamos','se gradúan'],preterito:['me gradué','te graduaste','se graduó','nos graduamos','se graduaron'],imperfecto:['me graduaba','te graduabas','se graduaba','nos graduábamos','se graduaban'],futuro:['me graduaré','te graduarás','se graduará','nos graduaremos','se graduarán'],condicional:['me graduaría','te graduarías','se graduaría','nos graduaríamos','se graduarían'],subjuntivo:['me gradúe','te gradúes','se gradúe','nos graduemos','se gradúen']},pronominal:true,baseInf:'graduar'},
+  {inf:'peinarse',type:'ar',tr:'to comb (one\'s hair)',tag:'regular',nivel:3,table:{presente:['me peino','te peinas','se peina','nos peinamos','se peinan'],preterito:['me peiné','te peinaste','se peinó','nos peinamos','se peinaron'],imperfecto:['me peinaba','te peinabas','se peinaba','nos peinábamos','se peinaban'],futuro:['me peinaré','te peinarás','se peinará','nos peinaremos','se peinarán'],condicional:['me peinaría','te peinarías','se peinaría','nos peinaríamos','se peinarían'],subjuntivo:['me peine','te peines','se peine','nos peinemos','se peinen']},pronominal:true,baseInf:'peinar'},
+  {inf:'maquillarse',type:'ar',tr:'to put on makeup',tag:'regular',nivel:3,table:{presente:['me maquillo','te maquillas','se maquilla','nos maquillamos','se maquillan'],preterito:['me maquillé','te maquillaste','se maquilló','nos maquillamos','se maquillaron'],imperfecto:['me maquillaba','te maquillabas','se maquillaba','nos maquillábamos','se maquillaban'],futuro:['me maquillaré','te maquillarás','se maquillará','nos maquillaremos','se maquillarán'],condicional:['me maquillaría','te maquillarías','se maquillaría','nos maquillaríamos','se maquillarían'],subjuntivo:['me maquille','te maquilles','se maquille','nos maquillemos','se maquillen']},pronominal:true,baseInf:'maquillar'},
+  {inf:'afeitarse',type:'ar',tr:'to shave',tag:'regular',nivel:3,table:{presente:['me afeito','te afeitas','se afeita','nos afeitamos','se afeitan'],preterito:['me afeité','te afeitaste','se afeitó','nos afeitamos','se afeitaron'],imperfecto:['me afeitaba','te afeitabas','se afeitaba','nos afeitábamos','se afeitaban'],futuro:['me afeitaré','te afeitarás','se afeitará','nos afeitaremos','se afeitarán'],condicional:['me afeitaría','te afeitarías','se afeitaría','nos afeitaríamos','se afeitarían'],subjuntivo:['me afeite','te afeites','se afeite','nos afeitemos','se afeiten']},pronominal:true,baseInf:'afeitar'},
+  {inf:'acostarse',type:'ar',tr:'to go to bed',tag:'irregular',nivel:3,table:{presente:['me acuesto','te acuestas','se acuesta','nos acostamos','se acuestan'],preterito:['me acosté','te acostaste','se acostó','nos acostamos','se acostaron'],imperfecto:['me acostaba','te acostabas','se acostaba','nos acostábamos','se acostaban'],futuro:['me acostaré','te acostarás','se acostará','nos acostaremos','se acostarán'],condicional:['me acostaría','te acostarías','se acostaría','nos acostaríamos','se acostarían'],subjuntivo:['me acueste','te acuestes','se acueste','nos acostemos','se acuesten']},pronominal:true,baseInf:'acostar'},
+  {inf:'sentarse',type:'ar',tr:'to sit down',tag:'irregular',nivel:3,table:{presente:['me siento','te sientas','se sienta','nos sentamos','se sientan'],preterito:['me senté','te sentaste','se sentó','nos sentamos','se sentaron'],imperfecto:['me sentaba','te sentabas','se sentaba','nos sentábamos','se sentaban'],futuro:['me sentaré','te sentarás','se sentará','nos sentaremos','se sentarán'],condicional:['me sentaría','te sentarías','se sentaría','nos sentaríamos','se sentarían'],subjuntivo:['me siente','te sientes','se siente','nos sentemos','se sienten']},pronominal:true,baseInf:'sentar'},
+  {inf:'lavarse',type:'ar',tr:'to wash (oneself)',tag:'regular',nivel:3,table:{presente:['me lavo','te lavas','se lava','nos lavamos','se lavan'],preterito:['me lavé','te lavaste','se lavó','nos lavamos','se lavaron'],imperfecto:['me lavaba','te lavabas','se lavaba','nos lavábamos','se lavaban'],futuro:['me lavaré','te lavarás','se lavará','nos lavaremos','se lavarán'],condicional:['me lavaría','te lavarías','se lavaría','nos lavaríamos','se lavarían'],subjuntivo:['me lave','te laves','se lave','nos lavemos','se laven']},pronominal:true,baseInf:'lavar'},
+  {inf:'ponerse',type:'er',tr:'to become/to put on (clothing)',tag:'irregular',nivel:2,table:{presente:['me pongo','te pones','se pone','nos ponemos','se ponen'],preterito:['me puse','te pusiste','se puso','nos pusimos','se pusieron'],imperfecto:['me ponía','te ponías','se ponía','nos poníamos','se ponían'],futuro:['me pondré','te pondrás','se pondrá','nos pondremos','se pondrán'],condicional:['me pondría','te pondrías','se pondría','nos pondríamos','se pondrían'],subjuntivo:['me ponga','te pongas','se ponga','nos pongamos','se pongan']},pronominal:true,baseInf:'poner'},
+  {inf:'moverse',type:'er',tr:'to move (oneself)',tag:'irregular',nivel:2,table:{presente:['me muevo','te mueves','se mueve','nos movemos','se mueven'],preterito:['me moví','te moviste','se movió','nos movimos','se movieron'],imperfecto:['me movía','te movías','se movía','nos movíamos','se movían'],futuro:['me moveré','te moverás','se moverá','nos moveremos','se moverán'],condicional:['me movería','te moverías','se movería','nos moveríamos','se moverían'],subjuntivo:['me mueva','te muevas','se mueva','nos movamos','se muevan']},pronominal:true,baseInf:'mover'},
+];
+const HABER = VERBS.find(v=>v.inf==='haber');
+const TENER_OBJ = VERBS.find(v=>v.inf==='tener');
+const IR_OBJ = VERBS.find(v=>v.inf==='ir');
+
+const PRONOUNS = ['yo','tú','él / ella / usted','nosotros / nosotras','ellos / ellas / ustedes'];
+const GUSTAR_PRONOUNS = ['a mí','a ti','a él / ella / usted','a nosotros/as','a ellos / ellas / ustedes'];
+const GUSTAR_OBJ = ['me','te','le','nos','les'];
+
+const TENSE_GROUPS = {
+  ind: ['presente','imperfecto','preterito','futuro','condicional','pretPerfComp','pluscuamperfecto','futuroComp','condicionalComp'],
+  subj: ['subjuntivo','subjImperfecto','subjPretPerfComp','subjPluscuamperfecto'],
+  imp: ['impTuAfirm','impOtras'],
+};
+const TENSE_NAMES = {
+  presente:'presente', imperfecto:'pret. imperfecto', preterito:'pret. perfecto simple', futuro:'futuro simple',
+  condicional:'condicional simple', pretPerfComp:'pret. perfecto compuesto', pluscuamperfecto:'pret. pluscuamperfecto',
+  futuroComp:'futuro compuesto', condicionalComp:'condicional compuesto',
+  subjuntivo:'subj. presente', subjImperfecto:'subj. pret. imperfecto',
+  subjPretPerfComp:'subj. pret. perf. compuesto', subjPluscuamperfecto:'subj. pluscuamperfecto',
+  impTuAfirm:'tú, afirmativo (imperativo puro)', impOtras:'usted/nosotros/ustedes + tú negativo (subjuntivo)',
+};
+/* the 7 person+polarity combinations that make up "impOtras" */
+const IMP_OTRAS_COMBOS = [
+  {person:0, neg:true},
+  {person:1, neg:false},{person:1, neg:true},
+  {person:2, neg:false},{person:2, neg:true},
+  {person:3, neg:false},{person:3, neg:true},
+];
+const STRUCT_NAMES = { obligacion:'tener + que + infinitivo', perifrastico:'ir + a + infinitivo', gustarE:'tipo "gustar"' };
+const SIMPLE_SENTENCE_TENSES = ['presente','preterito','futuro','subjuntivo'];
+const STRUCT_OPTIONS = ['obligacion','perifrastico','gustarE'];
+
+
+const TU_IMPERATIVO_IRREGULAR = {
+  decir:'di', hacer:'haz', ir:'ve', poner:'pon', salir:'sal', ser:'sé', tener:'ten', venir:'ven',
+  mantener:'mantén', obtener:'obtén', detener:'detén', sostener:'sostén', suponer:'supón', proponer:'propón',
+};
+function tuImperativo(v){
+  if(TU_IMPERATIVO_IRREGULAR[v.inf]) return TU_IMPERATIVO_IRREGULAR[v.inf];
+  const tuForm=v.table.presente[1];
+  return tuForm.endsWith('s')?tuForm.slice(0,-1):tuForm;
+}
+/* affirmative commands attach reflexive pronouns as a suffix (levántate, not te levanta),
+   with a written accent to keep the original stress: accent the second-to-last vowel of the
+   word before attaching tú/usted/ustedes pronouns; nosotros drops the -mos and accents that vowel. */
+function vowelGroups(word){
+  const isVowel=c=>'aeiou'.includes(c);
+  const chars=word.split(''); const excluded=new Set();
+  for(let i=0;i<chars.length;i++){
+    if(chars[i]==='u'){
+      if(chars[i-1]==='q') excluded.add(i);
+      else if(chars[i-1]==='g' && (chars[i+1]==='e'||chars[i+1]==='i')) excluded.add(i);
+    }
+  }
+  const groups=[]; let cur=[];
+  for(let i=0;i<chars.length;i++){
+    if(isVowel(chars[i]) && !excluded.has(i)) cur.push(i);
+    else { if(cur.length){ groups.push(cur); cur=[]; } }
+  }
+  if(cur.length) groups.push(cur);
+  return groups;
+}
+function accentPenultimateVowel(word){
+  if(/[áéíóú]/.test(word)) return word; // already carries its correct written accent (e.g. gradúa)
+  const groups=vowelGroups(word);
+  if(groups.length<2) return word;
+  const target=groups[groups.length-2];
+  const strong='aeo';
+  let idx=target.find(i=>strong.includes(word[i]));
+  if(idx===undefined) idx=target[target.length-1];
+  return word.slice(0,idx)+ACCENT[word[idx]]+word.slice(idx+1);
+}
+function imperativoAfirmativoReflexivo(v,p){
+  if(p===0){
+    let base;
+    if(TU_IMPERATIVO_IRREGULAR[v.baseInf]) base=TU_IMPERATIVO_IRREGULAR[v.baseInf];
+    else { const bare=v.table.presente[1].replace(/^te /,''); base=bare.endsWith('s')?bare.slice(0,-1):bare; }
+    return accentPenultimateVowel(base)+'te';
+  }
+  if(p===1){ const bare=v.table.subjuntivo[2].replace(/^se /,''); return accentPenultimateVowel(bare)+'se'; }
+  if(p===2){ const bareFull=v.table.subjuntivo[3].replace(/^nos /,''); const stem=bareFull.slice(0,-3); return accentLast(stem)+'monos'; }
+  if(p===3){ const bare=v.table.subjuntivo[4].replace(/^se /,''); return accentPenultimateVowel(bare)+'se'; }
+}
+
+let openInfoPop = null;
+let mcButtons = [];
+let questionQueue = [];
+let historyStack = [];
+let historyIndex = -1;
+let nivelMax=1, tiposActivos=new Set(['regular','irregular']), tensesActivos=new Set(['presente']),
+    structsActivos=new Set(), modosActivos=new Set(['solo']), manualVerbs=[], onlyManual=false, onlyEspeciales=false, current=null,
+    pronominalIncluido=false,
+    correctCount=0, wrongCount=0, streak=0, answered=false;
+
+document.querySelectorAll('input[name="nivel"]').forEach(r=>r.addEventListener('change',e=>{nivelMax=parseInt(e.target.value); refresh();}));
+
+function tenseExample(tenseId){
+  if(tenseId==='impTuAfirm'){
+    return ['hablar','comer','vivir'].map(inf=>{
+      const v=VERBS.find(vv=>vv.inf===inf);
+      return 'tú '+computeAnswer({tense:tenseId, verb:v, person:0});
+    }).join(' · ');
+  }
+  if(tenseId==='impOtras'){
+    return ['hablar','comer','vivir'].map(inf=>{
+      const v=VERBS.find(vv=>vv.inf===inf);
+      return 'usted '+computeAnswer({tense:tenseId, verb:v, person:1, neg:false});
+    }).join(' · ') + '  ·  (al azar también: negativo, nosotros, ustedes)';
+  }
+  return ['hablar','comer','vivir'].map(inf=>{
+    const v = VERBS.find(vv=>vv.inf===inf);
+    const form = computeAnswer({tense:tenseId, verb:v, person:0});
+    return 'yo '+form;
+  }).join(' · ');
+}
+
+function buildTenseChipGroup(containerId, options){
+  const el=document.getElementById(containerId);
+  options.forEach(val=>{
+    const wrap=document.createElement('div');
+    wrap.style.display='flex'; wrap.style.alignItems='center'; wrap.style.gap='2px';
+
+    const chip=document.createElement('div');
+    chip.className='opt'+(tensesActivos.has(val)?' active':'');
+    chip.textContent=TENSE_NAMES[val];
+    chip.addEventListener('click',()=>{
+      if(tensesActivos.has(val)){
+        if(tensesActivos.size===1) return;
+        tensesActivos.delete(val); chip.classList.remove('active');
+      } else { tensesActivos.add(val); chip.classList.add('active'); }
+      refresh();
+    });
+
+    const info=document.createElement('span');
+    info.textContent='!';
+    info.style.cssText='font-family:IBM Plex Mono,monospace;font-size:.62rem;color:var(--gray);border:1px solid var(--gray-light);border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;';
+    const pop=document.createElement('div');
+    pop.style.cssText='display:none;font-family:IBM Plex Mono,monospace;font-size:.68rem;color:var(--ink);background:#fafafa;border:1px solid var(--gray-light);padding:6px 9px;border-radius:2px;margin:2px 0 6px;width:100%;';
+    pop.textContent = tenseExample(val);
+    info.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const willOpen = pop.style.display==='none';
+      if(openInfoPop && openInfoPop!==pop) openInfoPop.style.display='none';
+      pop.style.display = willOpen ? 'block' : 'none';
+      openInfoPop = willOpen ? pop : null;
+    });
+
+    wrap.appendChild(chip); wrap.appendChild(info);
+    const outer=document.createElement('div'); outer.style.cssText='display:flex;flex-direction:column;';
+    outer.appendChild(wrap); outer.appendChild(pop);
+    el.appendChild(outer);
+  });
+}
+
+function structExample(id){
+  if(id==='obligacion') return ['hablar','comer','vivir'].map(inf=>'tengo que '+inf).join(' · ');
+  if(id==='perifrastico') return ['hablar','comer','vivir'].map(inf=>'voy a '+inf).join(' · ');
+  if(id==='gustarE') return 'me gusta · te gusta · le gusta';
+  return '';
+}
+function buildStructChipGroup(containerId, options){
+  const el=document.getElementById(containerId);
+  options.forEach(val=>{
+    const wrap=document.createElement('div');
+    wrap.style.display='flex'; wrap.style.alignItems='center'; wrap.style.gap='2px';
+
+    const chip=document.createElement('div');
+    chip.className='opt struct'+(structsActivos.has(val)?' active':'');
+    chip.textContent=STRUCT_NAMES[val];
+    chip.addEventListener('click',()=>{
+      if(structsActivos.has(val)){ structsActivos.delete(val); chip.classList.remove('active'); }
+      else { structsActivos.add(val); chip.classList.add('active'); }
+      renderOnlyEspecialesChip();
+      refresh();
+    });
+
+    const info=document.createElement('span');
+    info.textContent='!';
+    info.style.cssText='font-family:IBM Plex Mono,monospace;font-size:.62rem;color:var(--gray);border:1px solid var(--gray-light);border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;';
+    const pop=document.createElement('div');
+    pop.style.cssText='display:none;font-family:IBM Plex Mono,monospace;font-size:.68rem;color:var(--ink);background:#fafafa;border:1px solid var(--gray-light);padding:6px 9px;border-radius:2px;margin:2px 0 6px;width:100%;';
+    pop.textContent = structExample(val);
+    info.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const willOpen = pop.style.display==='none';
+      if(openInfoPop && openInfoPop!==pop) openInfoPop.style.display='none';
+      pop.style.display = willOpen ? 'block' : 'none';
+      openInfoPop = willOpen ? pop : null;
+    });
+
+    wrap.appendChild(chip); wrap.appendChild(info);
+    const outer=document.createElement('div'); outer.style.cssText='display:flex;flex-direction:column;';
+    outer.appendChild(wrap); outer.appendChild(pop);
+    el.appendChild(outer);
+  });
+}
+
+function buildChipGroup(containerId, options, labelFn, activeSet, extraClass){
+  const el=document.getElementById(containerId);
+  options.forEach(val=>{
+    const chip=document.createElement('div');
+    chip.className='opt'+(extraClass?(' '+extraClass):'')+(activeSet.has(val)?' active':'');
+    chip.textContent=labelFn(val);
+    chip.addEventListener('click',()=>{
+      if(activeSet.has(val)){
+        if((activeSet===tiposActivos||activeSet===modosActivos)&&activeSet.size===1) return;
+        activeSet.delete(val); chip.classList.remove('active');
+      } else { activeSet.add(val); chip.classList.add('active'); }
+      refresh();
+    });
+    el.appendChild(chip);
+  });
+}
+buildChipGroup('tipoChips',['regular','irregular'],v=>v==='regular'?'regular':'irregular',tiposActivos);
+buildTenseChipGroup('tenseChipsInd',TENSE_GROUPS.ind);
+buildTenseChipGroup('tenseChipsSubj',TENSE_GROUPS.subj);
+buildTenseChipGroup('tenseChipsImp',TENSE_GROUPS.imp);
+buildStructChipGroup('structChips',STRUCT_OPTIONS);
+
+(function buildPronominalToggle(){
+  const el=document.getElementById('pronominalChip');
+  const wrap=document.createElement('div');
+  wrap.style.display='flex'; wrap.style.alignItems='center'; wrap.style.gap='2px';
+
+  const chip=document.createElement('div');
+  chip.className='opt struct';
+  chip.textContent='verbos pronominales';
+  chip.addEventListener('click',()=>{
+    pronominalIncluido=!pronominalIncluido;
+    chip.classList.toggle('active',pronominalIncluido);
+    renderOnlyEspecialesChip();
+    refresh();
+  });
+
+  const info=document.createElement('span');
+  info.textContent='!';
+  info.style.cssText='font-family:IBM Plex Mono,monospace;font-size:.62rem;color:var(--gray);border:1px solid var(--gray-light);border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;';
+  const pop=document.createElement('div');
+  pop.style.cssText='display:none;font-family:IBM Plex Mono,monospace;font-size:.68rem;color:var(--ink);background:#fafafa;border:1px solid var(--gray-light);padding:6px 9px;border-radius:2px;margin:2px 0 6px;width:100%;';
+  const pronomInfinitives = ['llamarse','ponerse','vestirse'].join(' · ');
+  pop.textContent = pronomInfinitives;
+  info.addEventListener('click',(e)=>{
+    e.stopPropagation();
+    const willOpen2 = pop.style.display==='none';
+    if(openInfoPop && openInfoPop!==pop) openInfoPop.style.display='none';
+    pop.style.display = willOpen2 ? 'block' : 'none';
+    openInfoPop = willOpen2 ? pop : null;
+  });
+
+  wrap.appendChild(chip); wrap.appendChild(info);
+  const outer=document.createElement('div'); outer.style.cssText='display:flex;flex-direction:column;';
+  outer.appendChild(wrap); outer.appendChild(pop);
+  el.appendChild(outer);
+})();
+buildChipGroup('modeChips',['solo','multiple'],v=>({solo:'escribir la forma',multiple:'opción múltiple'}[v]),modosActivos);
+
+document.getElementById('manualInput').addEventListener('input', e=>{
+  const raw=e.target.value.trim(); const status=document.getElementById('manualStatus');
+  if(!raw){ manualVerbs=[]; onlyManual=false; status.innerHTML=''; renderOnlyManualChip(); refresh(); return; }
+  const names=raw.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+  const valid=[]; const invalid=[];
+  names.forEach(n=>{ const v=VERBS.find(vv=>vv.inf===n); if(v) valid.push(v); else invalid.push(n); });
+  manualVerbs=valid;
+  status.innerHTML=(valid.length?'<span class="ok">✓ '+valid.map(v=>v.inf).join(', ')+'</span>':'')+
+                    (invalid.length?' <span class="bad">✗ '+invalid.join(', ')+'</span>':'');
+  renderOnlyManualChip();
+  refresh();
+});
+
+function renderOnlyManualChip(){
+  const el=document.getElementById('onlyManualChip');
+  el.innerHTML='';
+  if(!manualVerbs.length){ onlyManual=false; return; }
+  const row=document.createElement('label'); row.className='switch-row';
+  const sw=document.createElement('span'); sw.className='switch';
+  const input=document.createElement('input'); input.type='checkbox'; input.checked=onlyManual;
+  const track=document.createElement('span'); track.className='switch-track';
+  input.addEventListener('change',()=>{ onlyManual=input.checked; refresh(); });
+  sw.appendChild(input); sw.appendChild(track);
+  const label=document.createElement('span'); label.className='switch-label'; label.textContent='solo estos verbos';
+  row.appendChild(sw); row.appendChild(label);
+  el.appendChild(row);
+}
+function renderOnlyEspecialesChip(){
+  const el=document.getElementById('onlyEspecialesChip');
+  el.innerHTML='';
+  if(structsActivos.size===0 && !pronominalIncluido){ onlyEspeciales=false; return; }
+  const row=document.createElement('label'); row.className='switch-row';
+  const sw=document.createElement('span'); sw.className='switch';
+  const input=document.createElement('input'); input.type='checkbox'; input.checked=onlyEspeciales;
+  const track=document.createElement('span'); track.className='switch-track';
+  input.addEventListener('change',()=>{ onlyEspeciales=input.checked; refresh(); });
+  sw.appendChild(input); sw.appendChild(track);
+  const label=document.createElement('span'); label.className='switch-label'; label.textContent='solo estas formas';
+  row.appendChild(sw); row.appendChild(label);
+  el.appendChild(row);
+}
+
+function refresh(){ questionQueue=[]; historyStack=[]; historyIndex=-1; renderQuestion(nextQuestion()); }
+
+function pool(){
+  let b=VERBS.filter(v=>v.nivel<=nivelMax && tiposActivos.has(v.tag) && !v.esTipoGustar && (pronominalIncluido || !v.pronominal));
+  if(onlyEspeciales && pronominalIncluido){ b = b.filter(v=>v.pronominal); }
+  if(manualVerbs.length){
+    const manualNonGustar = manualVerbs.filter(v=>!v.esTipoGustar);
+    if(onlyManual) return manualNonGustar;
+    b = Array.from(new Set([...manualNonGustar, ...b]));
+  }
+  return b;
+}
+function gustarPool(){
+  let b=VERBS.filter(v=>v.esTipoGustar && v.nivel<=nivelMax);
+  if(manualVerbs.length){
+    const m=manualVerbs.filter(v=>v.esTipoGustar);
+    if(onlyManual) return m; // may be empty; caller falls back gracefully
+    if(m.length) b = Array.from(new Set([...m, ...b]));
+  }
+  return b;
+}
+function nonPronominalPool(){ return pool().filter(v=>!v.pronominal); }
+
+function activeQuestionTypes(){
+  if(onlyEspeciales && structsActivos.size>0){
+    const list=[]; structsActivos.forEach(s=>list.push({kind:'struct',id:s})); return list;
+  }
+  const list=[]; tensesActivos.forEach(t=>list.push({kind:'tense',id:t})); structsActivos.forEach(s=>list.push({kind:'struct',id:s})); return list;
+}
+const AUX_TENSE_POOL_PERIFRASTICO = ['presente','imperfecto']; // "voy a" / "iba a" only
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  return arr;
+}
+/* build every possible verb+tense+person combo for the current filters, shuffled;
+   consumed one at a time so nothing repeats until the whole set has been used */
+const MANUAL_PRIVILEGE_WEIGHT = 3;
+function buildQueue(){
+  const types=activeQuestionTypes();
+  const combos=[];
+  const privileged = (manualVerbs.length && !onlyManual) ? new Set(manualVerbs) : null;
+  types.forEach(qt=>{
+    if(qt.kind==='struct'){
+      let verbSource = qt.id==='gustarE' ? gustarPool() : nonPronominalPool();
+      const auxPool = qt.id==='perifrastico'
+        ? AUX_TENSE_POOL_PERIFRASTICO
+        : Array.from(tensesActivos).filter(t=>t!=='impTuAfirm' && t!=='impOtras'); // follow "Tiempos verbales" (imperativo doesn't apply here)
+      verbSource.forEach(verb=>{
+        const copies = (privileged && privileged.has(verb)) ? MANUAL_PRIVILEGE_WEIGHT : 1;
+        auxPool.forEach(auxTense=>{
+          for(let person=0; person<5; person++){
+            for(let c=0;c<copies;c++) combos.push({tense:qt.id, auxTense, verb, person});
+          }
+        });
+      });
+    } else if(qt.id==='impTuAfirm'){
+      const verbSource = pool();
+      verbSource.forEach(verb=>{
+        const copies = (privileged && privileged.has(verb)) ? MANUAL_PRIVILEGE_WEIGHT : 1;
+        for(let c=0;c<copies;c++) combos.push({tense:qt.id, verb, person:0});
+      });
+    } else if(qt.id==='impOtras'){
+      const verbSource = pool();
+      verbSource.forEach(verb=>{
+        const copies = (privileged && privileged.has(verb)) ? MANUAL_PRIVILEGE_WEIGHT : 1;
+        IMP_OTRAS_COMBOS.forEach(combo=>{
+          for(let c=0;c<copies;c++) combos.push({tense:qt.id, verb, person:combo.person, neg:combo.neg});
+        });
+      });
+    } else {
+      const verbSource = pool();
+      const nPersons=5;
+      verbSource.forEach(verb=>{
+        const copies = (privileged && privileged.has(verb)) ? MANUAL_PRIVILEGE_WEIGHT : 1;
+        for(let person=0; person<nPersons; person++){
+          for(let c=0;c<copies;c++) combos.push({tense:qt.id, verb, person});
+        }
+      });
+    }
+  });
+  return shuffle(combos);
+}
+function nextQuestion(){
+  const modes=Array.from(modosActivos);
+  if(modes.length===0){ current=null; return null; }
+  if(historyIndex < historyStack.length-1){
+    historyIndex++;
+    current = historyStack[historyIndex];
+    return current;
+  }
+  if(questionQueue.length===0) questionQueue=buildQueue();
+  if(questionQueue.length===0){ current=null; return null; }
+  const combo=questionQueue.shift();
+  const mode=modes[Math.floor(Math.random()*modes.length)];
+  const q={mode, tense:combo.tense, auxTense:combo.auxTense, verb:combo.verb, person:combo.person, neg:combo.neg};
+  historyStack.push(q); historyIndex=historyStack.length-1;
+  current=q; return q;
+}
+function previousQuestion(){
+  if(historyIndex<=0) return current; // already at the first question, stay put
+  historyIndex--;
+  current = historyStack[historyIndex];
+  return current;
+}
+function compoundForm(verb,auxArr,p){ const part=participio(verb); if(verb.pronominal){ const pron=['me ','te ','se ','nos ','se ']; return pron[p]+auxArr[p]+' '+part; } return auxArr[p]+' '+part; }
+function computeAnswer(q){
+  const v=q.verb,p=q.person,t=q.tense;
+  if(t==='obligacion') return computeAnswer({tense:q.auxTense, verb:TENER_OBJ, person:p})+' que '+v.inf;
+  if(t==='perifrastico') return computeAnswer({tense:q.auxTense, verb:IR_OBJ, person:p})+' a '+v.inf;
+  if(t==='gustarE') return GUSTAR_OBJ[p]+' '+computeAnswer({tense:q.auxTense, verb:v, person:2});
+  if(t==='impTuAfirm'){
+    if(v.pronominal) return imperativoAfirmativoReflexivo(v,0);
+    return tuImperativo(v);
+  }
+  if(t==='impOtras'){
+    const s=v.table.subjuntivo;
+    if(q.neg){
+      const map=[s[1],s[2],s[3],s[4]]; // tú,usted,nosotros,ustedes negative forms
+      return 'no '+map[p];
+    }
+    if(v.pronominal) return imperativoAfirmativoReflexivo(v,p);
+    return [null,s[2],s[3],s[4]][p]; // usted/nosotros/ustedes affirmative (tú never affirmative here)
+  }
+  if(t==='pretPerfComp') return compoundForm(v,HABER.table.presente,p);
+  if(t==='pluscuamperfecto') return compoundForm(v,HABER.table.imperfecto,p);
+  if(t==='futuroComp') return compoundForm(v,HABER.table.futuro,p);
+  if(t==='condicionalComp') return compoundForm(v,HABER.table.condicional,p);
+  if(t==='subjPretPerfComp') return compoundForm(v,HABER.table.subjuntivo,p);
+  if(t==='subjPluscuamperfecto') return compoundForm(v,imperfSubj(HABER),p);
+  if(t==='subjImperfecto') return imperfSubj(v)[p];
+  return v.table[t][p];
+}
+
+async function renderQuestion(q){
+  answered=false;
+  document.getElementById('prevBtn').disabled = historyIndex<=0;
+  document.getElementById('warnBox').innerHTML='';
+  document.getElementById('answer').value=''; document.getElementById('answer').className='';
+  document.getElementById('feedback').textContent=''; document.getElementById('feedback').className='feedback';
+  document.getElementById('mcBox').style.display='none'; document.getElementById('mcBox').innerHTML='';
+  document.getElementById('inputWrap').style.display='block';
+  document.getElementById('checkBtn').style.display='inline-block';
+  document.getElementById('tildePop').classList.remove('show');
+  document.getElementById('verbDisplay').style.display='none';
+
+  if(!q){
+    document.getElementById('warnBox').innerHTML='<div class="warn">No hay verbos que cumplan estos filtros. Ajustá el nivel, tipo, tiempo o estructura.</div>';
+    document.getElementById('pronounLine').textContent='';
+    document.getElementById('tags').innerHTML='';
+    return;
+  }
+
+  const isObligPerif = q.tense==='obligacion' || q.tense==='perifrastico';
+  const IMP_OTRAS_PERSON_LABEL = ['tú','usted','nosotros','ustedes'];
+  const tagWrap=document.getElementById('tags'); tagWrap.innerHTML='';
+  const t1=document.createElement('span'); t1.className='tag';
+  if(q.tense==='impOtras'){
+    t1.textContent = IMP_OTRAS_PERSON_LABEL[q.person] + ', ' + (q.neg?'negativo':'afirmativo');
+  } else {
+    t1.textContent = isObligPerif ? TENSE_NAMES[q.auxTense]
+                     : (TENSE_NAMES[q.tense] || (STRUCT_NAMES[q.tense] + ' · ' + TENSE_NAMES[q.auxTense]));
+  }
+  tagWrap.appendChild(t1);
+  const t2=document.createElement('span'); t2.className='tag accent';
+  const typeSourceVerb = q.tense==='obligacion' ? TENER_OBJ : (q.tense==='perifrastico' ? IR_OBJ : q.verb);
+  t2.textContent = typeSourceVerb.tag==='regular' ? 'regular' : 'irregular';
+  tagWrap.appendChild(t2);
+
+  const pronounLine=document.getElementById('pronounLine'); const verbDisplay=document.getElementById('verbDisplay');
+  const isGustar=q.tense==='gustarE'; const isImp=q.tense==='impTuAfirm'||q.tense==='impOtras';
+  const pronounList = isGustar?GUSTAR_PRONOUNS:(isImp?['tú','usted','nosotros','ustedes']:PRONOUNS);
+  const useMC = q.mode==='multiple';
+
+  pronounLine.style.display='block';
+  pronounLine.textContent = pronounList[q.person];
+  verbDisplay.style.display='block';
+  verbDisplay.classList.toggle('long', isObligPerif);
+  if(q.tense==='impOtras') verbDisplay.textContent = q.neg ? ('no ' + q.verb.inf) : q.verb.inf;
+  else if(q.tense==='obligacion') verbDisplay.textContent = 'tener + que + ' + q.verb.inf;
+  else if(q.tense==='perifrastico') verbDisplay.textContent = 'ir + a + ' + q.verb.inf;
+  else verbDisplay.textContent = q.verb.inf;
+
+  if(useMC){
+    document.getElementById('inputWrap').style.display='none';
+    document.getElementById('checkBtn').style.display='none';
+    const correct=computeAnswer(q);
+    const candidates=buildMCCandidates(q, correct);
+    const distractors=new Set();
+    while(distractors.size<3 && candidates.length){ const c=candidates.splice(Math.floor(Math.random()*candidates.length),1)[0]; if(c && c.toLowerCase()!==correct.toLowerCase()) distractors.add(c); }
+    const options=Array.from(distractors); options.push(correct); options.sort(()=>Math.random()-0.5);
+    const mcBox=document.getElementById('mcBox'); mcBox.style.display='flex';
+    mcButtons=[];
+    options.forEach((opt,i)=>{
+      const btn=document.createElement('button'); btn.className='opt-btn'; btn.dataset.opt=opt;
+      const num=document.createElement('span'); num.className='opt-num'; num.textContent=(i+1)+'';
+      const label=document.createElement('span'); label.textContent=opt;
+      btn.appendChild(num); btn.appendChild(label);
+      btn.addEventListener('click',()=>selectMC(btn,opt,correct));
+      mcBox.appendChild(btn); mcButtons.push(btn);
+    });
+  } else {
+    mcButtons=[];
+  }
+  if(document.activeElement !== document.getElementById('manualInput')){
+    document.getElementById('answer').focus({preventScroll:true});
+  }
+}
+/* distractors must share the same shape as the correct answer (same tense/structure),
+   otherwise the odd-one-out (e.g. a 2-word compound form among 1-word forms) gives it away */
+function buildMCCandidates(q, correct){
+  if(q.tense==='impOtras'){
+    return IMP_OTRAS_COMBOS.filter(c=>!(c.person===q.person && c.neg===q.neg))
+      .map(c=>computeAnswer({tense:q.tense, verb:q.verb, person:c.person, neg:c.neg}));
+  }
+  if(q.tense==='impTuAfirm'){
+    // only one person exists for this mode; vary the verb's other simple tú-forms instead (still single words, same shape)
+    return SIMPLE_SENTENCE_TENSES.map(t=> q.verb.table[t] && q.verb.table[t][1]).filter(Boolean);
+  }
+  // general case (plain tenses, compound tenses, obligación, perifrástico, tipo gustar):
+  // vary the person, keep tense/auxTense fixed, so every option has the same shape as the correct answer
+  const out=[];
+  for(let p=0;p<5;p++){
+    if(p===q.person) continue;
+    out.push(computeAnswer({tense:q.tense, auxTense:q.auxTense, verb:q.verb, person:p}));
+  }
+  return out;
+}
+
+function selectMC(btn,opt,correct){
+  if(answered) return; answered=true;
+  document.querySelectorAll('.opt-btn').forEach(b=>{ if(b.dataset.opt===correct) b.classList.add('correct'); b.disabled=true; });
+  if(opt!==correct) btn.classList.add('wrong');
+  const fb=document.getElementById('feedback');
+  if(opt===correct){ fb.textContent='Correcto'; correctCount++; streak++; }
+  else { fb.className='feedback bad'; fb.textContent='Forma correcta: '+correct; wrongCount++; streak=0; }
+  updateScore();
+}
+function checkAnswer(){
+  if(!current) return;
+  if(answered){ renderQuestion(nextQuestion()); return; }
+  if(current.mode==='multiple') return;
+  const raw=document.getElementById('answer').value.trim().toLowerCase();
+  const correct=computeAnswer(current);
+  const correctLower=correct.toLowerCase();
+  let isCorrect = raw===correctLower && raw.length>0;
+  let acceptableForms=[correctLower];
+  if(current.tense==='impOtras' && current.neg){
+    const withoutNo = correctLower.replace(/^no /,'');
+    acceptableForms.push(withoutNo);
+    if(!isCorrect) isCorrect = raw===withoutNo && raw.length>0;
+  }
+  let isAlmost=false;
+  if(!isCorrect && raw.length>0){
+    const rawStripped = stripAccents(raw);
+    isAlmost = acceptableForms.some(f=>stripAccents(f)===rawStripped);
+  }
+  const input=document.getElementById('answer'); const fb=document.getElementById('feedback');
+  if(isCorrect){
+    input.className='correct'; fb.className='feedback'; fb.textContent='Correcto';
+    document.getElementById('tildePop').classList.add('show');
+    correctCount++; streak++;
+  } else if(isAlmost){
+    input.className='almost'; fb.className='feedback almost';
+    fb.textContent='Forma correcta: '+correct+' — presta atención a las tildes';
+    wrongCount++; streak=0;
+  } else {
+    input.className='wrong'; fb.className='feedback bad'; fb.textContent='Forma correcta: '+correct;
+    wrongCount++; streak=0;
+  }
+  answered=true; updateScore();
+}
+function updateScore(){
+  document.getElementById('scoreText').textContent = correctCount+' correctas · '+wrongCount+' incorrectas';
+  document.getElementById('streakText').textContent = streak>0 ? '´'.repeat(streak) : '';
+}
+document.getElementById('checkBtn').addEventListener('click',checkAnswer);
+document.getElementById('prevBtn').addEventListener('click',()=>renderQuestion(previousQuestion()));
+document.getElementById('nextBtn').addEventListener('click',()=>renderQuestion(nextQuestion()));
+document.getElementById('answer').addEventListener('keydown',e=>{ if(e.key==='Enter') checkAnswer(); });
+document.addEventListener('keydown', e=>{
+  if(!current || current.mode!=='multiple') return;
+  if(!answered){
+    const idx = parseInt(e.key,10) - 1;
+    if(idx>=0 && idx<mcButtons.length){ e.preventDefault(); mcButtons[idx].click(); }
+  } else if(e.key==='Enter'){
+    e.preventDefault(); renderQuestion(nextQuestion());
+  }
+});
+
+renderQuestion(nextQuestion());
+updateScore();
+</script>
+</body>
+</html>
