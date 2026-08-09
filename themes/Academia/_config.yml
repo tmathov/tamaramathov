@@ -12,7 +12,7 @@ since: 2020
 # 可以选择外链或其他页面
 menu:
   Lessons: /lessons
-  Conjugation App: /conjugation-app
+  Spanish Conjugation App: /conjugation-app
   Resume: /resume
 
 # flink picture will load if avator link calls on error
