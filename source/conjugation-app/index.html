@@ -756,7 +756,7 @@ function imperativoAfirmativoReflexivo(v,p){
   if(p===3){ const bare=v.table.subjuntivo[4].replace(/^se /,''); return accentPenultimateVowel(bare)+'se'; }
 }
 
-let lang = 'es';
+let lang = 'en';
 const I18N = {
   es: {
     title:'Práctica de conjugación', filtros:'Filtros', variedad:'Variedad', vocabulario:'Vocabulario',
@@ -1476,6 +1476,7 @@ document.getElementById('langToggle').addEventListener('click', ()=>{
   lang = lang==='es' ? 'en' : 'es';
   applyLanguage();
 });
+applyLanguage();
 </script>
 </body>
 </html>
