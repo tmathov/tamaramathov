@@ -30,7 +30,19 @@ body{
 /* header */
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:1rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin:0;}
 .title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 36px;}
+.title-with-info{display:flex;align-items:center;gap:8px;}
+.info-icon{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--gray);border:1px solid var(--gray-light);border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.info-icon:hover{color:var(--ink);border-color:var(--ink);}
 .lang-switch-wrap{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.how-to-panel{font-family:'Inter';font-size:.85rem;line-height:1.6;color:var(--ink);background:#fafafa;border:1px solid var(--gray-light);border-radius:2px;padding:20px 22px;margin:0 0 24px;}
+.how-to-panel h3{font-family:'IBM Plex Mono',monospace;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--gray);margin:18px 0 8px;}
+.how-to-panel h3:first-child{margin-top:0;}
+.how-to-panel ul{margin:6px 0;padding-left:20px;}
+.how-to-panel li{margin-bottom:6px;}
+.how-to-panel p{margin:6px 0;}
+.color-ok{color:var(--ok);}
+.color-almost{color:var(--warn);}
+.color-bad{color:var(--accent);}
 .lang-switch-label{font-family:'Inter';font-size:.72rem;font-weight:600;color:var(--gray);cursor:pointer;}
 .lang-switch-label.active{color:var(--ink);}
 .footer-credit{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--gray);text-align:center;margin:32px 0 0;}
@@ -151,7 +163,10 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
 <body>
 <div class="col">
   <div class="title-row">
-    <h1 class="eyebrow" id="eyebrowTitle">Spanish Conjugation App</h1>
+    <div class="title-with-info">
+      <h1 class="eyebrow" id="eyebrowTitle">Spanish Conjugation App</h1>
+      <span class="info-icon" id="howToIcon">i</span>
+    </div>
     <div class="lang-switch-wrap">
       <span class="lang-switch-label active" id="langLabelEn">EN</span>
       <label class="switch">
@@ -161,6 +176,7 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
       <span class="lang-switch-label" id="langLabelEs">SP</span>
     </div>
   </div>
+  <div class="how-to-panel" id="howToPanel" style="display:none;"></div>
   <hr class="top-divider">
 
   <div class="tags" id="tags"></div>
@@ -247,7 +263,7 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
     </div>
   </details>
 
-  <p class="footer-credit"><span id="footerCredit">Created by</span> <a href="https://tamaramathov.com" target="_blank" rel="noopener">Tamara Mathov</a> · <a href="mailto:tamaramathov@gmail.com" id="footerReport">Feedback</a></p>
+  <p class="footer-credit"><span id="footerCredit">Created by</span> <a href="https://tamaramathov.com/resume/" target="_blank" rel="noopener">Tamara Mathov</a> · <a href="mailto:tamaramathov@gmail.com" id="footerReport">Feedback</a></p>
 </div>
 
 <script>
@@ -657,6 +673,7 @@ const VERBS = [
 ];
 const HABER = VERBS.find(v=>v.inf==='haber');
 const IR_OBJ = VERBS.find(v=>v.inf==='ir');
+const ESTAR_OBJ = VERBS.find(v=>v.inf==='estar');
 
 const PRONOUNS = ['yo','tú','él / ella / usted','nosotros / nosotras','ellos / ellas / ustedes','vosotros / vosotras'];
 const GUSTAR_PRONOUNS = ['a mí','a ti','a él / ella / usted','a nosotros/as','a ellos / ellas / ustedes','a vosotros/as'];
@@ -691,9 +708,9 @@ const IMP_OTRAS_COMBOS = [
   {person:2, neg:false},{person:2, neg:true},
   {person:3, neg:false},{person:3, neg:true},
 ];
-const STRUCT_NAMES = { perifrastico:'ir + a + infinitivo', gustarE:'tipo "gustar"' };
+const STRUCT_NAMES = { perifrastico:'ir + a + infinitivo', gustarE:'tipo "gustar"', gerundio:'estar + gerundio' };
 const SIMPLE_SENTENCE_TENSES = ['presente','preterito','futuro','subjuntivo'];
-const STRUCT_OPTIONS = ['perifrastico','gustarE'];
+const STRUCT_OPTIONS = ['perifrastico','gerundio','gustarE'];
 
 
 const TU_IMPERATIVO_IRREGULAR = {
@@ -773,7 +790,35 @@ function imperativoAfirmativoReflexivo(v,p){
   if(p===3){ const bare=v.table.subjuntivo[4].replace(/^se /,''); return accentPenultimateVowel(bare)+'se'; }
 }
 
+/* ===== gerundio (for "estar + gerundio") =====
+   Derived mostly from the preterito (él/ella) form we already have verified, since -ir stem-changing
+   verbs (pedir->pidiendo, dormir->durmiendo) and y-insertion verbs (leer->leyendo, construir->construyendo)
+   already show that exact pattern there. -ar verbs are always regular (-ando) and never use this rule,
+   since an -ar preterito can coincidentally end in "ió" (anunció) without that meaning anything for the gerund.
+   A handful of verbs are irregular in a way neither rule catches, so they're hand-specified. */
+const GERUNDIO_HAND = {ir:'yendo', poder:'pudiendo', decir:'diciendo', traer:'trayendo', venir:'viniendo', reír:'riendo'};
+function gerundio(verb){
+  const inf = verb.pronominal ? verb.baseInf : verb.inf;
+  if(GERUNDIO_HAND[inf]) return GERUNDIO_HAND[inf];
+  if(verb.type==='ar'){ return inf.slice(0,-2)+'ando'; }
+  const pret2 = verb.pronominal ? verb.table.preterito[2].replace(/^(me |te |se |nos )/,'') : verb.table.preterito[2];
+  if(pret2.endsWith('yó')) return pret2.slice(0,-2)+'yendo';
+  if(pret2.endsWith('ió')) return pret2.slice(0,-2)+'iendo';
+  const stem = inf.slice(0,-2);
+  return (stem && 'aeiou'.includes(stem.slice(-1))) ? stem+'yendo' : stem+'iendo';
+}
+/* attaching a pronoun to the gerundio always needs a written accent on its stressed vowel
+   (the one right after and-/iend-/yend-), since the extra syllable pushes it off the default
+   stress position — same principle as attaching pronouns to tú-imperatives. */
+function accentGerundioForAttach(ger){
+  if(ger.endsWith('ando')) return ger.slice(0,-4)+'ándo';
+  if(ger.endsWith('iendo')) return ger.slice(0,-5)+'iéndo';
+  if(ger.endsWith('yendo')) return ger.slice(0,-5)+'yéndo';
+  return ger;
+}
+
 let lang = 'en';
+let howToOpen = false;
 const I18N = {
   es: {
     title:'Práctica de conjugación', filtros:'Filtros', variedad:'Variedad', vocabulario:'Vocabulario',
@@ -789,7 +834,7 @@ const I18N = {
     verbosPronominales:'verbos pronominales', soloEstasFormas:'solo estas formas', soloEstosVerbos:'solo estos verbos',
     gustarTipo:'tipo "gustar"', expresarFuturo:'expresar futuro', expresarFuturoPasado:'expresar futuro en el pasado',
     correctasLabel:'correctas', incorrectasLabel:'incorrectas',
-    moodIndicativo:'Indicativo', moodSubjuntivo:'Subjuntivo', moodImperativo:'Imperativo', selectAll:'todos', createdBy:'Creado por', reportError:'Feedback',
+    moodIndicativo:'Indicativo', moodSubjuntivo:'Subjuntivo', moodImperativo:'Imperativo', selectAll:'todos', createdBy:'Creado por', reportError:'Feedback', imperativeLabel:'Imperativo',
   },
   en: {
     title:'Spanish Conjugation App', filtros:'Filters', variedad:'Variety', vocabulario:'Vocabulary',
@@ -805,12 +850,43 @@ const I18N = {
     verbosPronominales:'pronominal verbs', soloEstasFormas:'only these forms', soloEstosVerbos:'only these verbs',
     gustarTipo:'"gustar" type', expresarFuturo:'expressing future', expresarFuturoPasado:'expressing future in the past',
     correctasLabel:'correct', incorrectasLabel:'incorrect',
-    moodIndicativo:'Indicative', moodSubjuntivo:'Subjunctive', moodImperativo:'Imperative', selectAll:'all', createdBy:'Created by', reportError:'Feedback',
+    moodIndicativo:'Indicative', moodSubjuntivo:'Subjunctive', moodImperativo:'Imperative', selectAll:'all', createdBy:'Created by', reportError:'Feedback', imperativeLabel:'Imperative',
   },
 };
 function tr(key){ return I18N[lang][key]; }
-function structLabel(id){ return id==='gustarE' ? tr('gustarTipo') : STRUCT_NAMES[id]; }
+function structLabel(id){
+  if(id==='gustarE') return tr('gustarTipo');
+  if(id==='perifrastico') return 'ir + a + '+(lang==='es'?'infinitivo':'infinitive');
+  if(id==='gerundio') return 'estar + '+(lang==='es'?'gerundio':'gerund');
+  return STRUCT_NAMES[id];
+}
 
+const HOW_TO_HTML = {
+  en: `
+    <h3>The basics</h3>
+    <p>Type the correct conjugated form and press <b>Enter</b> (or click <b>Check</b>). In multiple choice, click an option or press <b>1</b>–<b>4</b>.</p>
+    <ul>
+      <li><b class="color-ok">Green</b>: correct</li>
+      <li><b class="color-almost">Yellow</b>: correct, but missing an accent mark.</li>
+      <li><b class="color-bad">Red</b>: incorrect (the right answer is shown)</li>
+    </ul>
+    <p>Use <b>← →</b> to move between questions. Click <b>Eng.</b> next to a verb for its translation.</p>
+    <h3>Filters</h3>
+    <p>Tap "Filters" to customize practice by verb type, tense, vocabulary level, regional variety (tú/vos/vosotros), and special forms ("ir + a", "estar + gerund", "gustar"-type verbs). Click the "i" next to any tense for a full example, or the ☑ to select a whole group at once.</p>
+  `,
+  es: `
+    <h3>Lo básico</h3>
+    <p>Escribe la forma conjugada correcta y presiona <b>Enter</b> (o haz clic en <b>Comprobar</b>). En opción múltiple, haz clic en una opción o presiona <b>1</b>–<b>4</b>.</p>
+    <ul>
+      <li><b class="color-ok">Verde</b>: correcta</li>
+      <li><b class="color-almost">Amarillo</b>: correcta, pero le falta una tilde.</li>
+      <li><b class="color-bad">Rojo</b>: incorrecta (se muestra la respuesta correcta)</li>
+    </ul>
+    <p>Usa <b>← →</b> para moverte entre preguntas. Haz clic en <b>Eng.</b> al lado de un verbo para ver su traducción.</p>
+    <h3>Filtros</h3>
+    <p>Toca "Filtros" para personalizar la práctica por tipo de verbo, tiempo, nivel de vocabulario, variedad regional (tú/vos/vosotros), y formas especiales ("ir + a", "estar + gerundio", verbos tipo "gustar"). Haz clic en la "i" al lado de cualquier tiempo para ver un ejemplo completo, o en el ☑ para seleccionar todo un grupo de una vez.</p>
+  `,
+};
 let openInfoPop = null;
 function setVerbDisplay(prefix, infWord, translation){
   const el = document.getElementById('verbDisplay');
@@ -996,6 +1072,23 @@ function structExample(id){
     lines.push(GUSTAR_OBJ[3]+' gusta (nosotros)');
     lines.push(vosotrosLine(GUSTAR_OBJ[5]+' gusta'));
     lines.push(GUSTAR_OBJ[4]+' gusta (ustedes, ellos, ellas)');
+    return lines.join('<br>');
+  }
+  if(id==='gerundio'){
+    const ger=(p)=>EXAMPLE_VERBS.map(inf=>{
+      const v=VERBS.find(vv=>vv.inf===inf);
+      return computeAnswer({tense:'gerundio', auxTense:'presente', verb:v, person:p});
+    }).join(' · ');
+    const lines=[];
+    lines.push(ger(0)+' (yo)');
+    const tuForms=ger(1);
+    const vosForms=EXAMPLE_VERBS.map(inf=>vosPresente(ESTAR_OBJ)+' '+gerundio(VERBS.find(vv=>vv.inf===inf))).join(' · ');
+    lines.push(tuVosLines(tuForms, vosForms));
+    lines.push(ger(2)+' (él, ella, usted)');
+    lines.push(ger(3)+' (nosotros)');
+    const vosotrosForms=EXAMPLE_VERBS.map(inf=>vosotrosForm(ESTAR_OBJ,'presente')+' '+gerundio(VERBS.find(vv=>vv.inf===inf))).join(' · ');
+    lines.push(vosotrosLine(vosotrosForms));
+    lines.push(ger(4)+' (ustedes, ellos, ellas)');
     return lines.join('<br>');
   }
   return '';
@@ -1262,6 +1355,14 @@ function computeAnswer(q){
     }
     return irForm+' a '+v.inf;
   }
+  if(t==='gerundio'){
+    const estarForm = computeAnswer({tense:q.auxTense, verb:ESTAR_OBJ, person:p});
+    if(v.pronominal){
+      const pron = ['me','te','se','nos','se','os'][p];
+      return estarForm+' '+accentGerundioForAttach(gerundio(v))+pron; // "estoy quedándome"
+    }
+    return estarForm+' '+gerundio(v);
+  }
   if(t==='gustarE') return GUSTAR_OBJ[p]+' '+computeAnswer({tense:q.auxTense, verb:v, person:2});
   if(t==='impTuAfirm'){
     if(variedad==='rioplatense') return vosImperativoAfirm(v);
@@ -1314,13 +1415,13 @@ async function renderQuestion(q){
     return;
   }
 
-  const isPerifrastico = q.tense==='perifrastico';
+  const needsLongDisplay = q.tense==='perifrastico' || q.tense==='gerundio';
   const IMP_OTRAS_PERSON_LABEL = ['tú','usted','nosotros','ustedes',null,'vosotros'];
   const tagWrap=document.getElementById('tags'); tagWrap.innerHTML='';
   const t1=document.createElement('span'); t1.className='tag';
   const PERIFRASTICO_LABEL = { presente:tr('expresarFuturo'), imperfecto:tr('expresarFuturoPasado') };
   if(q.tense==='impOtras'){
-    t1.textContent = IMP_OTRAS_PERSON_LABEL[q.person] + ', ' + (q.neg?tr('negativo'):tr('afirmativo'));
+    t1.textContent = tr('imperativeLabel')+': '+IMP_OTRAS_PERSON_LABEL[q.person] + ', ' + (q.neg?tr('negativo'):tr('afirmativo'));
   } else if(q.tense==='perifrastico'){
     t1.textContent = PERIFRASTICO_LABEL[q.auxTense] || TN(q.auxTense);
   } else {
@@ -1328,7 +1429,7 @@ async function renderQuestion(q){
   }
   tagWrap.appendChild(t1);
   const t2=document.createElement('span'); t2.className='tag accent';
-  const typeSourceVerb = q.tense==='perifrastico' ? IR_OBJ : q.verb;
+  const typeSourceVerb = q.tense==='perifrastico' ? IR_OBJ : (q.tense==='gerundio' ? ESTAR_OBJ : q.verb);
   t2.textContent = typeSourceVerb.tag==='regular' ? 'regular' : 'irregular';
   tagWrap.appendChild(t2);
 
@@ -1342,10 +1443,11 @@ async function renderQuestion(q){
   pronounLine.style.display='block';
   pronounLine.textContent = pronounList[q.person];
   verbDisplay.style.display='block';
-  verbDisplay.classList.toggle('long', isPerifrastico);
+  verbDisplay.classList.toggle('long', needsLongDisplay);
   let vPrefix = '';
   if(q.tense==='impOtras') vPrefix = q.neg ? 'no ' : '';
   else if(q.tense==='perifrastico') vPrefix = 'ir + a + ';
+  else if(q.tense==='gerundio') vPrefix = 'estar + ';
   setVerbDisplay(vPrefix, q.verb.inf, q.verb.tr);
 
   if(useMC){
@@ -1426,6 +1528,13 @@ function checkAnswer(){
     acceptableForms.push(altForm);
     if(!isCorrect) isCorrect = raw===altForm && raw.length>0;
   }
+  if(current.tense==='gerundio' && current.verb.pronominal){
+    const pron = ['me','te','se','nos','se','os'][current.person];
+    const estarForm = computeAnswer({tense:current.auxTense, verb:ESTAR_OBJ, person:current.person});
+    const altForm = (pron+' '+estarForm+' '+gerundio(current.verb)).toLowerCase();
+    acceptableForms.push(altForm);
+    if(!isCorrect) isCorrect = raw===altForm && raw.length>0;
+  }
   let isAlmost=false;
   if(!isCorrect && raw.length>0){
     const rawStripped = stripAccents(raw);
@@ -1468,7 +1577,11 @@ document.addEventListener('keydown', e=>{
   const active = document.activeElement;
   const isManualField = active && active.id==='manualInput';
   const isAnswerFieldWithText = active && active.id==='answer' && active.value.length>0;
-  if(isManualField || isAnswerFieldWithText) return; // don't hijack cursor movement while there's text to edit
+  if(isManualField) return;
+  if(e.key==='ArrowRight' && answered){
+    e.preventDefault(); renderQuestion(nextQuestion()); return;
+  }
+  if(isAnswerFieldWithText) return; // don't hijack cursor movement while there's unanswered text to edit
   if(e.key==='ArrowLeft' && !document.getElementById('prevBtn').disabled){
     e.preventDefault(); renderQuestion(previousQuestion());
   } else if(e.key==='ArrowRight'){
@@ -1481,6 +1594,7 @@ updateScore();
 
 function applyLanguage(){
   document.documentElement.lang = lang;
+  document.getElementById('howToPanel').innerHTML = HOW_TO_HTML[lang];
   document.getElementById('eyebrowTitle').textContent = tr('title');
   document.getElementById('filtrosLabel').textContent = tr('filtros');
   document.getElementById('labelVariedad').textContent = tr('variedad');
@@ -1531,6 +1645,10 @@ document.getElementById('langLabelEn').addEventListener('click', ()=>{
 document.getElementById('langLabelEs').addEventListener('click', ()=>{
   lang = 'es';
   applyLanguage();
+});
+document.getElementById('howToIcon').addEventListener('click', ()=>{
+  howToOpen = !howToOpen;
+  document.getElementById('howToPanel').style.display = howToOpen ? 'block' : 'none';
 });
 applyLanguage();
 </script>
