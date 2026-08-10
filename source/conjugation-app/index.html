@@ -1518,7 +1518,7 @@ function applyLanguage(){
   renderOnlyManualChip();
   renderOnlyEspecialesChip();
   updateScore();
-  refresh();
+  if(current){ renderQuestion(current); } else { refresh(); }
 }
 document.getElementById('langToggle').addEventListener('change', (e)=>{
   lang = e.target.checked ? 'es' : 'en';
