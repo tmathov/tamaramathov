@@ -1,8 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Conjugaciones</title>
+<title>Spanish Conjugation App | Free Spanish Verb Practice</title>
+<meta name="description" content="Free Spanish conjugation app to practice Spanish verbs by tense, mood, level and regional variety. Practice regular and irregular verb conjugations online.">
+<link rel="canonical" href="https://tamaramathov.com/conjugation-app/">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Spanish Conjugation App | Free Spanish Verb Practice">
+<meta property="og:description" content="Free Spanish conjugation app to practice Spanish verbs by tense, mood, level and regional variety. Practice regular and irregular verb conjugations online.">
+<meta property="og:url" content="https://tamaramathov.com/conjugation-app/">
+<meta property="og:type" content="website">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
@@ -21,14 +28,13 @@ body{
 .col{ width:100%; max-width:440px; }
 
 /* header */
-.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin:0;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:1rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin:0;}
 .title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 36px;}
 .lang-btn{font-family:'Inter';font-size:.72rem;font-weight:600;color:var(--gray);background:transparent;border:1px solid var(--gray-light);border-radius:12px;padding:4px 12px;cursor:pointer;flex-shrink:0;}
 .lang-btn:hover{color:var(--ink);border-color:var(--ink);}
 .footer-credit{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--gray);text-align:center;margin:32px 0 0;}
 .footer-credit a{color:var(--gray);text-decoration:underline;}
 .footer-credit a:hover{color:var(--ink);}
-h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:1.5rem;margin:0 0 32px;letter-spacing:-.01em;}
 
 /* filters (collapsed by default) */
 .top-divider{ border:none; border-top:1px solid var(--gray-light); margin:0 0 40px; }
@@ -59,6 +65,9 @@ details.filters[open] > summary::after{ content:'–'; }
   border:1px solid var(--gray-light); color:var(--gray); border-radius:2px;
 }
 .opt.active{ border-color:var(--ink); color:var(--ink); }
+.select-all-icon{ display:none; margin-left:8px; color:var(--gray); cursor:pointer; font-size:1.35rem; line-height:1; }
+.sub-details[open] .select-all-icon{ display:inline; }
+.select-all-icon:hover{ color:var(--ink); }
 .opt.struct.active{ border-color:var(--accent); color:var(--accent); }
 .radio-inline{ display:flex; gap:16px; font-size:.8rem; }
 .radio-inline label{ display:flex; align-items:center; gap:5px; cursor:pointer; color:var(--gray); }
@@ -141,8 +150,8 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
 <body>
 <div class="col">
   <div class="title-row">
-    <p class="eyebrow" id="eyebrowTitle">Práctica de conjugación</p>
-    <button id="langToggle" class="lang-btn">English</button>
+    <h1 class="eyebrow" id="eyebrowTitle">Spanish Conjugation App</h1>
+    <button id="langToggle" class="lang-btn">Español</button>
   </div>
   <hr class="top-divider">
 
@@ -161,68 +170,68 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
   </div>
 
   <div class="actions">
-    <button id="checkBtn">Comprobar</button>
-    <button id="prevBtn">← Anterior</button>
-    <button id="nextBtn">Siguiente →</button>
+    <button id="checkBtn">Check</button>
+    <button id="prevBtn">← Previous</button>
+    <button id="nextBtn">Next →</button>
   </div>
   <div class="feedback" id="feedback"></div>
   <div id="warnBox"></div>
 
   <div class="scoreboard">
-    <span class="score-text" id="scoreText">0 correctas · 0 incorrectas</span>
+    <span class="score-text" id="scoreText">0 correct · 0 incorrect</span>
     <span class="streak-marks" id="streakText"></span>
   </div>
 
   <details class="filters" id="filtersDetails">
-    <summary id="filtrosLabel">Filtros</summary>
+    <summary id="filtrosLabel">Filters</summary>
     <div class="filter-body">
       <div class="f-group">
-        <span class="f-label" id="labelManual">Modo manual - Verbos específicos</span>
-        <input type="text" id="manualInput" placeholder="ej. hablar, tener, ir">
+        <span class="f-label" id="labelManual">Manual mode - Specific verbs</span>
+        <input type="text" id="manualInput" placeholder="e.g. hablar, tener, ir">
         <div class="manual-status" id="manualStatus"></div>
         <div class="opt-row" id="onlyManualChip" style="margin-top:8px;"></div>
       </div>
       <div class="f-group">
-        <span class="f-label" id="labelVariedad">Variedad</span>
+        <span class="f-label" id="labelVariedad">Variety</span>
         <div class="radio-inline" id="variedadRadio">
-          <label><input type="radio" name="variedad" value="estandar" checked><span id="vEstandar">estándar Latam (tú / ustedes)</span></label>
-          <label><input type="radio" name="variedad" value="rioplatense"><span id="vRio">rioplatense (vos)</span></label>
-          <label><input type="radio" name="variedad" value="espana"><span id="vEsp">España (vosotros)</span></label>
+          <label><input type="radio" name="variedad" value="estandar" checked><span id="vEstandar">standard Latam (tú / ustedes)</span></label>
+          <label><input type="radio" name="variedad" value="rioplatense"><span id="vRio">Rioplatense (vos)</span></label>
+          <label><input type="radio" name="variedad" value="espana"><span id="vEsp">Spain (vosotros)</span></label>
         </div>
       </div>
       <div class="f-group">
-        <span class="f-label" id="labelVocabulario">Vocabulario</span>
+        <span class="f-label" id="labelVocabulario">Vocabulary</span>
         <div class="radio-inline" id="nivelRadio">
-          <label><input type="radio" name="nivel" value="1" checked><span id="nivBasico">básico</span></label>
-          <label><input type="radio" name="nivel" value="2"><span id="nivIntermedio">intermedio</span></label>
-          <label><input type="radio" name="nivel" value="3"><span id="nivAvanzado">avanzado</span></label>
+          <label><input type="radio" name="nivel" value="1" checked><span id="nivBasico">basic</span></label>
+          <label><input type="radio" name="nivel" value="2"><span id="nivIntermedio">intermediate</span></label>
+          <label><input type="radio" name="nivel" value="3"><span id="nivAvanzado">advanced</span></label>
         </div>
       </div>
       <div class="f-group">
-        <span class="f-label" id="labelModos">Modos de drilling</span>
+        <span class="f-label" id="labelModos">Drill modes</span>
         <div class="opt-row" id="modeChips"></div>
       </div>
       <div class="f-group">
-        <span class="f-label" id="labelTipo">Tipo de verbo</span>
+        <span class="f-label" id="labelTipo">Verb type</span>
         <div class="opt-row" id="tipoChips"></div>
       </div>
       <div class="f-group">
-        <span class="f-label" id="labelTiempos">Tiempos verbales</span>
+        <span class="f-label" id="labelTiempos">Verb tenses</span>
         <details class="sub-details">
-          <summary class="f-sub" id="moodIndicativo">Indicativo</summary>
+          <summary class="f-sub"><span id="moodIndicativo">Indicative</span><span class="select-all-icon" id="selAllInd" title="">☑</span></summary>
           <div class="opt-row" id="tenseChipsInd"></div>
         </details>
         <details class="sub-details">
-          <summary class="f-sub" id="moodSubjuntivo">Subjuntivo</summary>
+          <summary class="f-sub"><span id="moodSubjuntivo">Subjunctive</span><span class="select-all-icon" id="selAllSubj" title="">☑</span></summary>
           <div class="opt-row" id="tenseChipsSubj"></div>
         </details>
         <details class="sub-details">
-          <summary class="f-sub" id="moodImperativo">Imperativo</summary>
+          <summary class="f-sub"><span id="moodImperativo">Imperative</span><span class="select-all-icon" id="selAllImp" title="">☑</span></summary>
           <div class="opt-row" id="tenseChipsImp"></div>
         </details>
       </div>
       <div class="f-group">
-        <span class="f-label" id="labelFormas">Formas especiales</span>
+        <span class="f-label" id="labelFormas">Special forms</span>
         <div class="opt-row" id="structChips"></div>
         <div class="opt-row" id="pronominalChip" style="margin-top:6px;"></div>
         <div class="opt-row" id="onlyEspecialesChip" style="margin-top:8px;"></div>
@@ -230,7 +239,7 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
     </div>
   </details>
 
-  <p class="footer-credit">Created by <a href="https://tamaramathov.com" target="_blank" rel="noopener">Tamara Mathov</a></p>
+  <p class="footer-credit"><span id="footerCredit">Created by</span> <a href="https://tamaramathov.com" target="_blank" rel="noopener">Tamara Mathov</a> · <a href="mailto:tamaramathov@gmail.com" id="footerReport">Feedback</a></p>
 </div>
 
 <script>
@@ -772,10 +781,10 @@ const I18N = {
     verbosPronominales:'verbos pronominales', soloEstasFormas:'solo estas formas', soloEstosVerbos:'solo estos verbos',
     gustarTipo:'tipo "gustar"', expresarFuturo:'expresar futuro', expresarFuturoPasado:'expresar futuro en el pasado',
     langBtn:'English', correctasLabel:'correctas', incorrectasLabel:'incorrectas',
-    moodIndicativo:'Indicativo', moodSubjuntivo:'Subjuntivo', moodImperativo:'Imperativo',
+    moodIndicativo:'Indicativo', moodSubjuntivo:'Subjuntivo', moodImperativo:'Imperativo', selectAll:'todos', createdBy:'Creado por', reportError:'Feedback',
   },
   en: {
-    title:'Spanish Conjugation Practice', filtros:'Filters', variedad:'Variety', vocabulario:'Vocabulary',
+    title:'Spanish Conjugation App', filtros:'Filters', variedad:'Variety', vocabulario:'Vocabulary',
     tipoDeVerbo:'Verb type', tiemposVerbales:'Verb tenses', formasEspeciales:'Special forms',
     modosDrilling:'Drill modes', modoManual:'Manual mode - Specific verbs',
     manualPlaceholder:'e.g. hablar, tener, ir', check:'Check', prev:'← Previous', next:'Next →',
@@ -788,7 +797,7 @@ const I18N = {
     verbosPronominales:'pronominal verbs', soloEstasFormas:'only these forms', soloEstosVerbos:'only these verbs',
     gustarTipo:'"gustar" type', expresarFuturo:'expressing future', expresarFuturoPasado:'expressing future in the past',
     langBtn:'Español', correctasLabel:'correct', incorrectasLabel:'incorrect',
-    moodIndicativo:'Indicative', moodSubjuntivo:'Subjunctive', moodImperativo:'Imperative',
+    moodIndicativo:'Indicative', moodSubjuntivo:'Subjunctive', moodImperativo:'Imperative', selectAll:'all', createdBy:'Created by', reportError:'Feedback',
   },
 };
 function tr(key){ return I18N[lang][key]; }
@@ -884,9 +893,28 @@ function tenseExample(tenseId){
   return lines.join('<br>');
 }
 
+const SELECT_ALL_ICON_ID = { tenseChipsInd:'selAllInd', tenseChipsSubj:'selAllSubj', tenseChipsImp:'selAllImp' };
 function buildTenseChipGroup(containerId, options){
   const el=document.getElementById(containerId);
   el.innerHTML='';
+  const iconId = SELECT_ALL_ICON_ID[containerId];
+  if(iconId){
+    const icon = document.getElementById(iconId);
+    icon.title = tr('selectAll');
+    icon.onclick = (e)=>{
+      e.preventDefault(); e.stopPropagation();
+      const allSelected = options.every(v=>tensesActivos.has(v));
+      if(allSelected){
+        const remainingOutside = Array.from(tensesActivos).filter(v=>!options.includes(v));
+        if(remainingOutside.length===0) return; // never leave the whole filter empty
+        options.forEach(v=>tensesActivos.delete(v));
+      } else {
+        options.forEach(v=>tensesActivos.add(v));
+      }
+      buildTenseChipGroup(containerId, options);
+      refresh();
+    };
+  }
   options.forEach(val=>{
     const wrap=document.createElement('div');
     wrap.style.display='flex'; wrap.style.alignItems='center'; wrap.style.gap='2px';
@@ -894,7 +922,9 @@ function buildTenseChipGroup(containerId, options){
     const chip=document.createElement('div');
     chip.className='opt'+(tensesActivos.has(val)?' active':'');
     if(val==='impTuAfirm'){
-      chip.innerHTML = 'imperativo puro (tú, <span class="extra-form">vos</span>, <span class="extra-form">vosotros</span> afirmativo)';
+      const label = lang==='es' ? 'imperativo puro' : 'pure imperative';
+      const afirm = lang==='es' ? 'afirmativo' : 'affirmative';
+      chip.innerHTML = label+' (tú, <span class="extra-form">vos</span>, <span class="extra-form">vosotros</span> '+afirm+')';
     } else {
       chip.textContent=TN(val);
     }
@@ -1271,7 +1301,7 @@ async function renderQuestion(q){
     return;
   }
 
-  const isObligPerif = q.tense==='perifrastico';
+  const isPerifrastico = q.tense==='perifrastico';
   const IMP_OTRAS_PERSON_LABEL = ['tú','usted','nosotros','ustedes',null,'vosotros'];
   const tagWrap=document.getElementById('tags'); tagWrap.innerHTML='';
   const t1=document.createElement('span'); t1.className='tag';
@@ -1299,7 +1329,7 @@ async function renderQuestion(q){
   pronounLine.style.display='block';
   pronounLine.textContent = pronounList[q.person];
   verbDisplay.style.display='block';
-  verbDisplay.classList.toggle('long', isObligPerif);
+  verbDisplay.classList.toggle('long', isPerifrastico);
   let vPrefix = '';
   if(q.tense==='impOtras') vPrefix = q.neg ? 'no ' : '';
   else if(q.tense==='perifrastico') vPrefix = 'ir + a + ';
@@ -1437,6 +1467,7 @@ renderQuestion(nextQuestion());
 updateScore();
 
 function applyLanguage(){
+  document.documentElement.lang = lang;
   document.getElementById('eyebrowTitle').textContent = tr('title');
   document.getElementById('filtrosLabel').textContent = tr('filtros');
   document.getElementById('labelVariedad').textContent = tr('variedad');
@@ -1460,6 +1491,8 @@ function applyLanguage(){
   document.getElementById('moodIndicativo').textContent = tr('moodIndicativo');
   document.getElementById('moodSubjuntivo').textContent = tr('moodSubjuntivo');
   document.getElementById('moodImperativo').textContent = tr('moodImperativo');
+  document.getElementById('footerCredit').textContent = tr('createdBy');
+  document.getElementById('footerReport').textContent = tr('reportError');
 
   buildChipGroup('modeChips',['solo','multiple'],v=>({solo:tr('escribirForma'),multiple:tr('opcionMultiple')}[v]),modosActivos);
   buildStructChipGroup('structChips',STRUCT_OPTIONS);
