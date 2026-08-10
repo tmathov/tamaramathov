@@ -30,8 +30,9 @@ body{
 /* header */
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:1rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin:0;}
 .title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 36px;}
-.lang-btn{font-family:'Inter';font-size:.72rem;font-weight:600;color:var(--gray);background:transparent;border:1px solid var(--gray-light);border-radius:12px;padding:4px 12px;cursor:pointer;flex-shrink:0;}
-.lang-btn:hover{color:var(--ink);border-color:var(--ink);}
+.lang-switch-wrap{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.lang-switch-label{font-family:'Inter';font-size:.72rem;font-weight:600;color:var(--gray);cursor:pointer;}
+.lang-switch-label.active{color:var(--ink);}
 .footer-credit{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--gray);text-align:center;margin:32px 0 0;}
 .footer-credit a{color:var(--gray);text-decoration:underline;}
 .footer-credit a:hover{color:var(--ink);}
@@ -94,7 +95,7 @@ input#manualInput:focus{ border-color:var(--ink); }
 .pronoun-line{ font-family:'IBM Plex Serif',serif; font-style:italic; font-size:1.15rem; color:var(--gray); margin-bottom:2px; }
 .verb-display{ font-family:'IBM Plex Serif',serif; font-weight:600; font-size:2.6rem; letter-spacing:-.01em; margin:2px 0 34px; }
 .verb-display.long{ font-size:1.7rem; line-height:1.3; }
-.verb-info-toggle{ font-family:'IBM Plex Mono',monospace; font-size:.62rem; font-weight:400; color:var(--gray); border:1px solid var(--gray-light); border-radius:50%; width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; vertical-align:middle; margin-left:10px; cursor:pointer; }
+.verb-info-toggle{ font-family:'IBM Plex Mono',monospace; font-size:.72rem; font-weight:400; color:var(--gray); border:1px solid var(--gray-light); border-radius:10px; padding:2px 8px; display:inline-flex; align-items:center; justify-content:center; vertical-align:middle; margin-left:10px; cursor:pointer; }
 .verb-info-pop{ display:block; font-family:'IBM Plex Mono',monospace; font-size:.9rem; font-weight:400; color:var(--ink); background:#fafafa; border:1px solid var(--gray-light); padding:8px 12px; border-radius:2px; margin-top:10px; width:fit-content; }
 .extra-form{ color:#c2c2c2; }
 
@@ -151,7 +152,14 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
 <div class="col">
   <div class="title-row">
     <h1 class="eyebrow" id="eyebrowTitle">Spanish Conjugation App</h1>
-    <button id="langToggle" class="lang-btn">Español</button>
+    <div class="lang-switch-wrap">
+      <span class="lang-switch-label active" id="langLabelEn">EN</span>
+      <label class="switch">
+        <input type="checkbox" id="langToggle">
+        <span class="switch-track"></span>
+      </label>
+      <span class="lang-switch-label" id="langLabelEs">SP</span>
+    </div>
   </div>
   <hr class="top-divider">
 
@@ -780,7 +788,7 @@ const I18N = {
     escribirForma:'escribir la forma', opcionMultiple:'opción múltiple',
     verbosPronominales:'verbos pronominales', soloEstasFormas:'solo estas formas', soloEstosVerbos:'solo estos verbos',
     gustarTipo:'tipo "gustar"', expresarFuturo:'expresar futuro', expresarFuturoPasado:'expresar futuro en el pasado',
-    langBtn:'English', correctasLabel:'correctas', incorrectasLabel:'incorrectas',
+    correctasLabel:'correctas', incorrectasLabel:'incorrectas',
     moodIndicativo:'Indicativo', moodSubjuntivo:'Subjuntivo', moodImperativo:'Imperativo', selectAll:'todos', createdBy:'Creado por', reportError:'Feedback',
   },
   en: {
@@ -796,7 +804,7 @@ const I18N = {
     escribirForma:'type the form', opcionMultiple:'multiple choice',
     verbosPronominales:'pronominal verbs', soloEstasFormas:'only these forms', soloEstosVerbos:'only these verbs',
     gustarTipo:'"gustar" type', expresarFuturo:'expressing future', expresarFuturoPasado:'expressing future in the past',
-    langBtn:'Español', correctasLabel:'correct', incorrectasLabel:'incorrect',
+    correctasLabel:'correct', incorrectasLabel:'incorrect',
     moodIndicativo:'Indicative', moodSubjuntivo:'Subjunctive', moodImperativo:'Imperative', selectAll:'all', createdBy:'Created by', reportError:'Feedback',
   },
 };
@@ -810,7 +818,7 @@ function setVerbDisplay(prefix, infWord, translation){
   if(prefix) el.appendChild(document.createTextNode(prefix));
   const wordSpan = document.createElement('span'); wordSpan.textContent = infWord;
   el.appendChild(wordSpan);
-  const info = document.createElement('span'); info.className='verb-info-toggle'; info.textContent='!';
+  const info = document.createElement('span'); info.className='verb-info-toggle'; info.textContent='Eng.';
   const pop = document.createElement('div'); pop.className='verb-info-pop'; pop.textContent = translation; pop.style.display='none';
   info.addEventListener('click', e=>{
     e.stopPropagation();
@@ -906,12 +914,17 @@ function buildTenseChipGroup(containerId, options){
       const allSelected = options.every(v=>tensesActivos.has(v));
       if(allSelected){
         const remainingOutside = Array.from(tensesActivos).filter(v=>!options.includes(v));
-        if(remainingOutside.length===0) return; // never leave the whole filter empty
-        options.forEach(v=>tensesActivos.delete(v));
+        if(remainingOutside.length===0){
+          tensesActivos = new Set(['presente']); // nothing would be left selected — fall back to the default
+        } else {
+          options.forEach(v=>tensesActivos.delete(v));
+        }
       } else {
         options.forEach(v=>tensesActivos.add(v));
       }
-      buildTenseChipGroup(containerId, options);
+      buildTenseChipGroup('tenseChipsInd', TENSE_GROUPS.ind);
+      buildTenseChipGroup('tenseChipsSubj', TENSE_GROUPS.subj);
+      buildTenseChipGroup('tenseChipsImp', TENSE_GROUPS.imp);
       refresh();
     };
   }
@@ -937,7 +950,7 @@ function buildTenseChipGroup(containerId, options){
     });
 
     const info=document.createElement('span');
-    info.textContent='!';
+    info.textContent='i';
     info.style.cssText='font-family:IBM Plex Mono,monospace;font-size:.62rem;color:var(--gray);border:1px solid var(--gray-light);border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;';
     const pop=document.createElement('div');
     pop.style.cssText='display:none;font-family:IBM Plex Mono,monospace;font-size:.68rem;line-height:1.8;color:var(--ink);background:#fafafa;border:1px solid var(--gray-light);padding:8px 9px;border-radius:2px;margin:2px 0 6px;width:100%;';
@@ -1005,7 +1018,7 @@ function buildStructChipGroup(containerId, options){
     });
 
     const info=document.createElement('span');
-    info.textContent='!';
+    info.textContent='i';
     info.style.cssText='font-family:IBM Plex Mono,monospace;font-size:.62rem;color:var(--gray);border:1px solid var(--gray-light);border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;';
     const pop=document.createElement('div');
     pop.style.cssText='display:none;font-family:IBM Plex Mono,monospace;font-size:.68rem;line-height:1.8;color:var(--ink);background:#fafafa;border:1px solid var(--gray-light);padding:8px 9px;border-radius:2px;margin:2px 0 6px;width:100%;';
@@ -1065,7 +1078,7 @@ function buildPronominalToggle(){
   });
 
   const info=document.createElement('span');
-  info.textContent='!';
+  info.textContent='i';
   info.style.cssText='font-family:IBM Plex Mono,monospace;font-size:.62rem;color:var(--gray);border:1px solid var(--gray-light);border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;';
   const pop=document.createElement('div');
   pop.style.cssText='display:none;font-family:IBM Plex Mono,monospace;font-size:.68rem;color:var(--ink);background:#fafafa;border:1px solid var(--gray-light);padding:6px 9px;border-radius:2px;margin:2px 0 6px;width:100%;';
@@ -1487,7 +1500,9 @@ function applyLanguage(){
   document.getElementById('nivBasico').textContent = tr('basico');
   document.getElementById('nivIntermedio').textContent = tr('intermedio');
   document.getElementById('nivAvanzado').textContent = tr('avanzado');
-  document.getElementById('langToggle').textContent = tr('langBtn');
+  document.getElementById('langToggle').checked = (lang==='es');
+  document.getElementById('langLabelEn').classList.toggle('active', lang==='en');
+  document.getElementById('langLabelEs').classList.toggle('active', lang==='es');
   document.getElementById('moodIndicativo').textContent = tr('moodIndicativo');
   document.getElementById('moodSubjuntivo').textContent = tr('moodSubjuntivo');
   document.getElementById('moodImperativo').textContent = tr('moodImperativo');
@@ -1505,8 +1520,16 @@ function applyLanguage(){
   updateScore();
   refresh();
 }
-document.getElementById('langToggle').addEventListener('click', ()=>{
-  lang = lang==='es' ? 'en' : 'es';
+document.getElementById('langToggle').addEventListener('change', (e)=>{
+  lang = e.target.checked ? 'es' : 'en';
+  applyLanguage();
+});
+document.getElementById('langLabelEn').addEventListener('click', ()=>{
+  lang = 'en';
+  applyLanguage();
+});
+document.getElementById('langLabelEs').addEventListener('click', ()=>{
+  lang = 'es';
   applyLanguage();
 });
 applyLanguage();
