@@ -145,8 +145,11 @@ input#answer.almost{ border-color:var(--warn); color:var(--warn); }
 
 .actions{ display:flex; justify-content:space-between; align-items:center; margin-top:24px; }
 button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cursor:pointer; background:none; padding:0; }
-#checkBtn{ color:var(--bg); background:var(--ink); padding:10px 22px; border-radius:2px; }
-#checkBtn:hover{ background:var(--accent); }
+#checkBtn{ color:var(--bg); background:var(--ink); padding:10px 22px; border-radius:2px; transition:background .12s ease; }
+#checkBtn:hover{ background:#333333; }
+#checkBtn.btn-ok{ background:var(--ok); }
+#checkBtn.btn-almost{ background:var(--warn); }
+#checkBtn.btn-bad{ background:var(--accent); }
 #nextBtn{ color:var(--gray); }
 #nextBtn:hover{ color:var(--ink); }
 #prevBtn{ color:var(--gray); }
@@ -1403,6 +1406,7 @@ function computeAnswer(q){
 
 async function renderQuestion(q){
   answered=false;
+  lastCheckedValue = null;
   document.getElementById('prevBtn').disabled = historyIndex<=0;
   document.getElementById('warnBox').innerHTML='';
   document.getElementById('answer').value=''; document.getElementById('answer').className='';
@@ -1410,6 +1414,7 @@ async function renderQuestion(q){
   document.getElementById('mcBox').style.display='none'; document.getElementById('mcBox').innerHTML='';
   document.getElementById('inputWrap').style.display='block';
   document.getElementById('checkBtn').style.display='inline-block';
+  document.getElementById('checkBtn').classList.remove('btn-ok','btn-almost','btn-bad');
   document.getElementById('tildePop').classList.remove('show');
   document.getElementById('verbDisplay').style.display='none';
 
@@ -1512,11 +1517,20 @@ function selectMC(btn,opt,correct){
   else { fb.className='feedback bad'; fb.textContent=tr('formaCorrecta')+correct; wrongCount++; streak=0; }
   updateScore();
 }
+let lastCheckedValue = null;
 function checkAnswer(){
   if(!current) return;
-  if(answered){ renderQuestion(nextQuestion()); return; }
-  if(current.mode==='multiple') return;
   const raw=document.getElementById('answer').value.trim().toLowerCase();
+  if(answered){
+    if(current.mode!=='multiple' && raw.length>0 && raw!==lastCheckedValue){
+      answered=false; // they typed a new attempt — fall through and re-check it
+    } else {
+      renderQuestion(nextQuestion());
+      return;
+    }
+  }
+  if(current.mode==='multiple') return;
+  lastCheckedValue = raw;
   const correct=computeAnswer(current);
   const correctLower=correct.toLowerCase();
   let isCorrect = raw===correctLower && raw.length>0;
@@ -1546,17 +1560,22 @@ function checkAnswer(){
     isAlmost = acceptableForms.some(f=>stripAccents(f)===rawStripped);
   }
   const input=document.getElementById('answer'); const fb=document.getElementById('feedback');
+  const btn=document.getElementById('checkBtn');
+  btn.classList.remove('btn-ok','btn-almost','btn-bad');
   if(isCorrect){
     input.className='correct'; fb.className='feedback ok'; fb.textContent=tr('correcto');
     document.getElementById('tildePop').classList.add('show');
     correctCount++; streak++;
+    btn.classList.add('btn-ok');
   } else if(isAlmost){
     input.className='almost'; fb.className='feedback almost';
     fb.textContent=tr('formaCorrecta')+correct+tr('watchAccent');
     wrongCount++; streak=0;
+    btn.classList.add('btn-almost');
   } else {
     input.className='wrong'; fb.className='feedback bad'; fb.textContent=tr('formaCorrecta')+correct;
     wrongCount++; streak=0;
+    btn.classList.add('btn-bad');
   }
   answered=true; updateScore();
 }
@@ -1568,6 +1587,15 @@ document.getElementById('checkBtn').addEventListener('click',checkAnswer);
 document.getElementById('prevBtn').addEventListener('click',()=>renderQuestion(previousQuestion()));
 document.getElementById('nextBtn').addEventListener('click',()=>renderQuestion(nextQuestion()));
 document.getElementById('answer').addEventListener('keydown',e=>{ if(e.key==='Enter') checkAnswer(); });
+document.getElementById('answer').addEventListener('input',()=>{
+  if(answered){
+    const input=document.getElementById('answer');
+    input.className='';
+    document.getElementById('feedback').textContent='';
+    document.getElementById('feedback').className='feedback';
+    document.getElementById('checkBtn').classList.remove('btn-ok','btn-almost','btn-bad');
+  }
+});
 document.addEventListener('keydown', e=>{
   if(!current || current.mode!=='multiple') return;
   if(!answered){
