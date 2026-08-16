@@ -20,9 +20,10 @@
 
 :root{
   --bg:#ffffff; --ink:#1a1a1a; --gray:#8a8a8a; --gray-light:#e4e4e4;
-  --accent:#c4432e; --ok:#4a7a5c; --warn:#b8860b;
+  --accent:#c4432e; --ok:#4a7a5c; --warn:#b8860b; --bordeaux:#a3324a; --muted-gold:#b3a58f;
 }
 *{box-sizing:border-box;}
+input[type="radio"]{accent-color:var(--bordeaux);}
 body{
   margin:0; background:var(--bg); color:var(--ink);
   font-family:'Inter',sans-serif;
@@ -67,9 +68,11 @@ body{
 .conjugator-suggestions:empty{border-bottom:none;}
 .conjugator-suggestion{padding:8px 14px;font-family:'Inter';font-size:.85rem;cursor:pointer;}
 .conjugator-suggestion:hover{background:#f4f4f4;}
-.conjugator-table{overflow-y:auto;padding:12px 16px 18px;font-family:'IBM Plex Mono',monospace;font-size:.74rem;}
-.conjugator-table h4{font-family:'IBM Plex Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray);margin:16px 0 4px;}
-.conjugator-table h4.current-tense{color:var(--ink);font-weight:600;}
+.conjugator-table{overflow-y:auto;padding:0 16px 18px;font-family:'IBM Plex Mono',monospace;font-size:.74rem;}
+.conjugator-verb-title{position:sticky;top:0;z-index:5;background:var(--bg);font-family:'IBM Plex Serif',serif;font-weight:600;font-size:1.15rem;color:var(--ink);margin:0 -16px 12px;padding:12px 16px 10px;border-bottom:1px solid var(--gray-light);box-shadow:0 1px 0 var(--bg);}
+.conjugator-verb-tag{font-family:'IBM Plex Mono',monospace;font-size:.66rem;text-transform:uppercase;letter-spacing:.04em;color:var(--bordeaux);font-weight:400;vertical-align:middle;margin-left:4px;}
+.conjugator-table h4{font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink);margin:16px 0 4px;}
+.conjugator-table h4.current-tense{color:var(--bordeaux);}
 .conjugator-table table.current-tense-table td{background:#fafaf5;}
 .conjugator-table h4:first-child{margin-top:0;}
 .conjugator-table table{width:100%;border-collapse:collapse;margin-bottom:2px;}
@@ -97,9 +100,9 @@ details.filters[open] > summary::after{ content:'–'; }
 .filter-body{ padding:4px 0 24px; }
 .f-group{ margin-bottom:20px; }
 .f-label{ font-family:'IBM Plex Mono',monospace; font-size:.76rem; letter-spacing:.08em; text-transform:uppercase; color:var(--gray); display:block; margin-bottom:8px; }
-.f-sub{ font-family:'Inter'; font-size:.68rem; font-weight:600; color:#b3a58f; margin:10px 0 4px; }
+.f-sub{ font-family:'Inter'; font-size:.68rem; font-weight:600; color:var(--muted-gold); margin:10px 0 4px; }
 .sub-details{ margin:4px 0; }
-.sub-details summary.f-sub{ cursor:pointer; list-style:none; list-style-type:none; display:flex; align-items:center; justify-content:flex-start; text-align:left; width:100%; gap:5px; user-select:none; color:#b3a58f; }
+.sub-details summary.f-sub{ cursor:pointer; list-style:none; list-style-type:none; display:flex; align-items:center; justify-content:flex-start; text-align:left; width:100%; gap:5px; user-select:none; color:var(--muted-gold); }
 .sub-details summary.f-sub::-webkit-details-marker{ display:none; }
 .sub-details summary.f-sub::marker{ content:''; display:none; font-size:0; }
 .sub-details summary.f-sub::before{ content:'▸'; font-size:.6rem; color:#b3a58f; transition:transform .12s ease; }
@@ -114,7 +117,8 @@ details.filters[open] > summary::after{ content:'–'; }
 .select-all-icon{ display:none; margin-left:8px; color:var(--gray); cursor:pointer; font-size:1.35rem; line-height:1; }
 .sub-details[open] .select-all-icon{ display:inline; }
 .select-all-icon:hover{ color:var(--ink); }
-.opt.struct.active{ border-color:var(--accent); color:var(--accent); }
+.opt.struct.active{ border-color:var(--muted-gold); color:var(--muted-gold); }
+.opt.gold.active{ border-color:var(--muted-gold); color:var(--muted-gold); }
 .radio-inline{ display:flex; gap:16px; font-size:.8rem; }
 .radio-inline label{ display:flex; align-items:center; gap:5px; cursor:pointer; color:var(--gray); }
 .radio-inline input:checked + span{ color:var(--ink); font-weight:600; }
@@ -134,8 +138,8 @@ input#manualInput:focus{ border-color:var(--ink); }
 /* question */
 .tags{ display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap; }
 .tag{ font-family:'IBM Plex Mono',monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; color:var(--gray); }
-.tag.accent{ color:var(--accent); }
-.tag::before{ content:'· '; }
+.tag.accent{ color:var(--bordeaux); }
+.tag::before{ content:'· '; color:var(--gray); }
 
 .pronoun-line{ font-family:'IBM Plex Serif',serif; font-style:italic; font-size:1.15rem; color:var(--gray); margin-bottom:2px; }
 .verb-display{ font-family:'IBM Plex Serif',serif; font-weight:600; font-size:2.6rem; letter-spacing:-.01em; margin:2px 0 34px; }
@@ -301,7 +305,7 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
 
   <p class="footer-credit"><span id="footerCredit">Created by</span> <a href="https://tamaramathov.com/resume/" target="_blank" rel="noopener">Tamara Mathov</a> · <a href="mailto:tamaramathov@gmail.com" id="footerReport">Feedback</a></p>
   <button type="button" class="conjugator-fab" id="conjugatorFab">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4.5C4 3 7 3 9 4.5v14c-2-1.5-5-1.5-7 0z"/><path d="M22 4.5C20 3 17 3 15 4.5v14c2-1.5 5-1.5 7 0z"/><path d="M9 4.5c2-1.5 5-1.5 6 0"/><path d="M9 18.5c2-1.5 5-1.5 6 0"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
     <span id="conjugatorFabText">Verb conjugator</span>
   </button>
   <div class="conjugator-panel" id="conjugatorPanel" style="display:none;">
@@ -1024,6 +1028,15 @@ const VERBS = [
 ];
 const HABER = VERBS.find(v=>v.inf==='haber');
 const IR_OBJ = VERBS.find(v=>v.inf==='ir');
+/* Verbs whose only "irregularity" is a spelling adjustment (c->qu, g->gu, z->c before e) to
+   preserve pronunciation — the stem itself never truly changes. Kept tagged 'irregular' for
+   the practice filter (so "solo irregulares" still includes them, matching how they've always
+   worked), but the conjugator shows them as their own middle category for clarity. */
+const ORTHO_ONLY_VERBS = new Set(['abrazar','acercar','actualizar','agregar','ahogarse','alcanzar','amenazar','analizar','apagar','aplicar','atacar','aterrizar','bostezar','buscar','calificar','castigar','cazar','chocar','clasificar','codificar','colocar','concluir','constituir','construir','criticar','cruzar','dedicar','delegar','descargar','desembarcar','deslizarse','despegar','destacar','diagnosticar','dirigir','disfrazarse','distinguir','domesticar','educar','embarazarse','embarcar','empacar','entregar','exigir','explicar','identificar','incluir','indicar','investigar','juzgar','lanzar','llegar','marcar','masticar','memorizar','navegar','organizar','pagar','pegar','pescar','picar','proteger','provocar','publicar','realizar','recoger','sacar','secar','significar','suplicar','testificar','tocar','tragar','utilizar']);
+function verbCategory3(v){
+  if(v.tag==='regular') return 'regular';
+  return ORTHO_ONLY_VERBS.has(v.inf) ? 'ortho' : 'irregular';
+}
 const ESTAR_OBJ = VERBS.find(v=>v.inf==='estar');
 
 const PRONOUNS = ['yo','tú','él / ella / usted','nosotros / nosotras','ellos / ellas / ustedes','vosotros / vosotras'];
@@ -1186,7 +1199,7 @@ const I18N = {
     verbosPronominales:'verbos pronominales', soloEstasFormas:'solo estas formas', soloEstosVerbos:'solo estos verbos',
     gustarTipo:'tipo "gustar"', expresarFuturo:'expresar futuro', expresarFuturoPasado:'expresar futuro en el pasado',
     correctasLabel:'correctas', incorrectasLabel:'incorrectas',
-    moodIndicativo:'Indicativo', moodSubjuntivo:'Subjuntivo', moodImperativo:'Imperativo', selectAll:'todos', createdBy:'Creado por', reportError:'Feedback', imperativeLabel:'Imperativo', conjugatorFab:'¿No te acuerdas? Revisa las conjugaciones aquí.', conjugatorHint:'Escribe el verbo que quieres conjugar',
+    moodIndicativo:'Indicativo', moodSubjuntivo:'Subjuntivo', moodImperativo:'Imperativo', selectAll:'todos', createdBy:'Creado por', reportError:'Feedback', imperativeLabel:'Imperativo', conjugatorFab:'¿No te acuerdas? Revisa las conjugaciones aquí.', conjugatorHint:'Escribe el verbo que quieres conjugar', orthoCategoryLabel:'regular con cambio ortográfico',
   },
   en: {
     title:'Spanish Conjugation App', filtros:'Filters', variedad:'Variety', vocabulario:'Vocabulary',
@@ -1202,7 +1215,7 @@ const I18N = {
     verbosPronominales:'pronominal verbs', soloEstasFormas:'only these forms', soloEstosVerbos:'only these verbs',
     gustarTipo:'"gustar" type', expresarFuturo:'expressing future', expresarFuturoPasado:'expressing future in the past',
     correctasLabel:'correct', incorrectasLabel:'incorrect',
-    moodIndicativo:'Indicative', moodSubjuntivo:'Subjunctive', moodImperativo:'Imperative', selectAll:'all', createdBy:'Created by', reportError:'Feedback', imperativeLabel:'Imperative', conjugatorFab:'Can\'t remember? Check the conjugations here.', conjugatorHint:'Type the verb you want to conjugate',
+    moodIndicativo:'Indicative', moodSubjuntivo:'Subjunctive', moodImperativo:'Imperative', selectAll:'all', createdBy:'Created by', reportError:'Feedback', imperativeLabel:'Imperative', conjugatorFab:'Can\'t remember? Check the conjugations here.', conjugatorHint:'Type the verb you want to conjugate', orthoCategoryLabel:'regular with spelling change',
   },
 };
 function tr(key){ return I18N[lang][key]; }
@@ -1341,7 +1354,9 @@ function tuVosRows(tuForm, vosForm, extra){
 }
 function verbFullTable(v){
   const allTenses = [...TENSE_GROUPS.ind, ...TENSE_GROUPS.subj];
-  let html = '';
+  const cat3 = verbCategory3(v);
+  const catLabel = cat3==='regular' ? 'regular' : (cat3==='ortho' ? tr('orthoCategoryLabel') : 'irregular');
+  let html = '<div class="conjugator-verb-title">'+v.inf+' <span class="conjugator-verb-tag">· '+catLabel+'</span></div>';
   allTenses.forEach(t=>{
     const yo = computeAnswer({tense:t, verb:v, person:0});
     const tuForm = computeAnswer({tense:t, verb:v, person:1});
@@ -1406,7 +1421,7 @@ function buildTenseChipGroup(containerId, options){
     wrap.style.display='flex'; wrap.style.alignItems='center'; wrap.style.gap='2px';
 
     const chip=document.createElement('div');
-    chip.className='opt'+(tensesActivos.has(val)?' active':'');
+    chip.className='opt gold'+(tensesActivos.has(val)?' active':'');
     if(val==='impTuAfirm'){
       const label = lang==='es' ? 'imperativo puro' : 'pure imperative';
       const afirm = lang==='es' ? 'afirmativo' : 'affirmative';
@@ -1545,7 +1560,7 @@ function buildChipGroup(containerId, options, labelFn, activeSet, extraClass){
     el.appendChild(chip);
   });
 }
-buildChipGroup('tipoChips',['regular','irregular'],v=>v==='regular'?'regular':'irregular',tiposActivos);
+buildChipGroup('tipoChips',['regular','irregular'],v=>v==='regular'?'regular':'irregular',tiposActivos,'gold');
 buildTenseChipGroup('tenseChipsInd',TENSE_GROUPS.ind);
 buildTenseChipGroup('tenseChipsSubj',TENSE_GROUPS.subj);
 buildTenseChipGroup('tenseChipsImp',TENSE_GROUPS.imp);
@@ -1588,7 +1603,7 @@ function buildPronominalToggle(){
   el.appendChild(outer);
 }
 buildPronominalToggle();
-buildChipGroup('modeChips',['solo','multiple'],v=>({solo:tr('escribirForma'),multiple:tr('opcionMultiple')}[v]),modosActivos);
+buildChipGroup('modeChips',['solo','multiple'],v=>({solo:tr('escribirForma'),multiple:tr('opcionMultiple')}[v]),modosActivos,'gold');
 
 document.getElementById('manualInput').addEventListener('input', e=>{
   const raw=e.target.value.trim(); const status=document.getElementById('manualStatus');
@@ -1816,8 +1831,13 @@ async function renderQuestion(q){
 
   const needsLongDisplay = q.tense==='perifrastico' || q.tense==='gerundio';
   const IMP_OTRAS_PERSON_LABEL = ['tú','usted','nosotros','ustedes',null,'vosotros'];
+  const isGustar=q.tense==='gustarE'; const isImp=q.tense==='impTuAfirm'||q.tense==='impOtras';
+  const pronounList = isGustar ? (variedad==='rioplatense' ? ['a mí','a vos','a él / ella / usted','a nosotros/as','a ellos / ellas / ustedes','a vosotros/as'] : GUSTAR_PRONOUNS)
+                     : (isImp ? [(variedad==='rioplatense'?'vos':'tú'),'usted','nosotros','ustedes',null,'vosotros / vosotras']
+                     : (variedad==='rioplatense' ? ['yo','vos','él / ella / usted','nosotros / nosotras','ellos / ellas / ustedes','vosotros / vosotras'] : PRONOUNS));
+
   const tagWrap=document.getElementById('tags'); tagWrap.innerHTML='';
-  const t1=document.createElement('span'); t1.className='tag';
+  const t1=document.createElement('span'); t1.className='tag accent';
   const PERIFRASTICO_LABEL = { presente:tr('expresarFuturo'), imperfecto:tr('expresarFuturoPasado') };
   if(q.tense==='impOtras'){
     t1.textContent = tr('imperativeLabel')+': '+IMP_OTRAS_PERSON_LABEL[q.person] + ', ' + (q.neg?tr('negativo'):tr('afirmativo'));
@@ -1828,19 +1848,13 @@ async function renderQuestion(q){
   }
   tagWrap.appendChild(t1);
   const t2=document.createElement('span'); t2.className='tag accent';
-  const typeSourceVerb = q.tense==='perifrastico' ? IR_OBJ : (q.tense==='gerundio' ? ESTAR_OBJ : q.verb);
-  t2.textContent = typeSourceVerb.tag==='regular' ? 'regular' : 'irregular';
+  t2.textContent = pronounList[q.person];
   tagWrap.appendChild(t2);
 
   const pronounLine=document.getElementById('pronounLine'); const verbDisplay=document.getElementById('verbDisplay');
-  const isGustar=q.tense==='gustarE'; const isImp=q.tense==='impTuAfirm'||q.tense==='impOtras';
-  const pronounList = isGustar ? (variedad==='rioplatense' ? ['a mí','a vos','a él / ella / usted','a nosotros/as','a ellos / ellas / ustedes','a vosotros/as'] : GUSTAR_PRONOUNS)
-                     : (isImp ? [(variedad==='rioplatense'?'vos':'tú'),'usted','nosotros','ustedes',null,'vosotros / vosotras']
-                     : (variedad==='rioplatense' ? ['yo','vos','él / ella / usted','nosotros / nosotras','ellos / ellas / ustedes','vosotros / vosotras'] : PRONOUNS));
   const useMC = q.mode==='multiple';
 
-  pronounLine.style.display='block';
-  pronounLine.textContent = pronounList[q.person];
+  pronounLine.style.display='none';
   verbDisplay.style.display='block';
   verbDisplay.classList.toggle('long', needsLongDisplay);
   let vPrefix = '';
@@ -2047,7 +2061,7 @@ function applyLanguage(){
   document.getElementById('conjugatorFabText').textContent = tr('conjugatorFab');
   document.getElementById('conjugatorHint').textContent = tr('conjugatorHint');
 
-  buildChipGroup('modeChips',['solo','multiple'],v=>({solo:tr('escribirForma'),multiple:tr('opcionMultiple')}[v]),modosActivos);
+  buildChipGroup('modeChips',['solo','multiple'],v=>({solo:tr('escribirForma'),multiple:tr('opcionMultiple')}[v]),modosActivos,'gold');
   buildStructChipGroup('structChips',STRUCT_OPTIONS);
   buildPronominalToggle();
   buildTenseChipGroup('tenseChipsInd',TENSE_GROUPS.ind);
