@@ -24,6 +24,7 @@
 }
 *{box-sizing:border-box;}
 input[type="radio"]{accent-color:var(--bordeaux);}
+html{ overflow-y:scroll; scrollbar-gutter:stable; }
 body{
   margin:0; background:var(--bg); color:var(--ink);
   font-family:'Inter',sans-serif;
@@ -52,11 +53,10 @@ body{
 .lang-switch-label{font-family:'Inter';font-size:.72rem;font-weight:600;color:var(--gray);cursor:pointer;}
 .lang-switch-label.active{color:var(--ink);}
 .footer-credit{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--gray);text-align:center;margin:32px 0 0;}
-.conjugator-fab{position:fixed;bottom:24px;right:24px;max-width:220px;background:var(--ink);color:var(--bg);font-family:'Inter';font-size:.76rem;font-weight:600;line-height:1.3;padding:12px 18px;border-radius:16px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.18);display:flex;align-items:center;gap:8px;z-index:50;transition:transform .12s ease, box-shadow .12s ease;}
+.conjugator-fab{position:fixed;bottom:24px;right:24px;max-width:220px;background:var(--ink);color:var(--bg);font-family:'Inter';font-size:.76rem;font-weight:600;line-height:1.3;padding:12px 18px;border-radius:16px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.18);display:flex;align-items:center;gap:8px;z-index:50;transition:transform .12s ease, box-shadow .12s ease;border:none;cursor:pointer;text-align:left;}
 .conjugator-fab svg{width:20px;height:20px;flex-shrink:0;}
 .conjugator-fab:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.24);}
 @media (max-width:480px){.conjugator-fab{bottom:16px;right:16px;max-width:180px;padding:10px 14px;font-size:.7rem;}}
-.conjugator-fab{border:none;cursor:pointer;text-align:left;}
 .conjugator-panel{position:fixed;bottom:90px;right:24px;width:340px;max-width:calc(100vw - 32px);max-height:70vh;background:var(--bg);border:1px solid var(--gray-light);border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.18);z-index:60;display:flex;flex-direction:column;overflow:hidden;}
 .conjugator-panel-head{display:flex;align-items:center;gap:8px;padding:14px 14px 10px;}
 .conjugator-hint{font-family:'Inter';font-size:.72rem;color:var(--gray);margin:8px 14px 12px;padding-bottom:10px;border-bottom:1px solid var(--gray-light);}
@@ -64,8 +64,11 @@ body{
 .conjugator-search:focus{outline:none;border-color:var(--ink);}
 .conjugator-close{cursor:pointer;font-size:1.3rem;color:var(--gray);line-height:1;padding:0 4px;}
 .conjugator-close:hover{color:var(--ink);}
-.conjugator-suggestions{max-height:160px;overflow-y:auto;border-bottom:1px solid var(--gray-light);}
-.conjugator-suggestions:empty{border-bottom:none;}
+.conjugator-suggestions{flex-shrink:0;max-height:78px;overflow-y:auto;border-bottom:1px solid var(--gray-light);scrollbar-width:auto;scrollbar-color:var(--gray) var(--gray-light);}
+.conjugator-suggestions:empty{max-height:0;border-bottom:none;}
+.conjugator-suggestions::-webkit-scrollbar{width:8px;}
+.conjugator-suggestions::-webkit-scrollbar-track{background:var(--gray-light);}
+.conjugator-suggestions::-webkit-scrollbar-thumb{background:var(--gray);border-radius:4px;}
 .conjugator-suggestion{padding:8px 14px;font-family:'Inter';font-size:.85rem;cursor:pointer;}
 .conjugator-suggestion:hover{background:#f4f4f4;}
 .conjugator-table{overflow-y:auto;padding:0 16px 18px;font-family:'IBM Plex Mono',monospace;font-size:.74rem;}
@@ -86,9 +89,9 @@ body{
 .footer-credit a:hover{color:var(--ink);}
 
 /* filters (collapsed by default) */
-.top-divider{ border:none; border-top:1px solid var(--gray-light); margin:0 0 40px; }
-.mode-switcher{ display:inline-flex; border:1px solid var(--gray-light); border-radius:22px; padding:3px; margin:0 0 28px; }
-.mode-switcher-btn{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:.8rem; color:var(--gray); background:transparent; border:none; border-radius:18px; padding:8px 18px; cursor:pointer; transition:background .12s ease, color .12s ease; }
+.top-divider{ border:none; border-top:1px solid var(--gray-light); margin:0 0 28px; }
+.mode-switcher{ display:flex; width:fit-content; border:1px solid var(--gray-light); border-radius:16px; padding:2px; margin:0 auto 40px; }
+.mode-switcher-btn{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:.66rem; color:var(--gray); background:transparent; border:none; border-radius:13px; padding:5px 12px; cursor:pointer; transition:background .12s ease, color .12s ease; }
 .mode-switcher-btn.active{ background:var(--ink); color:var(--bg); }
 details.filters{ margin-top:56px; border-top:1px solid var(--gray-light); border-bottom:1px solid var(--gray-light); }
 details.filters summary{
@@ -139,22 +142,32 @@ input#manualInput:focus{ border-color:var(--ink); }
 .switch-label{ font-family:'Inter'; font-size:.82rem; color:#4a4130; cursor:pointer; }
 
 /* question */
-.tags{ display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap; }
+.tags{ display:inline-flex; gap:10px; margin-bottom:30px; flex-wrap:wrap; }
+.tag-plate{ display:inline-flex; gap:10px; border-radius:4px; padding:7px 15px; }
+.tag-plate:empty{ display:none; }
+.tag-plate-tense{ background:rgba(163,50,74,.08); }
+.tag-plate-person{ background:rgba(179,165,143,.22); }
+.tag-plate-infinitive{ background:var(--gray-light); }
+.tag-plate-person .tag.accent{ color:#8a6d3b; }
+#questionArea{ }
+.flashcard-front .tags{ display:flex; width:fit-content; margin:0 0 16px; font-weight:normal; }
+.flashcard-back .tags{ display:flex; width:fit-content; margin:0 0 16px; }
 .tag{ font-family:'IBM Plex Mono',monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; color:var(--gray); }
 .tag.accent{ color:var(--bordeaux); }
 .tag::before{ content:'· '; color:var(--gray); }
+.tag-plate .tag:first-child::before{ content:none; }
 
 .pronoun-line{ font-family:'IBM Plex Serif',serif; font-style:italic; font-size:1.15rem; color:var(--gray); margin-bottom:2px; }
-.verb-display{ font-family:'IBM Plex Serif',serif; font-weight:600; font-size:2.6rem; letter-spacing:-.01em; margin:2px 0 34px; }
+.verb-display{ font-family:'IBM Plex Serif',serif; font-weight:600; font-size:2.6rem; letter-spacing:-.01em; margin:2px 0 28px; }
 .verb-display.long{ font-size:1.7rem; line-height:1.3; }
 .verb-info-toggle{ font-family:'IBM Plex Mono',monospace; font-size:.72rem; font-weight:400; color:var(--gray); border:1px solid var(--gray-light); border-radius:10px; padding:2px 8px; display:inline-flex; align-items:center; justify-content:center; vertical-align:middle; margin-left:10px; cursor:pointer; }
 .verb-info-pop{ display:block; font-family:'IBM Plex Mono',monospace; font-size:.9rem; font-weight:400; color:var(--ink); background:#fafafa; border:1px solid var(--gray-light); padding:8px 12px; border-radius:2px; margin-top:10px; width:fit-content; }
 .extra-form{ color:#c2c2c2; }
 
 #activityStage{ }
-.options-row{ display:grid; grid-template-columns:1fr 1fr; gap:8px 20px; margin:0 0 34px; }
+.options-row{ display:grid; grid-template-columns:1fr 1fr; gap:2px 20px; margin:-24px 0 24px; }
 .opt-btn{
-  font-family:'IBM Plex Mono',monospace; font-size:1rem; text-align:left; padding:13px 12px;
+  font-family:'IBM Plex Mono',monospace; font-size:1rem; text-align:left; padding:9px 12px;
   border:none; background:transparent; color:var(--ink); cursor:pointer;
   display:flex; align-items:center; gap:12px; width:100%;
 }
@@ -179,13 +192,13 @@ input#answer.wrong{ border-color:var(--accent); color:var(--accent); }
 input#answer.correct{ border-color:var(--ok); color:var(--ok); }
 input#answer.almost{ border-color:var(--warn); color:var(--warn); }
 
-.actions{ display:flex; justify-content:space-between; align-items:center; margin-top:24px; }
+.actions{ display:flex; justify-content:space-between; align-items:center; margin-top:32px; }
 button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cursor:pointer; background:none; padding:0; }
 #checkBtn{ color:var(--bg); background:var(--ink); padding:10px 22px; border-radius:2px; transition:background .12s ease; }
-.flashcard-flipper{ perspective:1400px; margin:2px 0 34px; cursor:pointer; }
-.flashcard-inner{ position:relative; min-height:130px; transition:transform .5s cubic-bezier(.45,.1,.15,1); transform-style:preserve-3d; }
+.flashcard-flipper{ perspective:1400px; margin:2px 0 0; padding-bottom:36px; cursor:pointer; }
+.flashcard-inner{ position:relative; min-height:140px; transition:transform .5s cubic-bezier(.45,.1,.15,1); transform-style:preserve-3d; }
 .flashcard-inner.flipped{ transform:rotateY(180deg); }
-.flashcard-front, .flashcard-back{ position:absolute; top:0; left:0; width:100%; box-sizing:border-box; padding:24px 26px; border:1px solid var(--gray-light); border-radius:8px; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+.flashcard-front, .flashcard-back{ position:absolute; top:0; left:0; width:100%; height:140px; box-sizing:border-box; padding:16px 20px; border:1px solid var(--gray-light); border-radius:8px; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
 .flashcard-front{ font-family:'IBM Plex Serif',serif; font-weight:600; font-size:2.6rem; letter-spacing:-.01em; }
 .flashcard-back{ transform:rotateY(180deg); }
 .flash-answer-correct{ font-family:'IBM Plex Serif',serif; font-weight:600; font-size:2.6rem; letter-spacing:-.01em; color:var(--ok); }
@@ -236,7 +249,11 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
 
   <div class="mode-switcher" id="modeSwitcher"></div>
 
-  <div class="tags" id="tags"></div>
+  <div class="tags" id="tags">
+    <span class="tag-plate tag-plate-person" id="tagsPerson"></span>
+    <span class="tag-plate tag-plate-tense" id="tagsTense"></span>
+  </div>
+  <span id="tagsAnchor" style="display:none;"></span>
 
   <div id="questionArea">
     <div class="pronoun-line" id="pronounLine"></div>
@@ -248,6 +265,11 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
       <div class="flashcard-inner" id="flashcardInner">
         <div class="flashcard-front" id="flashcardFront"></div>
         <div class="flashcard-back">
+          <div class="tags" id="tagsBack">
+            <span class="tag-plate tag-plate-infinitive" id="tagInfinitive"></span>
+            <span class="tag-plate tag-plate-person" id="tagsPersonBack"></span>
+            <span class="tag-plate tag-plate-tense" id="tagsTenseBack"></span>
+          </div>
           <div class="flash-answer-correct" id="flashAnswerCorrect"></div>
         </div>
       </div>
@@ -288,14 +310,6 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
         <div class="opt-row" id="onlyManualChip" style="margin-top:8px;"></div>
       </div>
       <div class="f-group">
-        <span class="f-label" id="labelVariedad">Variety</span>
-        <div class="radio-inline" id="variedadRadio">
-          <label><input type="radio" name="variedad" value="estandar" checked><span id="vEstandar">standard Latam (tú / ustedes)</span></label>
-          <label><input type="radio" name="variedad" value="rioplatense"><span id="vRio">Rioplatense (vos)</span></label>
-          <label><input type="radio" name="variedad" value="espana"><span id="vEsp">Spain (vosotros)</span></label>
-        </div>
-      </div>
-      <div class="f-group">
         <span class="f-label" id="labelVocabulario">Vocabulary</span>
         <div class="radio-inline" id="nivelRadio">
           <label><input type="radio" name="nivel" value="1" checked><span id="nivBasico">basic</span></label>
@@ -321,6 +335,10 @@ button{ font-family:'Inter'; font-weight:600; font-size:.85rem; border:none; cur
           <summary class="f-sub"><span id="moodImperativo">Imperative</span><span class="select-all-icon" id="selAllImp" title="">☑</span></summary>
           <div class="opt-row" id="tenseChipsImp"></div>
         </details>
+      </div>
+      <div class="f-group">
+        <span class="f-label" id="labelPersona">Person</span>
+        <div class="opt-row" id="personaChips"></div>
       </div>
       <div class="f-group">
         <span class="f-label" id="labelFormas">Special forms</span>
@@ -1067,8 +1085,7 @@ function verbCategory3(v){
 }
 const ESTAR_OBJ = VERBS.find(v=>v.inf==='estar');
 
-const PRONOUNS = ['yo','tú','él / ella / usted','nosotros / nosotras','ellos / ellas / ustedes','vosotros / vosotras'];
-const GUSTAR_PRONOUNS = ['a mí','a ti','a él / ella / usted','a nosotros/as','a ellos / ellas / ustedes','a vosotros/as'];
+
 const GUSTAR_OBJ = ['me','te','le','nos','les','os'];
 
 const TENSE_GROUPS = {
@@ -1093,13 +1110,6 @@ const TENSE_NAMES_EN = {
   impTuAfirm:'pure imperative (tú, vos, vosotros affirmative)', impOtras:'subjunctive with imperative value (usted, nosotros, ustedes and/or negative)',
 };
 function TN(id){ return (lang==='es' ? TENSE_NAMES_ES : TENSE_NAMES_EN)[id]; }
-/* the 7 person+polarity combinations that make up "impOtras" */
-const IMP_OTRAS_COMBOS = [
-  {person:0, neg:true},
-  {person:1, neg:false},{person:1, neg:true},
-  {person:2, neg:false},{person:2, neg:true},
-  {person:3, neg:false},{person:3, neg:true},
-];
 const STRUCT_NAMES = { perifrastico:'ir + a + infinitivo', gustarE:'tipo "gustar"', gerundio:'estar + gerundio' };
 const SIMPLE_SENTENCE_TENSES = ['presente','preterito','futuro','subjuntivo'];
 const STRUCT_OPTIONS = ['perifrastico','gerundio','gustarE'];
@@ -1214,36 +1224,34 @@ let lang = 'en';
 let howToOpen = false;
 const I18N = {
   es: {
-    title:'Práctica de conjugación', filtros:'Filtros', variedad:'Variedad', vocabulario:'Vocabulario',
+    title:'Práctica de conjugación', filtros:'Filtros', persona:'Persona', vocabulario:'Vocabulario',
     tipoDeVerbo:'Tipo de verbo', tiemposVerbales:'Tiempos verbales', formasEspeciales:'Formas especiales',
-    modosDrilling:'Modos de drilling', modoManual:'Modo manual - Verbos específicos',
+    modoManual:'Modo manual - Verbos específicos',
     manualPlaceholder:'ej. hablar, tener, ir', check:'Comprobar', prev:'← Anterior', next:'Siguiente →',
     correcto:'Correcto', formaCorrecta:'Forma correcta: ', watchAccent:' — presta atención a las tildes',
     noVerbs:'No hay verbos que cumplan estos filtros. Ajustá el nivel, tipo, tiempo o estructura.',
     afirmativo:'afirmativo', negativo:'negativo',
     basico:'básico', intermedio:'intermedio', avanzado:'avanzado',
-    estandarLabel:'estándar Latam (tú / ustedes)', rioLabel:'rioplatense (vos)', espLabel:'España (vosotros)',
     escribirForma:'escribir la forma', opcionMultiple:'opción múltiple',
     verbosPronominales:'verbos pronominales', soloEstasFormas:'solo estas formas', soloEstosVerbos:'solo estos verbos',
     gustarTipo:'tipo "gustar"', expresarFuturo:'expresar futuro', expresarFuturoPasado:'expresar futuro en el pasado',
     correctasLabel:'correctas', incorrectasLabel:'incorrectas',
-    moodIndicativo:'Indicativo', moodSubjuntivo:'Subjuntivo', moodImperativo:'Imperativo', selectAll:'todos', createdBy:'Creado por', reportError:'Feedback', imperativeLabel:'Imperativo', conjugatorFab:'¿No te acuerdas? Revisa las conjugaciones aquí.', conjugatorHint:'Escribe el verbo que quieres conjugar', orthoCategoryLabel:'regular con cambio ortográfico', showAnswer:'Ver respuesta', flashAgain:'De nuevo', flashGotIt:'Lo sabía',
+    moodIndicativo:'Indicativo', moodSubjuntivo:'Subjuntivo', moodImperativo:'Imperativo', selectAll:'todos', createdBy:'Creado por', reportError:'Feedback', imperativeLabel:'Imperativo', conjugatorFab:'¿No te acuerdas? Revisa las conjugaciones aquí.', conjugatorHint:'Escribe el verbo que quieres conjugar', orthoCategoryLabel:'regular con cambio ortográfico', showAnswer:'Ver respuesta', flashAgain:'De nuevo', flashGotIt:'Lo sabía', modoAleatorio:'random',
   },
   en: {
-    title:'Spanish Conjugation App', filtros:'Filters', variedad:'Variety', vocabulario:'Vocabulary',
+    title:'Spanish Conjugation App', filtros:'Filters', persona:'Person', vocabulario:'Vocabulary',
     tipoDeVerbo:'Verb type', tiemposVerbales:'Verb tenses', formasEspeciales:'Special forms',
-    modosDrilling:'Drill modes', modoManual:'Manual mode - Specific verbs',
+    modoManual:'Manual mode - Specific verbs',
     manualPlaceholder:'e.g. hablar, tener, ir', check:'Check', prev:'← Previous', next:'Next →',
     correcto:'Correct', formaCorrecta:'Correct form: ', watchAccent:' — watch the accent marks',
     noVerbs:'No verbs match these filters. Adjust the level, type, tense, or structure.',
     afirmativo:'affirmative', negativo:'negative',
     basico:'basic', intermedio:'intermediate', avanzado:'advanced',
-    estandarLabel:'standard Latam (tú / ustedes)', rioLabel:'Rioplatense (vos)', espLabel:'Spain (vosotros)',
     escribirForma:'type the form', opcionMultiple:'multiple choice',
     verbosPronominales:'pronominal verbs', soloEstasFormas:'only these forms', soloEstosVerbos:'only these verbs',
     gustarTipo:'"gustar" type', expresarFuturo:'expressing future', expresarFuturoPasado:'expressing future in the past',
     correctasLabel:'correct', incorrectasLabel:'incorrect',
-    moodIndicativo:'Indicative', moodSubjuntivo:'Subjunctive', moodImperativo:'Imperative', selectAll:'all', createdBy:'Created by', reportError:'Feedback', imperativeLabel:'Imperative', conjugatorFab:'Can\'t remember? Check the conjugations here.', conjugatorHint:'Type the verb you want to conjugate', orthoCategoryLabel:'regular with spelling change', showAnswer:'Show answer', flashAgain:'Again', flashGotIt:'Got it',
+    moodIndicativo:'Indicative', moodSubjuntivo:'Subjunctive', moodImperativo:'Imperative', selectAll:'all', createdBy:'Created by', reportError:'Feedback', imperativeLabel:'Imperative', conjugatorFab:'Can\'t remember? Check the conjugations here.', conjugatorHint:'Type the verb you want to conjugate', orthoCategoryLabel:'regular with spelling change', showAnswer:'Show answer', flashAgain:'Again', flashGotIt:'Got it', modoAleatorio:'random',
   },
 };
 function tr(key){ return I18N[lang][key]; }
@@ -1257,27 +1265,55 @@ function structLabel(id){
 const HOW_TO_HTML = {
   en: `
     <h3>The basics</h3>
-    <p>Type the correct conjugated form and press <b>Enter</b> (or click <b>Check</b>). In multiple choice, click an option or press <b>1</b>–<b>4</b>.</p>
+    <ul>
+      <li><b>Type the form</b>: press Enter or click Check</li>
+      <li><b>Multiple choice</b>: click an option or press 1–4</li>
+      <li><b>Flashcards</b>: click the card (or press Enter) to flip it, then choose Again or Got it</li>
+      <li><b>Random</b>: mixes all three modes above</li>
+    </ul>
+    <p><b>← →</b> or <b>Enter</b> moves to the next question once you've answered. Click <b>Eng.</b> for the translation.</p>
     <ul>
       <li><b class="color-ok">Green</b>: correct</li>
-      <li><b class="color-almost">Yellow</b>: correct, but missing an accent mark.</li>
-      <li><b class="color-bad">Red</b>: incorrect (the right answer is shown)</li>
+      <li><b class="color-almost">Yellow</b>: correct, missing an accent</li>
+      <li><b class="color-bad">Red</b>: incorrect (correct answer shown)</li>
     </ul>
-    <p>Use <b>← →</b> to move between questions. Click <b>Eng.</b> next to a verb for its translation.</p>
     <h3>Filters</h3>
-    <p>Tap "Filters" to customize practice by verb type, tense, vocabulary level, regional variety (tú/vos/vosotros), and special forms ("ir + a", "estar + gerund (-ing)", "gustar"-type verbs, reflexive/pronominal verbs). Click the <span class="icon-inline">i</span> next to any tense for a full example, or the ☑ to select a whole group at once.</p>
+    <ul>
+      <li><b>Manual mode</b>: type specific verbs to practice; "only these verbs" restricts practice to just them</li>
+      <li><b>Vocabulary</b>: basic / intermediate / advanced</li>
+      <li><b>Verb type</b>: regular / irregular</li>
+      <li><b>Verb tenses</b>: pick any combination; <span class="icon-inline">i</span> shows a full example, ☑ selects a whole group</li>
+      <li><b>Person</b>: choose exactly which of yo/tú/vos/usted/él·ella/nosotros/ustedes/vosotros/ellos·ellas to practice</li>
+      <li><b>Special forms</b>: "ir + a", "estar + gerund", "gustar"-type, reflexive/pronominal verbs — "only these forms" restricts practice to just what's checked here</li>
+    </ul>
+    <h3>Verb conjugator</h3>
+    <p>Can't remember a form? Tap the button at the bottom right. It opens on the verb and tense you're practicing. Type any verb to look it up — the full table stays visible.</p>
   `,
   es: `
     <h3>Lo básico</h3>
-    <p>Escribe la forma conjugada correcta y presiona <b>Enter</b> (o haz clic en <b>Comprobar</b>). En opción múltiple, haz clic en una opción o presiona <b>1</b>–<b>4</b>.</p>
+    <ul>
+      <li><b>Escribir la forma</b>: presiona Enter o haz clic en Comprobar</li>
+      <li><b>Opción múltiple</b>: haz clic en una opción o presiona 1–4</li>
+      <li><b>Flashcards</b>: haz clic en la tarjeta (o presiona Enter) para darla vuelta, y elige De nuevo o Lo sabía</li>
+      <li><b>Random</b>: mezcla los tres modos anteriores</li>
+    </ul>
+    <p><b>← →</b> o <b>Enter</b> te lleva a la siguiente pregunta una vez que respondiste. Haz clic en <b>Eng.</b> para ver la traducción.</p>
     <ul>
       <li><b class="color-ok">Verde</b>: correcta</li>
-      <li><b class="color-almost">Amarillo</b>: correcta, pero le falta una tilde.</li>
+      <li><b class="color-almost">Amarillo</b>: correcta, pero le falta una tilde</li>
       <li><b class="color-bad">Rojo</b>: incorrecta (se muestra la respuesta correcta)</li>
     </ul>
-    <p>Usa <b>← →</b> para moverte entre preguntas. Haz clic en <b>Eng.</b> al lado de un verbo para ver su traducción.</p>
     <h3>Filtros</h3>
-    <p>Toca "Filtros" para personalizar la práctica por tipo de verbo, tiempo, nivel de vocabulario, variedad regional (tú/vos/vosotros), y formas especiales ("ir + a", "estar + gerundio", verbos tipo "gustar", verbos reflexivos/pronominales). Haz clic en la <span class="icon-inline">i</span> al lado de cualquier tiempo para ver un ejemplo completo, o en el ☑ para seleccionar todo un grupo de una vez.</p>
+    <ul>
+      <li><b>Modo manual</b>: escribe verbos específicos para practicar; "solo estos verbos" restringe la práctica solo a esos</li>
+      <li><b>Vocabulario</b>: básico / intermedio / avanzado</li>
+      <li><b>Tipo de verbo</b>: regular / irregular</li>
+      <li><b>Tiempos verbales</b>: elige cualquier combinación; <span class="icon-inline">i</span> muestra un ejemplo completo, ☑ selecciona todo un grupo</li>
+      <li><b>Persona</b>: elige exactamente cuáles de yo/tú/vos/usted/él·ella/nosotros/ustedes/vosotros/ellos·ellas practicar</li>
+      <li><b>Formas especiales</b>: "ir + a", "estar + gerundio", verbos tipo "gustar", verbos reflexivos/pronominales — "solo estas formas" restringe la práctica solo a lo que esté tildado acá</li>
+    </ul>
+    <h3>Conjugador de verbos</h3>
+    <p>¿No te acuerdas de una forma? Toca el botón de abajo a la derecha. Se abre en el verbo y tiempo que estás practicando. Escribe cualquier verbo para buscarlo — la tabla completa queda a la vista.</p>
   `,
 };
 let openInfoPop = null;
@@ -1303,13 +1339,16 @@ let mcButtons = [];
 let questionQueue = [];
 let historyStack = [];
 let historyIndex = -1;
-let variedad = 'estandar';
+let personasActivos = new Set(['yo','tu','usted','elElla','nosotros','ustedes','ellosEllas']);
+const PERSON_LABELS = ['yo','tu','vos','usted','elElla','nosotros','ustedes','vosotros','ellosEllas'];
+const PERSON_SLOT = {yo:0, tu:1, vos:1, usted:2, elElla:2, nosotros:3, ustedes:4, vosotros:5, ellosEllas:4};
+const PERSON_TEXT = {yo:'yo', tu:'tú', vos:'vos', usted:'usted', elElla:'él · ella', nosotros:'nosotros · nosotras', ustedes:'ustedes', vosotros:'vosotros · vosotras', ellosEllas:'ellos · ellas'};
 let nivelMax=1, tiposActivos=new Set(['regular','irregular']), tensesActivos=new Set(['presente']),
     structsActivos=new Set(), modosActivos=new Set(['solo']), manualVerbs=[], onlyManual=false, onlyEspeciales=false, current=null,
     pronominalIncluido=false,
     correctCount=0, wrongCount=0, streak=0, answered=false, flashRevealed=false;
 
-document.querySelectorAll('input[name="variedad"]').forEach(r=>r.addEventListener('change',e=>{variedad=e.target.value; refresh();}));
+buildChipGroup('personaChips', PERSON_LABELS, l=>PERSON_TEXT[l], personasActivos);
 document.querySelectorAll('input[name="nivel"]').forEach(r=>r.addEventListener('change',e=>{nivelMax=parseInt(e.target.value); refresh();}));
 
 const EXAMPLE_VERBS = ['hablar','comer','vivir'];
@@ -1469,6 +1508,7 @@ function buildTenseChipGroup(containerId, options){
     info.textContent='i';
     info.style.cssText='font-family:IBM Plex Mono,monospace;font-size:.62rem;color:var(--gray);border:1px solid var(--gray-light);border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;';
     const pop=document.createElement('div');
+    pop.className='i-popover';
     pop.style.cssText='display:none;font-family:IBM Plex Mono,monospace;font-size:.68rem;line-height:1.8;color:var(--ink);background:#fafafa;border:1px solid var(--gray-light);padding:8px 9px;border-radius:2px;margin:2px 0 6px;width:100%;';
     pop.innerHTML = tenseExample(val);
     info.addEventListener('click',(e)=>{
@@ -1506,12 +1546,15 @@ function structExample(id){
   }
   if(id==='gustarE'){
     const lines=[];
-    lines.push(GUSTAR_OBJ[0]+' gusta (yo)');
-    lines.push(tuVosLines(GUSTAR_OBJ[1]+' gusta', GUSTAR_OBJ[1]+' gusta'));
-    lines.push(GUSTAR_OBJ[2]+' gusta (él, ella, usted)');
-    lines.push(GUSTAR_OBJ[3]+' gusta (nosotros)');
-    lines.push(vosotrosLine(GUSTAR_OBJ[5]+' gusta'));
-    lines.push(GUSTAR_OBJ[4]+' gusta (ustedes, ellos, ellas)');
+    const note = lang==='es'
+      ? 'Si eres principiante, en Filtros &rarr; Persona activa solo "él · ella" y "ellos · ellas".'
+      : 'If you\'re a beginner, in Filters &rarr; Person, turn on only "él · ella" and "ellos · ellas".';
+    lines.push(note+'<br>');
+    lines.push(GUSTAR_OBJ[1]+' gusto (yo &rarr; a ti)');
+    lines.push(GUSTAR_OBJ[0]+' gustas (tú &rarr; a mí)');
+    lines.push(GUSTAR_OBJ[3]+' gusta (él, ella, usted &rarr; a nosotros)');
+    lines.push(GUSTAR_OBJ[2]+' gustamos (nosotros &rarr; a él, ella, usted)');
+    lines.push(GUSTAR_OBJ[0]+' gustan (ustedes, ellos, ellas &rarr; a mí)');
     return lines.join('<br>');
   }
   if(id==='gerundio'){
@@ -1554,6 +1597,7 @@ function buildStructChipGroup(containerId, options){
     info.textContent='i';
     info.style.cssText='font-family:IBM Plex Mono,monospace;font-size:.62rem;color:var(--gray);border:1px solid var(--gray-light);border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;';
     const pop=document.createElement('div');
+    pop.className='i-popover';
     pop.style.cssText='display:none;font-family:IBM Plex Mono,monospace;font-size:.68rem;line-height:1.8;color:var(--ink);background:#fafafa;border:1px solid var(--gray-light);padding:8px 9px;border-radius:2px;margin:2px 0 6px;width:100%;';
     pop.innerHTML = structExample(val);
     info.addEventListener('click',(e)=>{
@@ -1580,7 +1624,7 @@ function buildChipGroup(containerId, options, labelFn, activeSet, extraClass){
     chip.textContent=labelFn(val);
     chip.addEventListener('click',()=>{
       if(activeSet.has(val)){
-        if(activeSet===tiposActivos&&activeSet.size===1) return;
+        if((activeSet===tiposActivos||activeSet===personasActivos)&&activeSet.size===1) return;
         activeSet.delete(val); chip.classList.remove('active');
       } else { activeSet.add(val); chip.classList.add('active'); }
       refresh();
@@ -1633,14 +1677,15 @@ function buildPronominalToggle(){
 buildPronominalToggle();
 function buildModeSwitcher(){
   const el=document.getElementById('modeSwitcher'); el.innerHTML='';
-  const options=['solo','multiple','flashcards'];
-  const labels={solo:tr('escribirForma'), multiple:tr('opcionMultiple'), flashcards:'flashcards'};
+  const options=['solo','multiple','flashcards','random'];
+  const labels={solo:tr('escribirForma'), multiple:tr('opcionMultiple'), flashcards:'flashcards', random:tr('modoAleatorio')};
   options.forEach(val=>{
     const btn=document.createElement('button'); btn.type='button';
-    btn.className='mode-switcher-btn'+(modosActivos.has(val)?' active':'');
+    const isActive = val==='random' ? modosActivos.size>1 : (modosActivos.size===1 && modosActivos.has(val));
+    btn.className='mode-switcher-btn'+(isActive?' active':'');
     btn.textContent=labels[val];
     btn.addEventListener('click',()=>{
-      modosActivos = new Set([val]);
+      modosActivos = val==='random' ? new Set(['solo','multiple','flashcards']) : new Set([val]);
       buildModeSwitcher();
       refresh();
     });
@@ -1732,7 +1777,7 @@ function buildQueue(){
   const types=activeQuestionTypes();
   const combos=[];
   const privileged = (manualVerbs.length && !onlyManual) ? new Set(manualVerbs) : null;
-  const nPersonsNow = variedad==='espana' ? 6 : 5;
+  const activePersonLabels = PERSON_LABELS.filter(l=>personasActivos.has(l));
   types.forEach(qt=>{
     if(qt.kind==='struct'){
       let verbSource = qt.id==='gustarE' ? gustarPool() : pool();
@@ -1742,20 +1787,41 @@ function buildQueue(){
       verbSource.forEach(verb=>{
         const copies = (privileged && privileged.has(verb)) ? MANUAL_PRIVILEGE_WEIGHT : 1;
         auxPool.forEach(auxTense=>{
-          for(let person=0; person<nPersonsNow; person++){
-            for(let c=0;c<copies;c++) combos.push({tense:qt.id, auxTense, verb, person});
+          if(qt.id==='gustarE'){
+            activePersonLabels.forEach(objLabel=>{
+              activePersonLabels.forEach(subjLabel=>{
+                if(subjLabel===objLabel) return; // avoid "me gusto a mí" (exact same identity as both subject and object)
+                const person=PERSON_SLOT[objLabel], subjPerson=PERSON_SLOT[subjLabel];
+                for(let c=0;c<copies;c++) combos.push({tense:qt.id, auxTense, verb, person, personLabel:objLabel, subjPerson, subjPersonLabel:subjLabel});
+              });
+            });
+          } else {
+            activePersonLabels.forEach(label=>{
+              const person=PERSON_SLOT[label];
+              for(let c=0;c<copies;c++) combos.push({tense:qt.id, auxTense, verb, person, personLabel:label});
+            });
           }
         });
       });
     } else if(qt.id==='impTuAfirm'){
       const verbSource = pool();
+      const tuVosVariants = [];
+      if(personasActivos.has('tu')) tuVosVariants.push('tu');
+      if(personasActivos.has('vos')) tuVosVariants.push('vos');
       verbSource.forEach(verb=>{
         const copies = (privileged && privileged.has(verb)) ? MANUAL_PRIVILEGE_WEIGHT : 1;
-        for(let c=0;c<copies;c++) combos.push({tense:qt.id, verb, person:0});
+        tuVosVariants.forEach(variant=>{
+          for(let c=0;c<copies;c++) combos.push({tense:qt.id, verb, person:0, personLabel:variant});
+        });
       });
     } else if(qt.id==='impOtras'){
       const verbSource = pool();
-      const combosList = variedad==='espana' ? IMP_OTRAS_COMBOS.concat([{person:5,neg:false},{person:5,neg:true}]) : IMP_OTRAS_COMBOS;
+      const combosList = [];
+      if(personasActivos.has('tu') || personasActivos.has('vos')) combosList.push({person:0, neg:true});
+      if(personasActivos.has('usted')) combosList.push({person:1, neg:false},{person:1, neg:true});
+      if(personasActivos.has('nosotros')) combosList.push({person:2, neg:false},{person:2, neg:true});
+      if(personasActivos.has('ustedes')) combosList.push({person:3, neg:false},{person:3, neg:true});
+      if(personasActivos.has('vosotros')) combosList.push({person:5, neg:false},{person:5, neg:true});
       verbSource.forEach(verb=>{
         const copies = (privileged && privileged.has(verb)) ? MANUAL_PRIVILEGE_WEIGHT : 1;
         combosList.forEach(combo=>{
@@ -1766,9 +1832,10 @@ function buildQueue(){
       const verbSource = pool();
       verbSource.forEach(verb=>{
         const copies = (privileged && privileged.has(verb)) ? MANUAL_PRIVILEGE_WEIGHT : 1;
-        for(let person=0; person<nPersonsNow; person++){
-          for(let c=0;c<copies;c++) combos.push({tense:qt.id, verb, person});
-        }
+        activePersonLabels.forEach(label=>{
+          const person=PERSON_SLOT[label];
+          for(let c=0;c<copies;c++) combos.push({tense:qt.id, verb, person, personLabel:label});
+        });
       });
     }
   });
@@ -1786,7 +1853,7 @@ function nextQuestion(){
   if(questionQueue.length===0){ current=null; return null; }
   const combo=questionQueue.shift();
   const mode=modes[Math.floor(Math.random()*modes.length)];
-  const q={mode, tense:combo.tense, auxTense:combo.auxTense, verb:combo.verb, person:combo.person, neg:combo.neg};
+  const q={mode, tense:combo.tense, auxTense:combo.auxTense, verb:combo.verb, person:combo.person, neg:combo.neg, subjPerson:combo.subjPerson, personLabel:combo.personLabel, subjPersonLabel:combo.subjPersonLabel};
   historyStack.push(q); historyIndex=historyStack.length-1;
   current=q; return q;
 }
@@ -1799,12 +1866,12 @@ function previousQuestion(){
 function compoundForm(verb,auxArr,p){ const part=participio(verb); if(verb.pronominal){ const pron=['me ','te ','se ','nos ','se ']; return pron[p]+auxArr[p]+' '+part; } return auxArr[p]+' '+part; }
 function computeAnswer(q){
   const v=q.verb,p=q.person,t=q.tense;
-  if(p===5 && variedad==='espana'){
+  if(p===5){
     const vf = vosotrosForm(v, t);
     if(vf!==null) return vf;
   }
   if(t==='perifrastico'){
-    const irForm = computeAnswer({tense:q.auxTense, verb:IR_OBJ, person:p});
+    const irForm = computeAnswer({tense:q.auxTense, verb:IR_OBJ, person:p, personLabel:q.personLabel});
     if(v.pronominal){
       const pron = ['me','te','se','nos','se','os'][p];
       return irForm+' a '+v.baseInf+pron; // "voy a quedarme"
@@ -1812,22 +1879,22 @@ function computeAnswer(q){
     return irForm+' a '+v.inf;
   }
   if(t==='gerundio'){
-    const estarForm = computeAnswer({tense:q.auxTense, verb:ESTAR_OBJ, person:p});
+    const estarForm = computeAnswer({tense:q.auxTense, verb:ESTAR_OBJ, person:p, personLabel:q.personLabel});
     if(v.pronominal){
       const pron = ['me','te','se','nos','se','os'][p];
       return estarForm+' '+accentGerundioForAttach(gerundio(v))+pron; // "estoy quedándome"
     }
     return estarForm+' '+gerundio(v);
   }
-  if(t==='gustarE') return GUSTAR_OBJ[p]+' '+computeAnswer({tense:q.auxTense, verb:v, person:2});
+  if(t==='gustarE') return GUSTAR_OBJ[p]+' '+computeAnswer({tense:q.auxTense, verb:v, person: q.subjPerson!==undefined ? q.subjPerson : 2, personLabel:q.subjPersonLabel});
   if(t==='impTuAfirm'){
-    if(variedad==='rioplatense') return vosImperativoAfirm(v);
+    if(q.personLabel==='vos') return vosImperativoAfirm(v);
     if(v.pronominal) return imperativoAfirmativoReflexivo(v,0);
     return tuImperativo(v);
   }
   if(t==='impOtras'){
     const s=v.table.subjuntivo;
-    if(p===5){ // vosotros (España)
+    if(p===5){ // vosotros
       return q.neg ? vosotrosImperativoNeg(v) : vosotrosImperativoAfirm(v);
     }
     if(q.neg){
@@ -1848,10 +1915,34 @@ function computeAnswer(q){
     if(v.pronominal){ const pron=['me ','te ','se ','nos ','se ']; return pron[p]+forms[p]; }
     return forms[p];
   }
-  if(t==='presente' && p===1 && variedad==='rioplatense') return vosPresente(v);
+  if(t==='presente' && p===1 && q.personLabel==='vos') return vosPresente(v);
   return v.table[t][p];
 }
 
+function buildTagContent(q, tenseWrap, personWrap){
+  const impOtrasPersonZeroLabel = (personasActivos.has('tu') && personasActivos.has('vos')) ? 'tú / vos' : (personasActivos.has('vos') ? 'vos' : 'tú');
+  const IMP_OTRAS_PERSON_LABEL = [impOtrasPersonZeroLabel,'usted','nosotros','ustedes',null,'vosotros'];
+  tenseWrap.innerHTML=''; personWrap.innerHTML='';
+  const t1=document.createElement('span'); t1.className='tag accent';
+  const PERIFRASTICO_LABEL = { presente:tr('expresarFuturo'), imperfecto:tr('expresarFuturoPasado') };
+  if(q.tense==='impOtras'){
+    t1.textContent = tr('imperativeLabel')+': '+(q.neg?tr('negativo'):tr('afirmativo'));
+  } else if(q.tense==='perifrastico'){
+    t1.textContent = PERIFRASTICO_LABEL[q.auxTense] || TN(q.auxTense);
+  } else {
+    t1.textContent = TN(q.tense) || (structLabel(q.tense) + ' · ' + TN(q.auxTense));
+  }
+  tenseWrap.appendChild(t1);
+  const qIsGustar = q.tense==='gustarE';
+  if(qIsGustar){
+    const t1b=document.createElement('span'); t1b.className='tag accent';
+    t1b.textContent = PERSON_TEXT[q.subjPersonLabel];
+    personWrap.appendChild(t1b);
+  }
+  const t2=document.createElement('span'); t2.className='tag accent';
+  t2.textContent = q.tense==='impOtras' ? IMP_OTRAS_PERSON_LABEL[q.person] : (qIsGustar ? ('a '+PERSON_TEXT[q.personLabel]) : PERSON_TEXT[q.personLabel]);
+  personWrap.appendChild(t2);
+}
 async function renderQuestion(q){
   answered=false;
   flashRevealed=false;
@@ -1872,31 +1963,17 @@ async function renderQuestion(q){
   if(!q){
     document.getElementById('warnBox').innerHTML='<div class="warn">'+tr('noVerbs')+'</div>';
     document.getElementById('pronounLine').textContent='';
-    document.getElementById('tags').innerHTML='';
+    document.getElementById('tagsTense').innerHTML='';
+    document.getElementById('tagsPerson').innerHTML='';
     return;
   }
 
   const needsLongDisplay = q.tense==='perifrastico' || q.tense==='gerundio';
-  const IMP_OTRAS_PERSON_LABEL = ['tú','usted','nosotros','ustedes',null,'vosotros'];
   const isGustar=q.tense==='gustarE'; const isImp=q.tense==='impTuAfirm'||q.tense==='impOtras';
-  const pronounList = isGustar ? (variedad==='rioplatense' ? ['a mí','a vos','a él / ella / usted','a nosotros/as','a ellos / ellas / ustedes','a vosotros/as'] : GUSTAR_PRONOUNS)
-                     : (isImp ? [(variedad==='rioplatense'?'vos':'tú'),'usted','nosotros','ustedes',null,'vosotros / vosotras']
-                     : (variedad==='rioplatense' ? ['yo','vos','él / ella / usted','nosotros / nosotras','ellos / ellas / ustedes','vosotros / vosotras'] : PRONOUNS));
 
-  const tagWrap=document.getElementById('tags'); tagWrap.innerHTML='';
-  const t1=document.createElement('span'); t1.className='tag accent';
-  const PERIFRASTICO_LABEL = { presente:tr('expresarFuturo'), imperfecto:tr('expresarFuturoPasado') };
-  if(q.tense==='impOtras'){
-    t1.textContent = tr('imperativeLabel')+': '+IMP_OTRAS_PERSON_LABEL[q.person] + ', ' + (q.neg?tr('negativo'):tr('afirmativo'));
-  } else if(q.tense==='perifrastico'){
-    t1.textContent = PERIFRASTICO_LABEL[q.auxTense] || TN(q.auxTense);
-  } else {
-    t1.textContent = TN(q.tense) || (structLabel(q.tense) + ' · ' + TN(q.auxTense));
-  }
-  tagWrap.appendChild(t1);
-  const t2=document.createElement('span'); t2.className='tag accent';
-  t2.textContent = pronounList[q.person];
-  tagWrap.appendChild(t2);
+  const tenseWrap=document.getElementById('tagsTense');
+  const personWrap=document.getElementById('tagsPerson');
+  buildTagContent(q, tenseWrap, personWrap);
 
   const pronounLine=document.getElementById('pronounLine'); const verbDisplay=document.getElementById('verbDisplay');
   const useMC = q.mode==='multiple';
@@ -1909,15 +1986,32 @@ async function renderQuestion(q){
   else if(q.tense==='gerundio') vPrefix = 'estar + ';
 
   document.getElementById('flashcardInner').classList.remove('flipped');
+  const tagsEl = document.getElementById('tags');
   if(useFlash){
     verbDisplay.style.display='none';
     document.getElementById('flashcardFlipper').style.display='block';
     setVerbDisplay('flashcardFront', vPrefix, q.verb.inf, q.verb.tr);
+    document.getElementById('flashcardFront').insertBefore(tagsEl, document.getElementById('flashcardFront').firstChild);
+
+    const infTag=document.createElement('span'); infTag.className='tag';
+    infTag.textContent = q.verb.inf;
+    const infWrap=document.getElementById('tagInfinitive'); infWrap.innerHTML=''; infWrap.appendChild(infTag);
+    buildTagContent(q, document.getElementById('tagsTenseBack'), document.getElementById('tagsPersonBack'));
+
+    const CARD_BASE_HEIGHT = 140;
+    const front = document.getElementById('flashcardFront');
+    const back = document.querySelector('.flashcard-back');
+    front.style.height='auto'; back.style.height='auto';
+    const neededHeight = Math.max(CARD_BASE_HEIGHT, front.scrollHeight, back.scrollHeight);
+    front.style.height = neededHeight+'px';
+    back.style.height = neededHeight+'px';
+    document.getElementById('flashcardInner').style.minHeight = neededHeight+'px';
   } else {
     document.getElementById('flashcardFlipper').style.display='none';
     verbDisplay.style.display='block';
     verbDisplay.classList.toggle('long', needsLongDisplay);
     setVerbDisplay('verbDisplay', vPrefix, q.verb.inf, q.verb.tr);
+    document.getElementById('tagsAnchor').parentNode.insertBefore(tagsEl, document.getElementById('tagsAnchor'));
   }
 
   if(useMC){
@@ -1954,7 +2048,12 @@ async function renderQuestion(q){
    otherwise the odd-one-out (e.g. a 2-word compound form among 1-word forms) gives it away */
 function buildMCCandidates(q, correct){
   if(q.tense==='impOtras'){
-    const combosList = variedad==='espana' ? IMP_OTRAS_COMBOS.concat([{person:5,neg:false},{person:5,neg:true}]) : IMP_OTRAS_COMBOS;
+    const combosList = [];
+    if(personasActivos.has('tu') || personasActivos.has('vos')) combosList.push({person:0, neg:true});
+    if(personasActivos.has('usted')) combosList.push({person:1, neg:false},{person:1, neg:true});
+    if(personasActivos.has('nosotros')) combosList.push({person:2, neg:false},{person:2, neg:true});
+    if(personasActivos.has('ustedes')) combosList.push({person:3, neg:false},{person:3, neg:true});
+    if(personasActivos.has('vosotros')) combosList.push({person:5, neg:false},{person:5, neg:true});
     return combosList.filter(c=>!(c.person===q.person && c.neg===q.neg))
       .map(c=>computeAnswer({tense:q.tense, verb:q.verb, person:c.person, neg:c.neg}));
   }
@@ -1964,11 +2063,68 @@ function buildMCCandidates(q, correct){
   }
   // general case (plain tenses, compound tenses, obligación, perifrástico, tipo gustar):
   // vary the person, keep tense/auxTense fixed, so every option has the same shape as the correct answer
+  const activeLabels = PERSON_LABELS.filter(l=>personasActivos.has(l));
+  if(q.tense==='gustarE'){
+    // vary both the indirect-object person and the subject (who pleases, drives conjugation),
+    // so multiple choice also tests conjugation, not just pronoun-matching
+    const pairs=[];
+    activeLabels.forEach(objLabel=>{
+      activeLabels.forEach(subjLabel=>{
+        if(subjLabel===objLabel) return; // avoid "me gusto a mí" (same identity)
+        if(objLabel===q.personLabel && subjLabel===q.subjPersonLabel) return; // skip the correct pair
+        pairs.push([objLabel,subjLabel]);
+      });
+    });
+    shuffle(pairs);
+    const seen = new Set([correct]);
+    const out2=[];
+    for(const [objLabel,subjLabel] of pairs){
+      if(out2.length>=8) break;
+      const ans = computeAnswer({tense:q.tense, auxTense:q.auxTense, verb:q.verb, person:PERSON_SLOT[objLabel], personLabel:objLabel, subjPerson:PERSON_SLOT[subjLabel], subjPersonLabel:subjLabel});
+      if(seen.has(ans)) continue; // dedupe (e.g. usted/él·ella share a conjugation)
+      seen.add(ans); out2.push(ans);
+    }
+    // fallback: too few active person/subject pairs to fill 3 options (e.g. only "usted"+"él/ella" active) —
+    // also vary the underlying tense, first within the user's active tenses, then beyond them if still short.
+    if(out2.length<3){
+      const tryTenses=(tenseList)=>{
+        tenseList.forEach(t=>{
+          if(out2.length>=3) return;
+          if(t===q.auxTense) return;
+          const ans = computeAnswer({tense:q.tense, auxTense:t, verb:q.verb, person:q.person, personLabel:q.personLabel, subjPerson:q.subjPerson, subjPersonLabel:q.subjPersonLabel});
+          if(seen.has(ans)) return;
+          seen.add(ans); out2.push(ans);
+        });
+      };
+      tryTenses(SIMPLE_SENTENCE_TENSES.filter(t=>tensesActivos.has(t)));
+      if(out2.length<3) tryTenses(SIMPLE_SENTENCE_TENSES);
+    }
+    return out2;
+  }
   const out=[];
-  const nP = variedad==='espana' ? 6 : 5;
-  for(let p=0;p<nP;p++){
-    if(p===q.person) continue;
-    out.push(computeAnswer({tense:q.tense, auxTense:q.auxTense, verb:q.verb, person:p}));
+  const seen = new Set([correct]);
+  activeLabels.forEach(label=>{
+    if(label===q.personLabel) return;
+    const ans = computeAnswer({tense:q.tense, auxTense:q.auxTense, verb:q.verb, person:PERSON_SLOT[label], personLabel:label});
+    if(seen.has(ans)) return; // dedupe (e.g. usted/él·ella share a conjugation)
+    seen.add(ans); out.push(ans);
+  });
+  // fallback: if varying person alone didn't yield enough options (e.g. only "usted"+"él/ella" active,
+  // which share a conjugation), also vary the tense — first within the user's active tenses, then,
+  // if still short, from tenses outside the current filters. This only affects distractor options,
+  // never what's actually being asked.
+  if(out.length<3 && SIMPLE_SENTENCE_TENSES.includes(q.tense)){
+    const tryTenses=(tenseList)=>{
+      tenseList.forEach(t=>{
+        if(out.length>=3) return;
+        if(t===q.tense) return;
+        const ans = computeAnswer({tense:t, verb:q.verb, person:q.person, personLabel:q.personLabel});
+        if(seen.has(ans)) return;
+        seen.add(ans); out.push(ans);
+      });
+    };
+    tryTenses(SIMPLE_SENTENCE_TENSES.filter(t=>tensesActivos.has(t)));
+    if(out.length<3) tryTenses(SIMPLE_SENTENCE_TENSES);
   }
   return out;
 }
@@ -2051,6 +2207,7 @@ function updateScore(){
 function revealFlashcard(){
   if(!current || flashRevealed) return;
   flashRevealed = true;
+  document.getElementById('checkBtn').blur();
   const correct = computeAnswer(current);
   document.getElementById('flashAnswerCorrect').textContent = correct;
   document.getElementById('flashcardInner').classList.add('flipped');
@@ -2068,6 +2225,7 @@ function hideFlashcard(){
 document.getElementById('flashcardFlipper').addEventListener('click', ()=>{
   if(flashRevealed){ hideFlashcard(); } else { revealFlashcard(); }
 });
+document.getElementById('checkBtn').addEventListener('mousedown', e=>{ e.preventDefault(); });
 document.getElementById('checkBtn').addEventListener('click',()=>{
   if(current && current.mode==='flashcards'){ revealFlashcard(); }
   else { checkAnswer(); }
@@ -2075,7 +2233,7 @@ document.getElementById('checkBtn').addEventListener('click',()=>{
 document.getElementById('flashAgainBtn').addEventListener('click',()=>{
   if(!current) return;
   wrongCount++; streak=0; updateScore();
-  questionQueue.push({tense:current.tense, auxTense:current.auxTense, verb:current.verb, person:current.person, neg:current.neg});
+  questionQueue.push({tense:current.tense, auxTense:current.auxTense, verb:current.verb, person:current.person, neg:current.neg, subjPerson:current.subjPerson, personLabel:current.personLabel, subjPersonLabel:current.subjPersonLabel});
   renderQuestion(nextQuestion());
 });
 document.getElementById('flashGotItBtn').addEventListener('click',()=>{
@@ -2134,7 +2292,7 @@ function applyLanguage(){
   document.getElementById('howToPanel').innerHTML = HOW_TO_HTML[lang];
   document.getElementById('eyebrowTitle').textContent = tr('title');
   document.getElementById('filtrosLabel').textContent = tr('filtros');
-  document.getElementById('labelVariedad').textContent = tr('variedad');
+  document.getElementById('labelPersona').textContent = tr('persona');
   document.getElementById('labelVocabulario').textContent = tr('vocabulario');
   document.getElementById('labelTipo').textContent = tr('tipoDeVerbo');
   document.getElementById('labelTiempos').textContent = tr('tiemposVerbales');
@@ -2144,9 +2302,6 @@ function applyLanguage(){
   document.getElementById('checkBtn').textContent = tr('check');
   document.getElementById('prevBtn').textContent = tr('prev');
   document.getElementById('nextBtn').textContent = tr('next');
-  document.getElementById('vEstandar').textContent = tr('estandarLabel');
-  document.getElementById('vRio').textContent = tr('rioLabel');
-  document.getElementById('vEsp').textContent = tr('espLabel');
   document.getElementById('nivBasico').textContent = tr('basico');
   document.getElementById('nivIntermedio').textContent = tr('intermedio');
   document.getElementById('nivAvanzado').textContent = tr('avanzado');
@@ -2159,6 +2314,8 @@ function applyLanguage(){
   document.getElementById('footerCredit').textContent = tr('createdBy');
   document.getElementById('footerReport').textContent = tr('reportError');
   document.getElementById('conjugatorFabText').textContent = tr('conjugatorFab');
+  document.getElementById('flashAgainBtn').textContent = tr('flashAgain');
+  document.getElementById('flashGotItBtn').textContent = tr('flashGotIt');
   document.getElementById('conjugatorHint').textContent = tr('conjugatorHint');
 
   buildModeSwitcher();
@@ -2184,9 +2341,23 @@ document.getElementById('langLabelEs').addEventListener('click', ()=>{
   lang = 'es';
   applyLanguage();
 });
-document.getElementById('howToIcon').addEventListener('click', ()=>{
+document.getElementById('howToIcon').addEventListener('click', (e)=>{
+  e.stopPropagation();
   howToOpen = !howToOpen;
   document.getElementById('howToPanel').style.display = howToOpen ? 'block' : 'none';
+});
+document.addEventListener('click', (e)=>{
+  if(howToOpen){
+    const panel = document.getElementById('howToPanel');
+    if(!panel.contains(e.target)){
+      howToOpen = false;
+      panel.style.display = 'none';
+    }
+  }
+  if(openInfoPop && openInfoPop.classList.contains('i-popover') && !openInfoPop.contains(e.target)){
+    openInfoPop.style.display = 'none';
+    openInfoPop = null;
+  }
 });
 
 let conjugatorOpen = false;
@@ -2195,7 +2366,7 @@ function renderConjugatorSuggestions(query){
   box.innerHTML = '';
   if(!query){ return; }
   const q = query.toLowerCase();
-  const matches = VERBS.filter(v=>v.inf.toLowerCase().includes(q)).slice(0,8);
+  const matches = VERBS.filter(v=>v.inf.toLowerCase().startsWith(q)).slice(0,8);
   matches.forEach(v=>{
     const item = document.createElement('div');
     item.className = 'conjugator-suggestion';
@@ -2208,6 +2379,7 @@ function selectConjugatorVerb(v, highlightTense){
   document.getElementById('conjugatorSearch').value = v.inf;
   document.getElementById('conjugatorSuggestions').innerHTML = '';
   const tableEl = document.getElementById('conjugatorTable');
+  tableEl.style.display = 'block';
   tableEl.innerHTML = verbFullTable(v);
   if(highlightTense){
     const h4 = tableEl.querySelector('h4[data-tense="'+highlightTense+'"]');
